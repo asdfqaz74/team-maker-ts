@@ -1,6 +1,9 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const SECRET = process.env.JWT_SECRET;
 
 export async function POST(request) {
   await connectDB();
@@ -26,11 +29,23 @@ export async function POST(request) {
     return Response.json({ error: "사용자 정보가 다릅니다." }, { status: 401 });
   }
 
+  const token = jwt.sign(
+    {
+      userId: member.userId,
+      name: member.name,
+      email: member.email,
+    },
+    SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
+
   // 로그인 성공 시, 사용자 정보를 반환합니다.
   return Response.json(
     {
       message: "로그인 성공",
-      user: { userId: member.userId, name: member.name, email: member.email },
+      token,
     },
     { status: 200 }
   );
