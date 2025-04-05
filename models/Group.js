@@ -10,4 +10,4 @@ const GroupSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Group = mongoose.models.Group || mongoose.model("Group", GroupSchema);
+export default mongoose.models.Group || mongoose.model("Group", GroupSchema);
