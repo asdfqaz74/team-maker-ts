@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   monthlyTotalGames: { type: Number, default: 0 },
   monthlyWins: { type: Number, default: 0 },
   monthlyLosses: { type: Number, default: 0 },
-  group: [{ type: String }],
+  group: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
