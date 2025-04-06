@@ -1,5 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
+import { sendResetEmail } from "@/lib/mailer/sendResetEmail";
+import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   await connectDB();
@@ -17,11 +19,13 @@ export async function POST(request) {
       );
     }
 
+    const token = jwt.sign({ userId: member.userId }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    await sendResetEmail(member.email, token);
     return Response.json(
-      {
-        message: "비밀번호 찾기 성공",
-        password: member.password,
-      },
+      { message: "비밀번호 재설정 이메일이 전송되었습니다." },
       { status: 200 }
     );
   } catch (error) {
