@@ -52,7 +52,9 @@ export default function LoginPage() {
         placeholder="비밀번호를 입력하세요"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleLogin}>로그인</button>
+      <button onClick={handleLogin} className="cursor-pointer">
+        로그인
+      </button>
       {message && <p>{message}</p>}
     </div>
   );

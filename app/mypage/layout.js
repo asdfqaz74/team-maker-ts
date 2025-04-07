@@ -39,7 +39,7 @@ export default function MyPageLayout({ children }) {
       </aside>
 
       {/* 본문 */}
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 max-w-4xl px-8 py-6 mx-auto">{children}</main>
     </div>
   );
 }
