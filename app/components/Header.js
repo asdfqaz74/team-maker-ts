@@ -43,7 +43,9 @@ export default function Header() {
       )}
       <li className="px-5">
         {isLoggedIn ? (
-          <button onClick={handleLogout}>로그아웃</button>
+          <button onClick={handleLogout} className="cursor-pointer">
+            로그아웃
+          </button>
         ) : (
           <Link href="/auth/login">로그인</Link>
         )}

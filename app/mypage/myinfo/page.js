@@ -2,25 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom, tokenAtom } from "@/store/auth";
 
 export default function MyInfoPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useAtom(userAtom);
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  const [token] = useAtom(tokenAtom);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const storedToken = token || localStorage.getItem("token");
 
     if (!token) {
       router.push("/auth/login");
       return;
     }
 
+    if (user) return;
+
     const fetchUser = async () => {
       const response = await fetch("/api/me", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${storedToken}`,
         },
       });
 
@@ -33,7 +39,7 @@ export default function MyInfoPage() {
     };
 
     fetchUser();
-  }, [router]);
+  }, [token, user, router, setUser]);
 
   if (message) {
     return <div>{message}</div>;
