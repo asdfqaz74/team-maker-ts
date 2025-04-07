@@ -31,6 +31,16 @@ export default function Header() {
       </li>
       <li className="px-5">팀 메이커</li>
       <li className="px-5">플레이어 정보</li>
+      {isLoggedIn && (
+        <li className="px-5">
+          <Link href="/">피어리스 도우미</Link>
+        </li>
+      )}
+      {isLoggedIn && (
+        <li className="px-5">
+          <Link href="/mypage">마이페이지</Link>
+        </li>
+      )}
       <li className="px-5">
         {isLoggedIn ? (
           <button onClick={handleLogout}>로그아웃</button>
