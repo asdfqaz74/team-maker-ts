@@ -23,7 +23,7 @@ export async function POST(request) {
   // 중복된 아이디가 있으면 409 Conflict 응답
   if (memberId) {
     return Response.json(
-      { error: "이미 존재하는 사용자입니다." },
+      { error: "이미 존재하는 아이디입니다." },
       { status: 409 }
     );
   }
