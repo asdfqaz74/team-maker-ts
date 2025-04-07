@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function MyInfoPage() {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      setMessage("로그인이 필요합니다.");
+      router.push("/auth/login");
       return;
     }
 
@@ -31,7 +33,7 @@ export default function MyInfoPage() {
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   if (message) {
     return <div>{message}</div>;
