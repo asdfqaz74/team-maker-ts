@@ -4,11 +4,22 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const SECRET = process.env.JWT_SECRET;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export async function POST(request) {
   await connectDB();
   const body = await request.json();
   const { token, newPassword } = body;
+
+  if (!passwordRegex.test(newPassword)) {
+    return Response.json(
+      {
+        error:
+          "비밀번호는 최소 8자 이상이어야 하며, 문자와 숫자를 포함해야 합니다.",
+      },
+      { status: 400 }
+    );
+  }
 
   try {
     const decoded = jwt.verify(token, SECRET);

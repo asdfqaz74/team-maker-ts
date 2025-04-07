@@ -8,9 +8,13 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { name, email, userId } = body;
+    const { findPwName, findPwEmail, findPwId } = body;
 
-    const member = await Member.findOne({ name, email, userId });
+    const member = await Member.findOne({
+      name: findPwName,
+      email: findPwEmail,
+      userId: findPwId,
+    });
 
     if (!member) {
       return Response.json(

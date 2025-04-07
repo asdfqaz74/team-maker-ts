@@ -6,9 +6,12 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { name, email } = body;
+    const { findIdName, findIdEmail } = body;
 
-    const member = await Member.findOne({ name, email });
+    const member = await Member.findOne({
+      name: findIdName,
+      email: findIdEmail,
+    });
 
     if (!member) {
       return Response.json(
