@@ -58,10 +58,6 @@ export default function PlayerDB() {
     }
   };
 
-  const handleCheckPlayerDB = async () => {
-    console.log(selectedPlayer);
-  };
-
   return (
     <div>
       <span>{selectedPlayer?.name}</span>
@@ -101,9 +97,6 @@ export default function PlayerDB() {
       </div>
       <button onClick={handleEditPlayerDB} className="cursor-pointer">
         수정하기
-      </button>
-      <button className="cursor-pointer" onClick={handleCheckPlayerDB}>
-        선수 확인하기
       </button>
     </div>
   );
