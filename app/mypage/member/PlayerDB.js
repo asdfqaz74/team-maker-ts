@@ -88,11 +88,21 @@ export default function PlayerDB() {
         />
         <span>포지션</span>
         <select value={position} onChange={(e) => setPosition(e.target.value)}>
-          <option value="top">탑</option>
-          <option value="jug">정글</option>
-          <option value="mid">미드</option>
-          <option value="adc">원딜</option>
-          <option value="sup">서포터</option>
+          <option value="top" className="text-black">
+            탑
+          </option>
+          <option value="jug" className="text-black">
+            정글
+          </option>
+          <option value="mid" className="text-black">
+            미드
+          </option>
+          <option value="adc" className="text-black">
+            원딜
+          </option>
+          <option value="sup" className="text-black">
+            서포터
+          </option>
         </select>
       </div>
       <button onClick={handleEditPlayerDB} className="cursor-pointer">

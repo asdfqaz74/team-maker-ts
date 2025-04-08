@@ -34,12 +34,14 @@ export default function GroupList() {
   }, [setGroups]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 items-end">
       <span>그룹 불러오기</span>
       <select name="group" id="group-select">
-        <option value="">그룹을 선택하세요</option>
+        <option value="" className="text-black">
+          그룹을 선택하세요
+        </option>
         {groups.map((group) => (
-          <option key={group._id} value={group._id}>
+          <option key={group._id} value={group._id} className="text-black">
             {group.name}
           </option>
         ))}
