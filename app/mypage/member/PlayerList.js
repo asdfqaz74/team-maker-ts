@@ -2,6 +2,14 @@
 import { useAtom } from "jotai";
 import { playersAtom } from "@/store/player";
 
+const positionMap = {
+  top: "탑",
+  jungle: "정글",
+  mid: "미드",
+  adc: "원딜",
+  sup: "서포터",
+};
+
 export default function PlayerList() {
   const [players] = useAtom(playersAtom);
 
@@ -22,7 +30,8 @@ export default function PlayerList() {
                 <strong>닉네임:</strong> {player.nickName}
               </p>
               <p>
-                <strong>포지션:</strong> {player.position}
+                <strong>포지션:</strong>{" "}
+                {positionMap[player.position] || "알 수 없음"}
               </p>
               <p>
                 <strong>그룹:</strong>{" "}
