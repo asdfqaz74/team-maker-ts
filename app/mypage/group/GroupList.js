@@ -2,10 +2,11 @@
 
 import { useEffect } from "react";
 import { useAtom } from "jotai";
-import { groupListAtom } from "@/store/group";
+import { groupListAtom, selectedGroupAtom } from "@/store/group";
 
 export default function GroupList() {
   const [groups, setGroups] = useAtom(groupListAtom);
+  const [, setSelectedGroup] = useAtom(selectedGroupAtom);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -33,10 +34,14 @@ export default function GroupList() {
     fetchGroups();
   }, [setGroups]);
 
+  const handleSelect = (e) => {
+    setSelectedGroup(e.target.value);
+  };
+
   return (
     <div className="flex flex-col gap-4 items-end">
       <span>그룹 불러오기</span>
-      <select name="group" id="group-select">
+      <select name="group" id="group-select" onChange={handleSelect}>
         <option value="" className="text-black">
           그룹을 선택하세요
         </option>
