@@ -13,3 +13,5 @@ export const fetchPlayersAtom = atom(null, async (get, set, token) => {
   const data = await response.json();
   set(playersAtom, data || []);
 });
+
+export const selectedPlayerAtom = atom(null);

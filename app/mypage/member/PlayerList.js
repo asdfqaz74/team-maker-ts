@@ -1,6 +1,7 @@
 "use client";
-import { useAtom } from "jotai";
-import { playersAtom } from "@/store/player";
+import { useAtom, useSetAtom } from "jotai";
+import { playersAtom, selectedPlayerAtom } from "@/store/player";
+import PlayerDB from "./PlayerDB";
 
 const positionMap = {
   top: "탑",
@@ -12,6 +13,7 @@ const positionMap = {
 
 export default function PlayerList() {
   const [players] = useAtom(playersAtom);
+  const setSelectedPlayer = useSetAtom(selectedPlayerAtom);
 
   return (
     <div className="p-4">
@@ -44,8 +46,15 @@ export default function PlayerList() {
                   : "없음"}
               </p>
             </div>
+            <button
+              className="text-sm text-blue-500 underline cursor-pointer"
+              onClick={() => setSelectedPlayer(player)}
+            >
+              수정하기
+            </button>
           </li>
         ))}
+        <PlayerDB />
       </ul>
     </div>
   );

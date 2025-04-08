@@ -27,7 +27,7 @@ export async function GET(request) {
     }
 
     const users = await User.find({ createdBy: member._id })
-      .select("name nickName position group")
+      .select("name nickName position group eloRating")
       .populate("group", "name");
 
     return Response.json(users, { status: 200 });
