@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import GroupList from "./GroupList";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -65,6 +66,7 @@ export default function GroupPage() {
           </button>
         </div>
       )}
+      <GroupList />
     </>
   );
 }
