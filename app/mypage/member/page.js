@@ -12,7 +12,32 @@ export default function MemberPage() {
   };
 
   const handleCreatePlayer = async () => {
-    console.log(name, nickname, position);
+    const token = sessionStorage.getItem("token");
+
+    await fetch("/api/me/player", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name, nickName: nickname, position }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+        alert("선수가 추가되었습니다.");
+        setName("");
+        setNickname("");
+        setPosition("top");
+        setButtonClicked(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("에러가 발생했습니다.");
+      });
   };
 
   return (

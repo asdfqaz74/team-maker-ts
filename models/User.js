@@ -28,6 +28,11 @@ const UserSchema = new mongoose.Schema({
   monthlyWins: { type: Number, default: 0 },
   monthlyLosses: { type: Number, default: 0 },
   group: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Member",
+    required: true,
+  },
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
