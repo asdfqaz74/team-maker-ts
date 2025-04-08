@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlayerList from "./PlayerList";
+import { useSetAtom } from "jotai";
+import { fetchPlayersAtom } from "@/store/player";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("top");
+
+  const fetchPlayers = useSetAtom(fetchPlayersAtom);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) fetchPlayers(token);
+  }, [fetchPlayers]);
+
   const handleCreatePlayerButton = () => {
     setButtonClicked((c) => !c);
   };
@@ -34,6 +44,7 @@ export default function MemberPage() {
         setNickname("");
         setPosition("top");
         setButtonClicked(false);
+        fetchPlayers(token);
       })
       .catch((err) => {
         console.error(err);

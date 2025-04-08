@@ -1,27 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { playersAtom } from "@/store/player";
 
 export default function PlayerList() {
-  const [players, setPlayers] = useState([]);
-
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      const token = sessionStorage.getItem("token");
-
-      const response = await fetch("/api/me/player", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-      setPlayers(data || []);
-    };
-
-    fetchPlayers();
-  }, []);
+  const [players] = useAtom(playersAtom);
 
   return (
     <div className="p-4">
