@@ -15,7 +15,7 @@ export default function MyInfoPage() {
   useEffect(() => {
     const storedToken = token || sessionStorage.getItem("token");
 
-    if (!token) {
+    if (!storedToken) {
       router.push("/auth/login");
       return;
     }
