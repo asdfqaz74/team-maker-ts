@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongoose";
 import jwt from "jsonwebtoken";
 import Member from "@/models/Member";
 import User from "@/models/User";
+import Group from "@/models/Group";
 
 export async function GET(request) {
   await connectDB();
@@ -25,7 +26,9 @@ export async function GET(request) {
       );
     }
 
-    const users = await User.find({ createdBy: member._id });
+    const users = await User.find({ createdBy: member._id })
+      .select("name nickName position group")
+      .populate("group", "name");
 
     return Response.json(users, { status: 200 });
   } catch (error) {

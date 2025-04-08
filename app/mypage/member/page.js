@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PlayerList from "./PlayerList";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -87,6 +88,7 @@ export default function MemberPage() {
           </button>
         </div>
       )}
+      <PlayerList />
     </>
   );
 }
