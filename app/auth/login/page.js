@@ -26,7 +26,7 @@ export default function LoginPage() {
     if (response.ok) {
       setMessage("로그인 성공");
       // JWT 토큰을 로컬 스토리지에 저장
-      localStorage.setItem("token", data.token);
+      sessionStorage.setItem("token", data.token);
       // Jotai 상태 업데이트
       setToken(data.token);
 

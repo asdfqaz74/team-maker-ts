@@ -11,7 +11,7 @@ export default function GroupPage() {
   };
 
   const handleCreateGroup = async () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
       alert("로그인이 필요합니다.");

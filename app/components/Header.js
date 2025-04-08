@@ -12,13 +12,13 @@ export default function Header() {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setToken(null);
     router.push("/auth/login");
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = sessionStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
     }

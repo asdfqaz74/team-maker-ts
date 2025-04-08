@@ -13,7 +13,7 @@ export default function MyInfoPage() {
   const [token] = useAtom(tokenAtom);
 
   useEffect(() => {
-    const storedToken = token || localStorage.getItem("token");
+    const storedToken = token || sessionStorage.getItem("token");
 
     if (!token) {
       router.push("/auth/login");
