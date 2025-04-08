@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import { groupListAtom } from "@/store/group";
 
 export default function GroupList() {
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useAtom(groupListAtom);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -29,7 +31,7 @@ export default function GroupList() {
     };
 
     fetchGroups();
-  }, []);
+  }, [setGroups]);
 
   return (
     <div>

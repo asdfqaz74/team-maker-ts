@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import GroupList from "./GroupList";
+import { useAtom } from "jotai";
+import { groupListAtom } from "@/store/group";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [groupName, setGroupName] = useState("");
+  const [, setGroups] = useAtom(groupListAtom);
 
   const handleCreateGroupButton = async () => {
     setButtonClicked((c) => !c);
@@ -39,6 +42,13 @@ export default function GroupPage() {
       alert("그룹이 생성되었습니다.");
       setGroupName("");
       setButtonClicked(false);
+
+      const response = await fetch("/api/me/group", {
+        headers: { authorization: `Bearer ${token}` },
+      });
+
+      const newData = await response.json();
+      setGroups(newData.groups);
     } else {
       alert(data.error || "그룹 생성에 실패했습니다.");
     }

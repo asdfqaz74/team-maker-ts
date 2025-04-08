@@ -74,9 +74,7 @@ export async function GET(request) {
     }
 
     const memberId = member._id;
-
     const groups = await Group.find({ createdBy: memberId });
-    console.log("groups: ", groups);
 
     return Response.json({ groups }, { status: 200 });
   } catch (error) {
