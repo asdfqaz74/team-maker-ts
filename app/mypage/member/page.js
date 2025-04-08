@@ -1,8 +1,67 @@
+"use client";
+
+import { useState } from "react";
+
 export default function MemberPage() {
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [position, setPosition] = useState("top");
+  const handleCreatePlayerButton = () => {
+    setButtonClicked((c) => !c);
+  };
+
+  const handleCreatePlayer = async () => {
+    console.log(name, nickname, position);
+  };
+
   return (
-    <div>
-      <h1>팀원 관리</h1>
-      <p>팀원 관리 페이지입니다.</p>
-    </div>
+    <>
+      <div className="flex justify-between items-end">
+        <h1 className="text-4xl">내전 멤버 관리</h1>
+        <button className="cursor-pointer" onClick={handleCreatePlayerButton}>
+          선수 추가
+        </button>
+      </div>
+      {buttonClicked && (
+        <div className="flex flex-col">
+          <span>선수 추가하기</span>
+          <div className="flex gap-4">
+            <span>이름</span>
+            <input
+              type="text"
+              placeholder="강진성"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-4">
+            <span>닉네임</span>
+            <input
+              type="text"
+              placeholder="강진성#강진성"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-4">
+            <span>메인</span>
+            <select
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+            >
+              <option value="top">탑</option>
+              <option value="jug">정글</option>
+              <option value="mid">미드</option>
+              <option value="adc">원딜</option>
+              <option value="sup">서포터</option>
+            </select>
+          </div>
+          <button className="cursor-pointer" onClick={handleCreatePlayer}>
+            추가
+          </button>
+        </div>
+      )}
+    </>
   );
 }
