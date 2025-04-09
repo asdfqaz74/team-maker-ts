@@ -5,6 +5,7 @@ import GroupList from "./GroupList";
 import { useAtom } from "jotai";
 import { groupListAtom } from "@/store/group";
 import PlayerList from "./PlayerList";
+import GroupUserList from "./GroupUserList";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -79,6 +80,7 @@ export default function GroupPage() {
       )}
       <GroupList />
       <PlayerList />
+      <GroupUserList />
     </>
   );
 }
