@@ -1,9 +1,9 @@
 import { connectDB } from "@/lib/mongoose";
-import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import Group from "@/models/Group";
 import { findMember } from "@/utils/findMember";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
+import { verifyToken } from "@/utils/verifyToken";
 
 export async function GET(request) {
   await connectDB();
@@ -15,7 +15,7 @@ export async function GET(request) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
     const userId = decoded.userId;
 
     const member = await findMember({ userId });
@@ -51,7 +51,7 @@ export async function POST(request) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
     const userId = decoded.userId;
 
     await findMember({ userId });

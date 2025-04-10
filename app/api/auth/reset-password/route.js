@@ -1,9 +1,8 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { verifyToken } from "@/utils/verifyToken";
 
-const SECRET = process.env.JWT_SECRET;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export async function POST(request) {
@@ -22,7 +21,7 @@ export async function POST(request) {
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET);
+    const decoded = verifyToken(token);
     const userId = decoded.userId;
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
