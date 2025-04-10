@@ -19,7 +19,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko-KR">
-      <body className={`${notoSans.variable} antialiased`}>
+      <body
+        className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
+      >
         <Provider>
           <Header />
           {children}

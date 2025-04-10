@@ -5,6 +5,7 @@ const ChampionSchema = new mongoose.Schema({
   title: String,
   image: String,
   small: String,
+  loading: String,
   en_name: String,
 });
 

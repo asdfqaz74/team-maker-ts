@@ -52,8 +52,8 @@ export default function Header() {
 
   return (
     <div className="flex items-center py-4 px-40 justify-between bg-[#030222]">
-      <span className="text-[1.875rem] font-[BlackOps]">
-        <Link href={"/"}>TeaMaker</Link>
+      <span className="text-[1.875rem] font-[Alumni]">
+        <Link href={"/"}>Tea M aker</Link>
       </span>
       <ul className="flex justify-end text-[1rem] font-bold">
         <li className="px-5">
