@@ -46,7 +46,7 @@ export default function GlobalBan() {
       </div>
 
       {isLoading && (
-        <ul className="grid grid-cols-5 gap-2 mt-20">
+        <ul className="flex justify-between gap-2 mt-20">
           {[...Array(5)].map((_, idx) => (
             <li
               key={idx}
@@ -59,20 +59,24 @@ export default function GlobalBan() {
       )}
 
       {!isLoading && (
-        <ul className="flex justify-between gap-2 mt-20">
+        <ul className="flex justify-between gap-6 mt-30 mb-20">
           {champions.map((champion, idx) => (
             <li
               key={idx}
-              className="flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] rounded-xl items-center justify-center"
+              className="relative flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] px-4 pt-4 pb-2 rounded-xl items-center justify-end shadow-lg overflow-visible"
             >
-              <Image
-                src={`/images/champions/loading/${champion.en_name}.jpg`}
-                alt={champion.name}
-                width={130}
-                height={236.13}
-                className="rounded"
-              />
-              <span className="mt-2 font-semibold">{champion.name}</span>
+              <div className="absolute -top-12 w-[8.75rem] h-[12.5rem] rounded-xl overflow-hidden">
+                <Image
+                  src={`/images/champions/loading/${champion.en_name}.jpg`}
+                  alt={champion.name}
+                  width={140}
+                  height={180}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <span className="absolute -bottom-10 text-white text-sm font-semibold">
+                {champion.name}
+              </span>
             </li>
           ))}
         </ul>
