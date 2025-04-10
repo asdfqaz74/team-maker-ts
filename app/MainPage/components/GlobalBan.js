@@ -46,13 +46,13 @@ export default function GlobalBan() {
       </div>
 
       {isLoading && (
-        <ul className="flex justify-between gap-2 mt-20">
+        <ul className="flex justify-between gap-6 mt-30 mb-20">
           {[...Array(5)].map((_, idx) => (
             <li
               key={idx}
-              className="bg-[#1B4A85] w-[10rem] h-[10rem] rounded-2xl flex items-center justify-center"
+              className="relative flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] px-4 pt-4 pb-2 rounded-xl items-center justify-end shadow-lg overflow-visible"
             >
-              <div className="w-[8.125rem] h-[14.75rem] bg-gray-700 rounded animate-pulse" />
+              <div className="absolute -top-12 w-[8.75rem] h-[12.5rem] rounded-xl overflow-hidden animate-pulse" />
             </li>
           ))}
         </ul>
