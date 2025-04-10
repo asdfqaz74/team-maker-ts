@@ -28,6 +28,8 @@ export default function Header() {
   const resetPlayers = useResetAtom(playersAtom);
   const resetSelectedPlayer = useResetAtom(selectedPlayerAtom);
 
+  // 로그아웃 핸들러
+  // 로그아웃 시 토큰 삭제 및 상태 초기화
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     resetAtoms();
