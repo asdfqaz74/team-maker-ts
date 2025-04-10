@@ -33,7 +33,7 @@ export default function PlayerDB() {
   }, [selectedPlayer]);
 
   const handleEditPlayerDB = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
 
     const response = await fetch(`/api/me/player/${selectedPlayer._id}`, {
       method: "PATCH",

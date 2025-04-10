@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import PlayerList from "./PlayerList";
 import { useSetAtom } from "jotai";
 import { fetchPlayersAtom } from "@/store/player";
+import { getToken } from "@/utils/getToken";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -14,7 +15,7 @@ export default function MemberPage() {
   const fetchPlayers = useSetAtom(fetchPlayersAtom);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
     if (token) fetchPlayers(token);
   }, [fetchPlayers]);
 
@@ -23,7 +24,7 @@ export default function MemberPage() {
   };
 
   const handleCreatePlayer = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
 
     await fetch("/api/me/player", {
       method: "POST",

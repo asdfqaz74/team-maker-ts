@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 import { groupListAtom } from "@/store/group";
 import PlayerList from "./PlayerList";
 import GroupUserList from "./GroupUserList";
+import { getToken } from "@/utils/getToken";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -17,12 +18,7 @@ export default function GroupPage() {
   };
 
   const handleCreateGroup = async () => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+    const token = getToken();
 
     if (!groupName.trim()) {
       alert("그룹 이름을 입력해주세요.");

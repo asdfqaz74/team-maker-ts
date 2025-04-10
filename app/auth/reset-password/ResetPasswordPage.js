@@ -14,18 +14,16 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("/api/auth/reset-password", {
+    const response = await fetch("/api/auth/reset-password", {
       method: "POST",
       body: JSON.stringify({ token, newPassword: password }),
       headers: { "Content-Type": "application/json" },
     });
 
-    console.log("token", token);
-
-    const data = await res.json();
+    const data = await response.json();
     setMessage(data.message || data.error);
 
-    if (res.ok) {
+    if (response.ok) {
       setTimeout(() => router.push("/"), 2000);
     }
   };

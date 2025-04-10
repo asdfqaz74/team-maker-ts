@@ -7,6 +7,7 @@ import {
   selectedGroupAtom,
 } from "@/store/group";
 import { useEffect } from "react";
+import { getToken } from "@/utils/getToken";
 
 export default function PlayerList() {
   const [players, setPlayers] = useAtom(groupPlayersAtom);
@@ -43,7 +44,7 @@ export default function PlayerList() {
     const fetchCheckedPlayers = async () => {
       if (!selectedGroup) return;
 
-      const token = sessionStorage.getItem("token");
+      const token = getToken();
 
       const response = await fetch(`/api/me/group/player/${selectedGroup}`, {
         headers: {
@@ -72,7 +73,7 @@ export default function PlayerList() {
     }
 
     const checked = !checkedPlayers.includes(playerId);
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
 
     const response = await fetch("/api/me/group/player", {
       method: "POST",

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { groupListAtom, selectedGroupAtom } from "@/store/group";
+import { getToken } from "@/utils/getToken";
 
 export default function GroupList() {
   const [groups, setGroups] = useAtom(groupListAtom);
@@ -10,12 +11,7 @@ export default function GroupList() {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      const token = sessionStorage.getItem("token");
-
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
+      const token = getToken();
 
       const response = await fetch("/api/me/group", {
         method: "GET",

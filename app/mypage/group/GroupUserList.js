@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { selectedGroupAtom } from "@/store/group";
+import { getToken } from "@/utils/getToken";
 
 export default function GroupUserList() {
   const [selectedGroup] = useAtom(selectedGroupAtom);
@@ -12,7 +13,8 @@ export default function GroupUserList() {
     const fetchUsers = async () => {
       if (!selectedGroup) return;
 
-      const token = sessionStorage.getItem("token");
+      const token = getToken();
+
       const response = await fetch(`/api/me/group/${selectedGroup}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
