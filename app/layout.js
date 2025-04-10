@@ -24,9 +24,9 @@ export default function RootLayout({ children }) {
         className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
       >
         <Provider>
-          <SpeedInsights />
           <Header />
           {children}
+          <SpeedInsights />
         </Provider>
       </body>
     </html>
