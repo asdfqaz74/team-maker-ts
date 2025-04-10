@@ -1,6 +1,7 @@
 import { atom } from "jotai";
+import { atomWithReset } from "jotai/utils";
 
-export const playersAtom = atom([]);
+export const playersAtom = atomWithReset([]);
 
 export const fetchPlayersAtom = atom(null, async (get, set, token) => {
   const response = await fetch("/api/me/player", {
@@ -14,4 +15,4 @@ export const fetchPlayersAtom = atom(null, async (get, set, token) => {
   set(playersAtom, data || []);
 });
 
-export const selectedPlayerAtom = atom(null);
+export const selectedPlayerAtom = atomWithReset(null);

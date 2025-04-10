@@ -1,19 +1,43 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { tokenAtom, isLoggedInAtom } from "@/store/auth";
+import { tokenAtom, isLoggedInAtom, userAtom } from "@/store/auth";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useResetAtom } from "jotai/utils";
+import {
+  checkedPlayersAtom,
+  groupListAtom,
+  playersAtom as groupPlayerAtom,
+  selectedGroupAtom,
+} from "@/store/group";
+import { playersAtom, selectedPlayerAtom } from "@/store/player";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const router = useRouter();
 
+  const resetAtoms = useResetAtom(tokenAtom);
+  const resetUser = useResetAtom(userAtom);
+  const resetGroupList = useResetAtom(groupListAtom);
+  const resetGroupPlayers = useResetAtom(groupPlayerAtom);
+  const resetSelectedGroup = useResetAtom(selectedGroupAtom);
+  const resetCheckedPlayers = useResetAtom(checkedPlayersAtom);
+  const resetPlayers = useResetAtom(playersAtom);
+  const resetSelectedPlayer = useResetAtom(selectedPlayerAtom);
+
   const handleLogout = () => {
     sessionStorage.removeItem("token");
-    setToken(null);
+    resetAtoms();
+    resetUser();
+    resetGroupList();
+    resetGroupPlayers();
+    resetSelectedGroup();
+    resetCheckedPlayers();
+    resetPlayers();
+    resetSelectedPlayer();
     router.push("/auth/login");
   };
 

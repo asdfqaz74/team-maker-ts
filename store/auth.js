@@ -1,6 +1,7 @@
 import { atom } from "jotai";
+import { atomWithReset } from "jotai/utils";
 
-export const tokenAtom = atom(null);
+export const tokenAtom = atomWithReset(null);
 export const isLoggedInAtom = atom((get) => !!get(tokenAtom));
 
-export const userAtom = atom(null);
+export const userAtom = atomWithReset(null);
