@@ -66,7 +66,7 @@ export default function GlobalBan() {
               className="flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] rounded-xl items-center justify-center"
             >
               <Image
-                src={`${champion.loading}.jpg`}
+                src={`/images/champions/loading/${champion.en_name}.jpg`}
                 alt={champion.name}
                 width={130}
                 height={160}

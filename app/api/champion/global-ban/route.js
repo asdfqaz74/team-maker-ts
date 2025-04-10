@@ -23,7 +23,7 @@ export async function GET() {
       {
         $project: {
           name: 1,
-          loading: 1,
+          en_name: 1,
           _id: 0,
         },
       },
