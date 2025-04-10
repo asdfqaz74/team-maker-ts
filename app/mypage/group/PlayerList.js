@@ -2,14 +2,14 @@
 
 import { useAtom } from "jotai";
 import {
-  playersAtom,
+  groupPlayersAtom,
   checkedPlayersAtom,
   selectedGroupAtom,
 } from "@/store/group";
 import { useEffect } from "react";
 
 export default function PlayerList() {
-  const [players, setPlayers] = useAtom(playersAtom);
+  const [players, setPlayers] = useAtom(groupPlayersAtom);
   const [checkedPlayers, setCheckedPlayers] = useAtom(checkedPlayersAtom);
   const [selectedGroup] = useAtom(selectedGroupAtom);
 

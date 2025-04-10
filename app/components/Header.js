@@ -9,7 +9,7 @@ import { useResetAtom } from "jotai/utils";
 import {
   checkedPlayersAtom,
   groupListAtom,
-  playersAtom as groupPlayerAtom,
+  groupPlayersAtom,
   selectedGroupAtom,
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
@@ -22,7 +22,7 @@ export default function Header() {
   const resetAtoms = useResetAtom(tokenAtom);
   const resetUser = useResetAtom(userAtom);
   const resetGroupList = useResetAtom(groupListAtom);
-  const resetGroupPlayers = useResetAtom(groupPlayerAtom);
+  const resetGroupPlayers = useResetAtom(groupPlayersAtom);
   const resetSelectedGroup = useResetAtom(selectedGroupAtom);
   const resetCheckedPlayers = useResetAtom(checkedPlayersAtom);
   const resetPlayers = useResetAtom(playersAtom);
