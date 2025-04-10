@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Group from "./Group";
 
 const EloSchema = new mongoose.Schema(
   {

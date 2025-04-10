@@ -1,6 +1,5 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import Group from "@/models/Group";
 import { findMember } from "@/utils/findMember";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
