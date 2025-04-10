@@ -1,15 +1,13 @@
 import { connectDB } from "@/lib/mongoose";
 import jwt from "jsonwebtoken";
-import Member from "@/models/Member";
 import User from "@/models/User";
-import Group from "@/models/Group";
 import { findMember } from "@/utils/findMember";
+import getTokenFromHeader from "@/utils/getTokenFromHeader";
 
 export async function GET(request) {
   await connectDB();
 
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.split(" ")[1];
+  const token = getTokenFromHeader(request.headers);
 
   if (!token) {
     return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
@@ -45,8 +43,7 @@ export async function GET(request) {
 export async function POST(request) {
   await connectDB();
 
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.split(" ")[1];
+  const token = getTokenFromHeader(request.headers);
 
   if (!token) {
     return Response.json({ error: "토큰이 없습니다." }, { status: 401 });

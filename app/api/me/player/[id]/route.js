@@ -1,11 +1,11 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
+import getTokenFromHeader from "@/utils/getTokenFromHeader";
 
 export async function PATCH(request, { params }) {
   await connectDB();
 
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.split(" ")[1];
+  const token = getTokenFromHeader(request.headers);
 
   if (!token) {
     return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
