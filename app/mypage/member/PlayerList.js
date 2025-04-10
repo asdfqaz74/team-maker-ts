@@ -1,7 +1,6 @@
 "use client";
 import { useAtom, useSetAtom } from "jotai";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
-import PlayerDB from "./PlayerDB";
 
 const positionMap = {
   top: "탑",
@@ -54,7 +53,6 @@ export default function PlayerList() {
             </button>
           </li>
         ))}
-        <PlayerDB />
       </ul>
     </div>
   );

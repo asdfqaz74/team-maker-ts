@@ -5,6 +5,7 @@ import PlayerList from "./PlayerList";
 import { useSetAtom } from "jotai";
 import { fetchPlayersAtom } from "@/store/player";
 import { getToken } from "@/utils/getToken";
+import PlayerDB from "./PlayerDB";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -101,6 +102,7 @@ export default function MemberPage() {
         </div>
       )}
       <PlayerList />
+      <PlayerDB />
     </>
   );
 }
