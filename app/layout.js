@@ -1,16 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import { Provider } from "jotai";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSans = Noto_Sans({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-noto",
+  display: "swap",
 });
 
 export const metadata = {
@@ -22,9 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko-KR">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${notoSans.variable} antialiased`}>
         <Provider>
           <Header />
           {children}

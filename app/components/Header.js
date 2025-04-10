@@ -51,31 +51,43 @@ export default function Header() {
   }, []);
 
   return (
-    <ul className="flex justify-end p-4">
-      <li className="px-5">
-        <Link href="/">홈</Link>
-      </li>
-      <li className="px-5">팀 메이커</li>
-      <li className="px-5">플레이어 정보</li>
-      {isLoggedIn && (
+    <div className="flex items-center py-4 px-40 justify-between bg-[#030222]">
+      <span className="text-[1.875rem] font-[BlackOps]">
+        <Link href={"/"}>TeaMaker</Link>
+      </span>
+      <ul className="flex justify-end text-[1rem] font-bold">
         <li className="px-5">
-          <Link href="/">피어리스 도우미</Link>
+          <Link href="/">홈</Link>
         </li>
-      )}
-      {isLoggedIn && (
-        <li className="px-5">
-          <Link href="/mypage">마이페이지</Link>
-        </li>
-      )}
-      <li className="px-5">
-        {isLoggedIn ? (
-          <button onClick={handleLogout} className="cursor-pointer">
-            로그아웃
-          </button>
-        ) : (
-          <Link href="/auth/login">로그인</Link>
+        <li className="px-5">팀 메이커</li>
+        <li className="px-5">플레이어 정보</li>
+        {isLoggedIn && (
+          <li className="px-5">
+            <Link href="/">피어리스 도우미</Link>
+          </li>
         )}
-      </li>
-    </ul>
+        {isLoggedIn && (
+          <li className="px-5">
+            <Link href="/mypage">
+              <span className="text-[#0FA4FE]">마이페이지</span>
+            </Link>
+          </li>
+        )}
+        <li className="px-5">
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="cursor-pointer text-[#F53B3B]"
+            >
+              로그아웃
+            </button>
+          ) : (
+            <Link href="/auth/login">
+              <span className="text-[#0FA4FE]">로그인</span>
+            </Link>
+          )}
+        </li>
+      </ul>
+    </div>
   );
 }
