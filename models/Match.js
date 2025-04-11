@@ -4,7 +4,7 @@ import Member from "./Member";
 const PlayerStatsSchema = new mongoose.Schema({
   userNickname: String,
   champion: String,
-  team: { type: String, enum: ["Blue", "RED"] },
+  team: { type: String, enum: ["Blue", "Red"] },
   position: String,
   kills: Number,
   deaths: Number,
@@ -26,6 +26,7 @@ const MatchSchema = new mongoose.Schema(
       ref: "Member",
       required: true,
     },
+    maxDamage: Number,
   },
   { timestamps: true }
 );
