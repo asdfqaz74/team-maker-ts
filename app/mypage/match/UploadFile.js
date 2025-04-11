@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function UploadFile({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
@@ -24,7 +26,7 @@ export default function UploadFile({ onUploadSuccess }) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch("/api/me/match/upload", {
+    const response = await fetch(`${baseUrl}/match/upload`, {
       method: "POST",
       body: formData,
     });
@@ -32,7 +34,7 @@ export default function UploadFile({ onUploadSuccess }) {
     const data = await response.json();
     if (response.ok) {
       alert("파일 업로드 성공: " + data.message);
-      onUploadSuccess(data.data);
+      onUploadSuccess(data.match);
     } else {
       alert("파일 업로드 실패: " + data.error);
     }
