@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function UploadFile() {
+export default function UploadFile({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
 
@@ -32,6 +32,7 @@ export default function UploadFile() {
     const data = await response.json();
     if (response.ok) {
       alert("파일 업로드 성공: " + data.message);
+      onUploadSuccess(data.data);
     } else {
       alert("파일 업로드 실패: " + data.error);
     }

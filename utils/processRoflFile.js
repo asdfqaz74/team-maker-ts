@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 export const processRoflFile = async (filePath) => {
   try {
     const buffer = fs.readFileSync(filePath);

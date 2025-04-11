@@ -1,5 +1,8 @@
 import { connectDB } from "@/lib/mongoose";
 import { processRoflFile } from "@/utils/processRoflFile";
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
 
 export async function POST(request) {
   await connectDB();
@@ -18,9 +21,7 @@ export async function POST(request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const fs = require("fs");
-    const path = require("path");
-    const tempPath = path.join("/tmp", `${Date.now()}-${file.name}`);
+    const tempPath = path.join(os.tmpdir(), `${Date.now()}-${file.name}`);
     fs.writeFileSync(tempPath, buffer);
 
     const parsed = await processRoflFile(tempPath);
