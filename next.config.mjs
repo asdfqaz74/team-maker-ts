@@ -10,6 +10,12 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 7,
     domains: ["imgur.com"],
   },
+
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "30mb",
+    },
+  },
 };
 
 export default nextConfig;
