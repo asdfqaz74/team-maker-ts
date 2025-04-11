@@ -1,3 +1,9 @@
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 import { connectDB } from "@/lib/mongoose";
 import { processRoflFile } from "@/utils/processRoflFile";
 const fs = require("fs");
