@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { tokenAtom, isLoggedInAtom, userAtom } from "@/store/auth";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useResetAtom } from "jotai/utils";
 import {
@@ -18,6 +18,7 @@ export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   const resetAtoms = useResetAtom(tokenAtom);
   const resetUser = useResetAtom(userAtom);
@@ -49,6 +50,12 @@ export default function Header() {
       setToken(storedToken);
     }
   }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="flex items-center py-4 px-40 justify-between bg-[#030222]">

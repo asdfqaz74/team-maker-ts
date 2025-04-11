@@ -72,6 +72,7 @@ export default function GlobalBan() {
                   width={140}
                   height={180}
                   className="object-cover w-full h-full"
+                  priority
                 />
               </div>
               <span className="absolute -bottom-10 text-white text-sm font-semibold">
