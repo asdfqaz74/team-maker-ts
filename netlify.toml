@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  # ROFL 파일 처리를 위한 함수 제한시간 및 크기 제한 설정
+  node_bundler = "esbuild"
+  external_node_modules = ["fsevents"]
+
+[functions."api/*"]
+  included_files = ["**/*.rofl"]
+  # 파일 크기 제한 설정 (30MB)
+  memory = 1024
+  timeout = 30

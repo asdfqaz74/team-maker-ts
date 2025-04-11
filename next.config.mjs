@@ -16,6 +16,7 @@ const nextConfig = {
       bodySizeLimit: "30mb",
     },
   },
+  output: "standalone",
 };
 
 export default nextConfig;
