@@ -2,7 +2,6 @@ import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import { Provider } from "jotai";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -26,7 +25,6 @@ export default function RootLayout({ children }) {
         <Provider>
           <Header />
           {children}
-          <SpeedInsights />
         </Provider>
       </body>
     </html>
