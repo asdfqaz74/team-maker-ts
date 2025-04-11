@@ -60,8 +60,12 @@ export default function PlayerNicknameEditor({ playersData, onSubmit }) {
             >
               <option value="">닉네임 선택</option>
               {userList.map((user) => (
-                <option key={user._id} value={user.nickName}>
-                  {user.nickName} ({user.position})
+                <option
+                  key={user._id}
+                  value={user.nickName}
+                  className="text-black"
+                >
+                  {user.nickName}
                 </option>
               ))}
             </select>
