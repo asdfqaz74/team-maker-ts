@@ -3,7 +3,9 @@ import { connectDB } from "@/lib/mongoose";
 import Champion from "@/models/Champion";
 
 function getToday() {
-  return new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  return kst.toISOString().split("T")[0];
 }
 
 export async function GET() {
