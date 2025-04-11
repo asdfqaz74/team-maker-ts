@@ -17,7 +17,6 @@ export default function UploadFile({ onUploadSuccess }) {
 
   const handleUpload = async () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    console.log("baseUrl", baseUrl);
 
     if (!file) {
       alert("파일을 선택해주세요.");
