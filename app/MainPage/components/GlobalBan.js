@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-const count = [1, 2, 3, 4, 5];
-
 export default function GlobalBan() {
   const [champions, setChampions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +10,8 @@ export default function GlobalBan() {
 
   const fetchGlobalBan = async () => {
     try {
+      setIsLoading(true);
+
       const response = await fetch("/api/champion/global-ban", {
         method: "GET",
       });
@@ -52,7 +52,7 @@ export default function GlobalBan() {
               key={idx}
               className="relative flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] px-4 pt-4 pb-2 rounded-xl items-center justify-end shadow-lg overflow-visible"
             >
-              <div className="absolute -top-12 w-[8.75rem] h-[12.5rem] rounded-xl overflow-hidden animate-pulse" />
+              <div className="absolute bg-gray-700 -top-12 w-[8.75rem] h-[12.5rem] rounded-xl animate-pulse" />
             </li>
           ))}
         </ul>
