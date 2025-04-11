@@ -4,6 +4,8 @@ export const config = {
   },
 };
 
+export const runtime = "nodejs";
+
 import { connectDB } from "@/lib/mongoose";
 import { processRoflFile } from "@/utils/processRoflFile";
 const fs = require("fs");
