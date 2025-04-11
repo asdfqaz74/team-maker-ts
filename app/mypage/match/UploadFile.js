@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 export default function UploadFile({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
@@ -18,6 +16,9 @@ export default function UploadFile({ onUploadSuccess }) {
   };
 
   const handleUpload = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    console.log("baseUrl", baseUrl);
+
     if (!file) {
       alert("파일을 선택해주세요.");
       return;
