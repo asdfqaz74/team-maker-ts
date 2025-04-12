@@ -3,6 +3,7 @@
 import { useAtom } from "jotai";
 import { selectedPlayerAtom, fetchPlayersAtom } from "@/store/player";
 import { useState, useEffect } from "react";
+import { getToken } from "@/utils/getToken";
 
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
