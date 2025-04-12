@@ -13,7 +13,7 @@ export default function MatchPage() {
       <p>매칭 관리 페이지입니다.</p>
       {parsed ? (
         <PlayerNicknameEditor
-          playersData={parsed.players}
+          playersData={parsed?.players}
           onSubmit={(players) => {
             console.log("닉네임 입력 완료", players);
           }}

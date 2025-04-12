@@ -26,12 +26,16 @@ export default function UploadFile({ onUploadSuccess }) {
     const formData = new FormData();
     formData.append("file", file);
 
+    console.log("업로드할 파일: ", file);
+    console.log("form data: ", formData.get("file"));
+
     const response = await fetch(`${baseUrl}/match/upload`, {
       method: "POST",
       body: formData,
     });
 
     const data = await response.json();
+    console.log("업로드 응답: ", data);
     if (response.ok) {
       alert("파일 업로드 성공: " + data.message);
       onUploadSuccess(data.match);

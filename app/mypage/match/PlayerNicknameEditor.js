@@ -3,8 +3,8 @@
 import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 
-export default function PlayerNicknameEditor({ playersData, onSubmit }) {
-  const [players, setPlayers] = useState(playersData || []);
+export default function PlayerNicknameEditor({ playersData, maxDamage }) {
+  const [players, setPlayers] = useState(() => playersData ?? []);
   const [userList, setUserList] = useState([]);
 
   useEffect(() => {
@@ -29,12 +29,35 @@ export default function PlayerNicknameEditor({ playersData, onSubmit }) {
     setPlayers(updated);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (players.some((player) => !player.userNickname)) {
       alert("모든 플레이어의 닉네임을 입력해주세요.");
       return;
     }
-    onSubmit(players);
+
+    const token = getToken();
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const response = await fetch("/api/me/match/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ players, maxDamage }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("닉네임이 성공적으로 저장되었습니다.");
+      setPlayers(data.players);
+    } else {
+      alert(data.error || "닉네임 저장에 실패했습니다.");
+    }
   };
 
   return (
