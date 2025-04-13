@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.73.3",
     "@vercel/speed-insights": "^1.2.0",
     "bcrypt": "^5.1.1",
     "jotai": "^2.12.2",
