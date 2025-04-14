@@ -31,6 +31,9 @@ export async function GET() {
           image: {
             $concat: ["/images/champions/loading/", "$_id", ".jpg"],
           },
+          logo: {
+            $concat: ["/images/champions/centered/", "$_id", ".jpg"],
+          },
           count: 1,
         },
       },
