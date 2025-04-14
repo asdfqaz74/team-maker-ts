@@ -14,7 +14,8 @@ export default function TodayBanChampion() {
   });
 
   return (
-    <div>
+    <div className="my-10">
+      <p className="text-2xl font-semibold">Today Global Ban</p>
       <p>오늘의 글로벌 밴</p>
       {isLoading && <p>불러오는 중...</p>}
       {isError && <p>{error.message}</p>}

@@ -2,12 +2,17 @@
 import { fetchChampionList } from "@/lib/api/fetchChampionList";
 import { Dialog } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
 
-export default function ChampionPalette({ open, onClose }) {
+export default function ChampionPalette({
+  open,
+  onClose,
+  selected,
+  setSelected,
+}) {
   const [searchChampion, setSearchChampion] = useState("");
-  const [selected, setSelected] = useState([]);
+
   const {
     data: championList = [],
     isLoading,
@@ -22,12 +27,13 @@ export default function ChampionPalette({ open, onClose }) {
     champ.name.includes(searchChampion)
   );
 
-  const toggleChampion = (championId) => {
-    setSelected((prev) =>
-      prev.includes(championId)
-        ? prev.filter((id) => id !== championId)
-        : [...prev, championId]
-    );
+  const toggleChampion = (champ) => {
+    const exists = selected.find((c) => c.id === champ.id);
+    const newList = exists
+      ? selected.filter((c) => c.id !== champ.id)
+      : [...selected, { id: champ.id, name: champ.name, image: champ.image }];
+
+    setSelected(newList); //
   };
 
   if (isLoading) return <div>불러오는 중...</div>;
@@ -37,6 +43,7 @@ export default function ChampionPalette({ open, onClose }) {
     <Dialog
       open={open}
       onClose={onClose}
+      autoFocus
       slotProps={{
         paper: {
           sx: {
@@ -60,9 +67,9 @@ export default function ChampionPalette({ open, onClose }) {
           {filteredChampionList.map((champ) => (
             <button
               key={champ.id}
-              onClick={() => toggleChampion(champ.id)}
+              onClick={() => toggleChampion(champ)}
               className={`border-2 rounded flex flex-col items-center justify-center min-w-0 ${
-                selected.includes(champ.id)
+                selected.find((c) => c.id === champ.id)
                   ? "border-blue-500"
                   : "border-transparent"
               }`}
@@ -81,20 +88,19 @@ export default function ChampionPalette({ open, onClose }) {
           ))}
         </div>
         <div className="flex gap-2 flex-wrap">
-          {selected.map((id) => {
-            const champ = championList.find((c) => c.id === id);
-            return (
-              <div
-                key={id}
-                className="text-sm px-2 py-1 bg-blue-600 text-white rounded"
-              >
-                {champ?.name}
-              </div>
-            );
-          })}
+          {selected.map((champ) => (
+            <div
+              key={champ.id}
+              className="text-sm px-2 py-1 bg-blue-600 text-white rounded"
+            >
+              {champ?.name}
+            </div>
+          ))}
         </div>
         <div className="flex">
-          <button className="cursor-pointer">설정</button>
+          <button className="cursor-pointer" onClick={onClose}>
+            설정
+          </button>
         </div>
       </div>
     </Dialog>

@@ -31,8 +31,6 @@ export default function MyInfoPage() {
     },
   });
 
-  console.log(user);
-
   if (isError) {
     return <div>{error.message}</div>;
   }
