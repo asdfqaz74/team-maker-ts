@@ -56,7 +56,7 @@ export default function GlobalBan() {
                   priority
                 />
               </div>
-              <span className="absolute -bottom-10 text-white text-sm font-semibold">
+              <span className="absolute -bottom-10 text-white font-semibold">
                 {champion.name}
               </span>
             </li>
