@@ -1,50 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { userAtom, tokenAtom } from "@/store/auth";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMe } from "@/lib/api/fetchMe";
 
 export default function MyInfoPage() {
-  const [user, setUser] = useAtom(userAtom);
-  const [message, setMessage] = useState("");
+  const [, setUser] = useAtom(userAtom);
   const router = useRouter();
-
   const [token] = useAtom(tokenAtom);
 
-  useEffect(() => {
-    const storedToken = token || sessionStorage.getItem("token");
+  const storedToken =
+    token || (typeof window !== "undefined" && sessionStorage.getItem("token"));
 
-    if (!storedToken) {
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["me"],
+    queryFn: async () => fetchMe(storedToken),
+    enabled: !!storedToken,
+    onSuccess: (data) => {
+      setUser(data.user);
+    },
+    onError: () => {
       router.push("/auth/login");
-      return;
-    }
+    },
+  });
 
-    if (user) return;
-
-    const fetchUser = async () => {
-      const response = await fetch("/api/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setUser(data.user);
-      } else {
-        setMessage(data.error || "사용자 정보를 가져오는 데 실패했습니다.");
-      }
-    };
-
-    fetchUser();
-  }, [token, user, router, setUser]);
-
-  if (message) {
-    return <div>{message}</div>;
+  if (isError) {
+    return <div>{error.message}</div>;
   }
-  if (!user) {
+  if (isLoading) {
     return (
       <div>
         <h1>내 정보</h1>
