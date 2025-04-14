@@ -2,6 +2,7 @@
 
 import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function PlayerNicknameEditor({ playersData, maxDamage }) {
   const [players, setPlayers] = useState(() => playersData ?? []);
@@ -65,16 +66,24 @@ export default function PlayerNicknameEditor({ playersData, maxDamage }) {
       {players.map((p, i) => (
         <div key={i} className="p-4 border rounded shadow">
           <div className="flex justify-between items-center">
-            <div>
-              <p>
-                <strong>챔피언:</strong> {p.champion}
-              </p>
-              <p>
-                <strong>포지션:</strong> {p.position}
-              </p>
-              <p>
-                <strong>K/D/A:</strong> {p.kills}/{p.deaths}/{p.assists}
-              </p>
+            <div className="flex items-center gap-10">
+              <div>
+                <p>
+                  <strong>챔피언:</strong> {p.champion}
+                </p>
+                <p>
+                  <strong>포지션:</strong> {p.position}
+                </p>
+                <p>
+                  <strong>K/D/A:</strong> {p.kills}/{p.deaths}/{p.assists}
+                </p>
+              </div>
+              <Image
+                src={`/images/champions/portrait/${p.champion}.png`}
+                alt={p.champion}
+                width={100}
+                height={100}
+              ></Image>
             </div>
             <select
               className="border p-2"

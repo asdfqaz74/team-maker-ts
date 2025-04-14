@@ -1,8 +1,9 @@
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
-import { Provider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
 import Token from "./components/Token";
+import ClientProvider from "./ClientProvider";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -23,11 +24,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
       >
-        <Provider>
-          <Token />
-          <Header />
-          {children}
-        </Provider>
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );
