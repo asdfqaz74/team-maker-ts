@@ -16,8 +16,6 @@ export default function Page() {
 
   return (
     <div className="flex flex-col px-40 py-20">
-      <p className="text-4xl font-bold mb-2">Fearless Helper</p>
-      <p className="mb-10">피어리스 도우미</p>
       <TodayBanChampion />
       <SetBan
         set={"1 경기"}

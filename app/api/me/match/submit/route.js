@@ -24,7 +24,7 @@ export async function POST(request) {
     }
     const body = await request.json();
     console.log("매치 저장 요청", body);
-    const { players, maxDamage } = body;
+    const { players, maxDamage, banChampionsId } = body;
 
     if (!Array.isArray(players) || players.length === 0) {
       return Response.json(
@@ -37,6 +37,7 @@ export async function POST(request) {
       players,
       uploadedBy: member._id,
       maxDamage,
+      banChampion: banChampionsId,
     });
 
     return Response.json(

@@ -3,6 +3,7 @@
 import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import ChampionPalette from "@/app/components/ChampionPalette";
 
 export default function PlayerNicknameEditor({
   playersData,
@@ -11,6 +12,9 @@ export default function PlayerNicknameEditor({
 }) {
   const [players, setPlayers] = useState(() => playersData ?? []);
   const [userList, setUserList] = useState([]);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [bans, setBans] = useState([]);
 
   useEffect(() => {
     const token = getToken();
@@ -46,13 +50,15 @@ export default function PlayerNicknameEditor({
       return;
     }
 
+    const banChampionsId = bans.map((champ) => champ.id);
+
     const response = await fetch("/api/me/match/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ players, maxDamage }),
+      body: JSON.stringify({ players, maxDamage, banChampionsId }),
     });
 
     const data = await response.json();
@@ -110,8 +116,42 @@ export default function PlayerNicknameEditor({
             </div>
           </div>
         ))}
+
+      <div className="flex justify-between items-center">
+        <p>밴한 챔피언</p>
+        <button
+          className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-800 cursor-pointer"
+          onClick={() => setOpenModal(true)}
+        >
+          설정하기
+        </button>
+      </div>
+
+      <ChampionPalette
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        selected={bans}
+        setSelected={setBans}
+      />
+      <ul className="flex justify-evenly">
+        {bans &&
+          bans.map((champ) => (
+            <li key={champ.id}>
+              <Image
+                src={champ.image}
+                alt={champ.name}
+                width={60}
+                height={60}
+              />
+              <p className="text-sm text-center text-white truncate w-[4rem]">
+                {champ.name}
+              </p>
+            </li>
+          ))}
+      </ul>
+
       <button
-        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded"
+        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded cursor-pointer hover:bg-blue-700"
         onClick={handleSubmit}
       >
         제출하기

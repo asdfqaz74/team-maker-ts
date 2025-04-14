@@ -27,6 +27,13 @@ const MatchSchema = new mongoose.Schema(
       required: true,
     },
     maxDamage: Number,
+    banChampion: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Champion",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );
