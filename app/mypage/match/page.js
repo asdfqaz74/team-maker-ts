@@ -14,8 +14,9 @@ export default function MatchPage() {
       {parsed ? (
         <PlayerNicknameEditor
           playersData={parsed?.players}
-          onSubmit={(players) => {
-            console.log("닉네임 입력 완료", players);
+          maxDamage={parsed?.maxDamage}
+          onSubmit={() => {
+            setParsed(null);
           }}
         />
       ) : (

@@ -4,7 +4,11 @@ import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function PlayerNicknameEditor({ playersData, maxDamage }) {
+export default function PlayerNicknameEditor({
+  playersData,
+  maxDamage,
+  onSubmit,
+}) {
   const [players, setPlayers] = useState(() => playersData ?? []);
   const [userList, setUserList] = useState([]);
 
@@ -56,6 +60,7 @@ export default function PlayerNicknameEditor({ playersData, maxDamage }) {
     if (response.ok) {
       alert("닉네임이 성공적으로 저장되었습니다.");
       setPlayers(data.players);
+      onSubmit(data.players);
     } else {
       alert(data.error || "닉네임 저장에 실패했습니다.");
     }
@@ -63,47 +68,48 @@ export default function PlayerNicknameEditor({ playersData, maxDamage }) {
 
   return (
     <div className="space-y-4">
-      {players.map((p, i) => (
-        <div key={i} className="p-4 border rounded shadow">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-10">
-              <div>
-                <p>
-                  <strong>챔피언:</strong> {p.champion}
-                </p>
-                <p>
-                  <strong>포지션:</strong> {p.position}
-                </p>
-                <p>
-                  <strong>K/D/A:</strong> {p.kills}/{p.deaths}/{p.assists}
-                </p>
+      {players &&
+        players.map((p, i) => (
+          <div key={i} className="p-4 border rounded shadow">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-10">
+                <div>
+                  <p>
+                    <strong>챔피언:</strong> {p.champion}
+                  </p>
+                  <p>
+                    <strong>포지션:</strong> {p.position}
+                  </p>
+                  <p>
+                    <strong>K/D/A:</strong> {p.kills}/{p.deaths}/{p.assists}
+                  </p>
+                </div>
+                <Image
+                  src={`/images/champions/portrait/${p.champion}.png`}
+                  alt={p.champion}
+                  width={100}
+                  height={100}
+                ></Image>
               </div>
-              <Image
-                src={`/images/champions/portrait/${p.champion}.png`}
-                alt={p.champion}
-                width={100}
-                height={100}
-              ></Image>
+              <select
+                className="border p-2"
+                value={p.userNickname}
+                onChange={(e) => handleSelectChange(i, e.target.value)}
+              >
+                <option value="">닉네임 선택</option>
+                {userList.map((user) => (
+                  <option
+                    key={user._id}
+                    value={user.nickName}
+                    className="text-black"
+                  >
+                    {user.nickName}
+                  </option>
+                ))}
+              </select>
             </div>
-            <select
-              className="border p-2"
-              value={p.userNickname}
-              onChange={(e) => handleSelectChange(i, e.target.value)}
-            >
-              <option value="">닉네임 선택</option>
-              {userList.map((user) => (
-                <option
-                  key={user._id}
-                  value={user.nickName}
-                  className="text-black"
-                >
-                  {user.nickName}
-                </option>
-              ))}
-            </select>
           </div>
-        </div>
-      ))}
+        ))}
       <button
         className="mt-4 bg-blue-600 text-white px-6 py-2 rounded"
         onClick={handleSubmit}

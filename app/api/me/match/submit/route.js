@@ -23,7 +23,8 @@ export async function POST(request) {
       );
     }
     const body = await request.json();
-    const { players } = body;
+    console.log("매치 저장 요청", body);
+    const { players, maxDamage } = body;
 
     if (!Array.isArray(players) || players.length === 0) {
       return Response.json(

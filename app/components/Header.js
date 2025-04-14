@@ -13,6 +13,7 @@ import {
   selectedGroupAtom,
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
+import { QueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
@@ -29,6 +30,8 @@ export default function Header() {
   const resetPlayers = useResetAtom(playersAtom);
   const resetSelectedPlayer = useResetAtom(selectedPlayerAtom);
 
+  const queryClient = new QueryClient();
+
   // 로그아웃 핸들러
   // 로그아웃 시 토큰 삭제 및 상태 초기화
   const handleLogout = () => {
@@ -41,6 +44,8 @@ export default function Header() {
     resetCheckedPlayers();
     resetPlayers();
     resetSelectedPlayer();
+    queryClient.removeQueries({ queryKey: ["me"] });
+    queryClient.removeQueries({ queryKey: ["players"] });
     router.push("/auth/login");
   };
 

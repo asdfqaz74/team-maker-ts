@@ -4,10 +4,11 @@ import { useAtom } from "jotai";
 import { selectedPlayerAtom, fetchPlayersAtom } from "@/store/player";
 import { useState, useEffect } from "react";
 import { getToken } from "@/utils/getToken";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
-  const fetchPlayers = useAtom(fetchPlayersAtom)[1];
+  const queryClient = useQueryClient();
 
   const [nickName, setNickName] = useState(selectedPlayer?.nickName || "");
   const [position, setPosition] = useState(selectedPlayer?.position || "top");
@@ -33,31 +34,42 @@ export default function PlayerDB() {
     }
   }, [selectedPlayer]);
 
-  const handleEditPlayerDB = async () => {
-    const token = getToken();
+  const { mutate: editPlayer, isPending } = useMutation({
+    mutationFn: async () => {
+      const token = getToken();
+      const response = await fetch(`/api/me/player/${selectedPlayer._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nickName,
+          position,
+          eloRating: elo,
+        }),
+      });
 
-    const response = await fetch(`/api/me/player/${selectedPlayer._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        nickName,
-        position,
-        eloRating: elo,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error || "선수 정보 수정에 실패했습니다.");
+      return data;
+    },
+    onSuccess: () => {
       alert("선수 정보가 수정되었습니다.");
-      fetchPlayers(token);
-    } else {
-      alert(data.error || "선수 정보 수정에 실패했습니다.");
-    }
+      queryClient.invalidateQueries({ queryKey: ["players"] });
+    },
+    onError: (error) => {
+      alert(error.message || "선수 정보 수정에 실패했습니다.");
+    },
+  });
+
+  const handleEditPlayerDB = async () => {
+    editPlayer();
   };
+
+  if (isPending) return <p>수정 중...</p>;
+  if (!selectedPlayer) return <p>선수를 선택해주세요.</p>;
 
   return (
     <div>

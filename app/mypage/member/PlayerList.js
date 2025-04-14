@@ -1,6 +1,9 @@
 "use client";
 import { useAtom, useSetAtom } from "jotai";
-import { playersAtom, selectedPlayerAtom } from "@/store/player";
+import { selectedPlayerAtom } from "@/store/player";
+import { tokenAtom } from "@/store/auth";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPlayers } from "@/lib/api/fetchPlayers";
 
 const positionMap = {
   top: "탑",
@@ -11,8 +14,22 @@ const positionMap = {
 };
 
 export default function PlayerList() {
-  const [players] = useAtom(playersAtom);
+  const [token] = useAtom(tokenAtom);
   const setSelectedPlayer = useSetAtom(selectedPlayerAtom);
+
+  const {
+    data: players = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["players"],
+    queryFn: async () => fetchPlayers(token),
+    enabled: !!token,
+  });
+
+  if (isLoading) return <p>로딩 중...</p>;
+  if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 
   return (
     <div className="p-4">
