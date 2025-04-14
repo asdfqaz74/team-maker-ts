@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { userAtom, tokenAtom } from "@/store/auth";
@@ -26,7 +24,7 @@ export default function MyInfoPage() {
     queryFn: async () => fetchMe(storedToken),
     enabled: !!storedToken,
     onSuccess: (data) => {
-      setUser(data.user);
+      setUser(data);
     },
     onError: () => {
       router.push("/auth/login");
