@@ -31,6 +31,8 @@ export default function MyInfoPage() {
     },
   });
 
+  console.log(user);
+
   if (isError) {
     return <div>{error.message}</div>;
   }
@@ -41,6 +43,17 @@ export default function MyInfoPage() {
         <p>아이디: 불러오는 중입니다...</p>
         <p>이메일: 불러오는 중입니다...</p>
         <p>이름: 불러오는 중입니다...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <h1>내 정보</h1>
+        <p>아이디: -</p>
+        <p>이메일: -</p>
+        <p>이름: -</p>
       </div>
     );
   }
