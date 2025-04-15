@@ -43,7 +43,7 @@ export default function MostSwiper({ champions }) {
             return (
               <SwiperSlide key={idx} className="flex justify-center items-end">
                 <div
-                  className={`relative rounded-2xl shadow-lg overflow-visible transition-all duration-300 border border-amber-50 ${
+                  className={`relative rounded-2xl shadow-lg overflow-visible transition-all duration-300 border border-amber-50 translate-x-15 ${
                     isSecondSlide
                       ? "w-60 h-90 translate-y-40"
                       : "w-50 aspect-square translate-y-80"
