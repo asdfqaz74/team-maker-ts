@@ -48,46 +48,61 @@ export default function FindPage() {
   };
 
   return (
-    <div className="flex">
-      <div>
-        <h1>아이디 찾기</h1>
+    <div className="flex justify-center items-center py-20 gap-28">
+      <div className="flex flex-col gap-4 items-start">
+        <h1 className="text-xl font-bold">아이디 찾기</h1>
         <span>이름</span>
         <input
           type="text"
           placeholder="이름을 입력하세요"
           onChange={(e) => setFindIdName(e.target.value)}
+          className="bg-gray-400 placeholder-gray-700"
         />
         <span>이메일</span>
         <input
           type="email"
           placeholder="이메일을 입력하세요"
           onChange={(e) => setFindIdEmail(e.target.value)}
+          className="bg-gray-400 placeholder-gray-700"
         />
-        <button onClick={handleFindId}>아이디 찾기</button>
+        <button
+          onClick={handleFindId}
+          className="bg-sky-700 rounded p-2 cursor-pointer"
+        >
+          아이디 찾기
+        </button>
         {messageId && <p>{messageId}</p>}
         {userId && <p>아이디: {userId}</p>}
       </div>
-      <div>
-        <h1>비밀번호 찾기</h1>
+      <div className="flex flex-col gap-4 items-start">
+        <h1 className="text-xl font-bold">비밀번호 찾기</h1>
         <span>이름</span>
         <input
           type="text"
           placeholder="이름을 입력하세요"
           onChange={(e) => setFindPwName(e.target.value)}
+          className="bg-gray-400 placeholder-gray-700"
         />
         <span>이메일</span>
         <input
           type="email"
           placeholder="이메일을 입력하세요"
           onChange={(e) => setFindPwEmail(e.target.value)}
+          className="bg-gray-400 placeholder-gray-700"
         />
         <span>아이디</span>
         <input
           type="text"
           placeholder="아이디를 입력하세요"
           onChange={(e) => setFindPwId(e.target.value)}
+          className="bg-gray-400 placeholder-gray-700"
         />
-        <button onClick={handleResetPassword}>비밀번호 찾기</button>
+        <button
+          onClick={handleResetPassword}
+          className="bg-sky-700 rounded p-2 cursor-pointer"
+        >
+          비밀번호 찾기
+        </button>
         {messagePw && <p>{messagePw}</p>}
       </div>
     </div>
