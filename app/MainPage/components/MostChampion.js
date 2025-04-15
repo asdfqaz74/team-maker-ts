@@ -14,6 +14,9 @@ export default function MostChampion() {
   } = useQuery({
     queryKey: ["mostChampion"],
     queryFn: fetchMostChampionTop5,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    staleTime: 1000 * 60 * 5, // 5분
   });
 
   if (isLoading) return <div className="animate-pulse">Loading...</div>;
