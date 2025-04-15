@@ -3,6 +3,7 @@
 import { fetchMostChampionTop5 } from "@/lib/api/fetchMostChampionTop5";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import MostSwiper from "./MostSwiper";
 
 export default function MostChampion() {
   const {
@@ -20,21 +21,7 @@ export default function MostChampion() {
 
   return (
     <div className="px-60 py-20 bg-[url('/images/MainPage/mainpage-2.png')] flex justify-evenly">
-      {mostChampion &&
-        mostChampion.map((champion) => (
-          <div
-            key={champion.en_name}
-            className="flex flex-col items-center gap-2"
-          >
-            <Image
-              src={champion.image}
-              alt={champion.name}
-              width={140}
-              height={180}
-            />
-            <span className=" text-white font-semibold">{champion.name}</span>
-          </div>
-        ))}
+      {mostChampion && <MostSwiper champions={mostChampion} />}
     </div>
   );
 }
