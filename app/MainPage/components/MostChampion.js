@@ -4,6 +4,7 @@ import { fetchMostChampionTop5 } from "@/lib/api/fetchMostChampionTop5";
 import { useQuery } from "@tanstack/react-query";
 
 import MostSwiper from "./MostSwiper";
+import MostSwiperSkeleton from "./MostSwiperSkeleton";
 
 export default function MostChampion() {
   const {
@@ -19,7 +20,7 @@ export default function MostChampion() {
     staleTime: 1000 * 60 * 5, // 5분
   });
 
-  if (isLoading) return <div className="animate-pulse">Loading...</div>;
+  if (isLoading) return <MostSwiperSkeleton />;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
