@@ -2,7 +2,7 @@
 
 import { fetchMostChampionTop5 } from "@/lib/api/fetchMostChampionTop5";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+
 import MostSwiper from "./MostSwiper";
 
 export default function MostChampion() {
