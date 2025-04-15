@@ -24,6 +24,13 @@ export default function MostSwiper({ champions }) {
           opacity: 0.5,
         }}
       />
+      <Image
+        src="/images/MainPage/MostLogo.png"
+        alt="모스트 챔피언 5"
+        width={400}
+        height={100}
+        className="absolute top-5 left-10 z-20"
+      />
 
       {/* Swiper 콘텐츠 */}
       <div className="relative w-full h-full z-10 py-10 px-5">
