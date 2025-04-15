@@ -48,7 +48,7 @@ export default function MostSwiper({ champions }) {
           loop={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          speed={3000}
+          speed={1000}
           className="w-full h-full"
         >
           {champions.map((champion, idx) => {
