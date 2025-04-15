@@ -25,6 +25,20 @@ export default function MostSwiper({ champions }) {
         }}
       />
 
+      {/* 배경 이미지 preloading */}
+      <div className="hidden">
+        {champions.map((champion, idx) => (
+          <Image
+            key={idx}
+            src={champion.logo}
+            alt=""
+            width={1}
+            height={1}
+            priority
+          />
+        ))}
+      </div>
+
       {/* 타이틀 */}
       <Image
         src="/images/MainPage/MostLogo.png"

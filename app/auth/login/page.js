@@ -48,7 +48,7 @@ export default function LoginPage() {
             placeholder="아이디를 입력하세요"
             onChange={(e) => setUserId(e.target.value)}
             id="userId"
-            className="bg-gray-400 placeholder-gray-700"
+            className="bg-gray-400 placeholder-gray-700 text-black px-2"
           />
         </div>
         <div className="flex gap-4">
@@ -58,7 +58,7 @@ export default function LoginPage() {
             placeholder="비밀번호를 입력하세요"
             onChange={(e) => setPassword(e.target.value)}
             id="password"
-            className="bg-gray-400 placeholder-gray-700"
+            className="bg-gray-400 placeholder-gray-700 text-black px-2"
           />
         </div>
       </div>
