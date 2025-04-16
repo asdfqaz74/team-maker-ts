@@ -63,7 +63,7 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center py-4 px-40 justify-between bg-[#030222]">
+    <div className="flex items-center py-4 px-40 justify-between bg-[#030222] sticky top-0 z-50">
       <span className="text-[1.875rem] font-[Alumni]">
         <Link href={"/"}>Tea M aker</Link>
       </span>
