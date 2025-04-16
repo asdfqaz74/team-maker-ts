@@ -26,8 +26,6 @@ export default function Page() {
     queryFn: fetchGlobalBan,
   });
 
-  console.log(bans);
-
   const formatList = (arr) => arr.map((champion) => champion.name).join(" ");
 
   const handleCopy = async () => {
