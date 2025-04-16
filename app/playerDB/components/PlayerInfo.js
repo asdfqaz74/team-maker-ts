@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-function createData(name, nickName, position, ELO, winRate) {
-  return { name, nickName, position, ELO, winRate };
+function createData(name, nickName, position, eloRating, winRate) {
+  return { name, nickName, position, eloRating, winRate };
 }
 
 export default function PlayerInfo() {
@@ -28,15 +28,15 @@ export default function PlayerInfo() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const rows = playerInfo.map((player) => {
-    return createData(
+  const rows = playerInfo.map((player) =>
+    createData(
       player.name,
       player.nickName,
       player.position,
-      player.ELO,
+      player.eloRating,
       player.winRate
-    );
-  });
+    )
+  );
 
   console.log("playerInfo", playerInfo);
 
@@ -45,7 +45,7 @@ export default function PlayerInfo() {
   if (!playerInfo) return <div>No data available</div>;
 
   return (
-    <div>
+    <div className="">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -68,7 +68,7 @@ export default function PlayerInfo() {
                 </TableCell>
                 <TableCell>{row?.nickName}</TableCell>
                 <TableCell>{row?.position}</TableCell>
-                <TableCell>{row?.ELO}</TableCell>
+                <TableCell>{row?.eloRating}</TableCell>
                 <TableCell>{row?.winRate}</TableCell>
               </TableRow>
             ))}
