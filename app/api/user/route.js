@@ -69,8 +69,6 @@ export async function GET(request) {
       delete user.group;
     });
 
-    console.log("users", users);
-
     return Response.json(users);
   } catch (error) {
     console.error("유저 조회 중 오류:", error);

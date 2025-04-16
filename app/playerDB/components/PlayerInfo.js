@@ -38,8 +38,6 @@ export default function PlayerInfo() {
     )
   );
 
-  console.log("playerInfo", playerInfo);
-
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   if (!playerInfo) return <div>No data available</div>;
