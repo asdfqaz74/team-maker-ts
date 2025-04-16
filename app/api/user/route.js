@@ -54,7 +54,7 @@ export async function GET(request) {
         return;
       }
       const winRate = (user.wins / user.totalGames) * 100;
-      user.winRate = winRate.toFixed(2) + "%";
+      user.winRate = winRate + "%";
     });
 
     // 불필요한 필드 제거

@@ -34,6 +34,7 @@ const UserSchema = new mongoose.Schema({
     ref: "Member",
     required: true,
   },
+  lastMonthlyReset: { type: Date, default: new Date() },
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
