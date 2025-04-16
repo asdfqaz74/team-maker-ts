@@ -72,7 +72,9 @@ export default function Header() {
           <Link href="/">홈</Link>
         </li>
         <li className="px-5">팀 메이커</li>
-        <li className="px-5">플레이어 정보</li>
+        <li className="px-5">
+          <Link href={"/playerDB"}>플레이어 정보</Link>
+        </li>
         {isLoggedIn && (
           <li className="px-5">
             <Link href="/fearless">피어리스 도우미</Link>

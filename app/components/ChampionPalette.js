@@ -21,6 +21,9 @@ export default function ChampionPalette({
   } = useQuery({
     queryKey: ["championList"],
     queryFn: fetchChampionList,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 1000 * 60 * 60,
   });
 
   const filteredChampionList = championList.filter((champ) =>
