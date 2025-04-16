@@ -25,7 +25,7 @@ export async function POST(request) {
       );
     }
     const body = await request.json();
-    console.log("매치 저장 요청", body);
+
     const { players, maxDamage, banChampionsId } = body;
 
     if (!Array.isArray(players) || players.length === 0) {

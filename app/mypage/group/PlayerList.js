@@ -89,7 +89,6 @@ export default function PlayerList() {
     });
 
     const data = response.json();
-    console.log(data);
 
     if (response.ok) {
       setCheckedPlayers((prev) => {
