@@ -8,7 +8,6 @@ const titleColor = {
 
 export default function Pick({ data, isLoading, title }) {
   const color = titleColor[title] || "#000000";
-  console.log(data, "data");
 
   return (
     <div className="border border-[#0FA4FE] p-10 rounded-2xl">

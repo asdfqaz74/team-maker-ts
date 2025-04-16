@@ -55,7 +55,7 @@ export default function ChampionPalette({
         },
       }}
     >
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center py-10 gap-5">
         <input
           type="text"
           className="bg-[#D9D9D9] placeholder-gray-500 p-2 text-gray-950 w-1/2 my-6"
@@ -63,6 +63,9 @@ export default function ChampionPalette({
           value={searchChampion}
           onChange={(e) => setSearchChampion(e.target.value)}
         />
+        <p className="mb-5 text-white">
+          현재 선택한 챔피언 수 : {selected.length}개
+        </p>
         <div className="grid grid-cols-8 gap-2">
           {filteredChampionList.map((champ) => (
             <button
@@ -87,19 +90,26 @@ export default function ChampionPalette({
             </button>
           ))}
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <p className="text-white mt-5">
+          현재 선택한 챔피언 수 : {selected.length}개
+        </p>
+        <div className="grid grid-cols-5 gap-2">
           {selected.map((champ) => (
             <div
               key={champ.id}
-              className="text-sm px-2 py-1 bg-blue-600 text-white rounded"
+              className="text-sm px-2 py-1 bg-blue-600 text-white rounded text-center w-[5.0625rem] truncate"
             >
               {champ?.name}
             </div>
           ))}
         </div>
         <div className="flex">
-          <button className="cursor-pointer" onClick={onClose}>
-            설정
+          <button
+            className="cursor-pointer bg-sky-700 hover:bg-sky-900 text-white p-2 rounded disabled:bg-gray-500 disabled:cursor-not-allowed"
+            onClick={onClose}
+            disabled={selected.length === 0 || selected.length > 10}
+          >
+            설정하기
           </button>
         </div>
       </div>

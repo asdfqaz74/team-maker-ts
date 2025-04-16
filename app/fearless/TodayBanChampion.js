@@ -1,18 +1,11 @@
-import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
-export default function TodayBanChampion() {
-  const {
-    data: champions = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["globalBan"],
-    queryFn: fetchGlobalBan,
-  });
-
+export default function TodayBanChampion({
+  champions,
+  isLoading,
+  isError,
+  error,
+}) {
   return (
     <div className="my-10">
       <p className="text-2xl font-semibold">Today Global Ban</p>
