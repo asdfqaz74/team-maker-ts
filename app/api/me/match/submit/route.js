@@ -11,7 +11,7 @@ export async function POST(request) {
 
   const token = getTokenFromHeader(request.headers);
   if (!token) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "권한이 없습니다." }, { status: 401 });
   }
 
   try {
@@ -43,7 +43,7 @@ export async function POST(request) {
     });
 
     for (const player of players) {
-      const { userNickname, win } = player;
+      const { userNickname, win, position } = player;
 
       const user = await User.findOne({ nickName: userNickname });
       if (!user) continue;
@@ -71,9 +71,16 @@ export async function POST(request) {
       if (win) {
         user.wins += 1;
         user.monthlyWins += 1;
+        if (user.eloRating && user.eloRating[position] !== undefined) {
+          user.eloRating[position] += 10;
+        }
       } else {
         user.losses += 1;
         user.monthlyLosses += 1;
+
+        if (user.eloRating && user.eloRating[position] !== undefined) {
+          user.eloRating[position] -= 10;
+        }
       }
 
       await user.save();
