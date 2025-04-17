@@ -14,15 +14,6 @@ export default function MostSwiper({ champions }) {
 
   return (
     <div className="relative w-full h-[37.5rem] rounded-2xl">
-      {/* 배경 이미지 */}
-      <Image
-        src={background}
-        alt="배경 이미지"
-        fill
-        className="object-cover z-0 rounded-xl opacity-50 transition-opacity duration-300"
-        priority
-      />
-
       {/* 배경 이미지 preloading */}
       <div className="hidden">
         {champions.map((champion, idx) => (
@@ -36,6 +27,15 @@ export default function MostSwiper({ champions }) {
           />
         ))}
       </div>
+
+      {/* 배경 이미지 */}
+      <Image
+        src={background}
+        alt="배경 이미지"
+        fill
+        className="object-cover z-0 rounded-xl opacity-50 transition-opacity duration-300"
+        priority
+      />
 
       {/* 타이틀 */}
       <Image
@@ -106,6 +106,7 @@ export default function MostSwiper({ champions }) {
           })}
         </Swiper>
       </div>
+
       {/* 커스텀 버튼 */}
       <div className="swiper-custom-prev absolute -left-20 top-1/2 -translate-y-1/2 z-30 w-[60px] h-[60px] cursor-pointer">
         <Image
