@@ -1,7 +1,6 @@
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "./ClientProvider";
-import Script from "next/script";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -44,15 +43,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko-KR">
-      <body
-        className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
-      >
-        <Script
+      <head>
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1539093914229562"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        ></script>
+      </head>
+      <body
+        className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
+      >
         <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
