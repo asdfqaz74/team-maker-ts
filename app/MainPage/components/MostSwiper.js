@@ -15,14 +15,12 @@ export default function MostSwiper({ champions }) {
   return (
     <div className="relative w-full h-[37.5rem] rounded-2xl">
       {/* 배경 이미지 */}
-      <div
-        className="absolute inset-0 bg-black z-0 transition-all duration-300 rounded-xl"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: 0.5,
-        }}
+      <Image
+        src={background}
+        alt="배경 이미지"
+        fill
+        className="object-cover z-0 rounded-xl opacity-50 transition-opacity duration-300"
+        priority
       />
 
       {/* 배경 이미지 preloading */}
