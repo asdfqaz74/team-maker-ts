@@ -1,11 +1,35 @@
 "use client";
 
+import { Alert, Slide, Snackbar } from "@mui/material";
 import { useState } from "react";
+
+function SlideTransition(props) {
+  return <Slide {...props} direction="left" />;
+}
 
 export default function UploadFile({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+
+  // 토스트 관리를 위한 상태
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackColor, setSnackColor] = useState("success");
+  const [state, setState] = useState({
+    open: false,
+    Transition: SlideTransition,
+  });
+
+  // 토스트 핸들러
+  const showSnack = (message, type = "success") => {
+    setSnackMessage(message);
+    setSnackColor(type);
+    setState({ open: true, Transition: SlideTransition });
+  };
+
+  const handleSnackClose = () => {
+    setState({ ...state, open: false });
+  };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
@@ -20,7 +44,7 @@ export default function UploadFile({ onUploadSuccess }) {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     if (!file) {
-      alert("파일을 선택해주세요.");
+      showSnack("파일을 선택해주세요.", "error");
       return;
     }
 
@@ -37,17 +61,17 @@ export default function UploadFile({ onUploadSuccess }) {
 
       const data = await response.json();
 
-      console.log(data);
-
       if (response.ok) {
-        alert("파일 업로드 성공: " + data.message);
-        onUploadSuccess(data.match);
+        showSnack("파일 업로드 성공");
+
+        setTimeout(() => {
+          onUploadSuccess(data.match);
+        }, 800);
       } else {
-        alert("파일 업로드 실패: " + data.error);
+        showSnack(`파일 업로드 실패: ${data.error}`, "error");
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("파일 업로드 중 오류가 발생했습니다.");
+      showSnack("파일 업로드 중 에러 발생", "error");
     } finally {
       setIsUploading(false);
     }
@@ -79,10 +103,22 @@ export default function UploadFile({ onUploadSuccess }) {
         className={`mt-2 px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 ${
           isUploading ? "cursor-not-allowed bg-gray-500" : ""
         }`}
-        onClick={handleUpload}
+        onClick={() => handleUpload()}
+        disabled={isUploading}
       >
         업로드
       </button>
+      <Snackbar
+        open={state.open}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        slots={{ transition: state.Transition }}
+      >
+        <Alert onClose={handleSnackClose} severity={snackColor}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

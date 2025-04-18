@@ -4,6 +4,11 @@ import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ChampionPalette from "@/app/components/ChampionPalette";
+import { Alert, Snackbar, Slide } from "@mui/material";
+
+function SlideTransition(props) {
+  return <Slide {...props} direction="left" />;
+}
 
 export default function PlayerNicknameEditor({
   playersData,
@@ -15,6 +20,24 @@ export default function PlayerNicknameEditor({
 
   const [openModal, setOpenModal] = useState(false);
   const [bans, setBans] = useState([]);
+
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackColor, setSnackColor] = useState("success");
+  const [state, setState] = useState({
+    open: false,
+    Transition: SlideTransition,
+  });
+
+  // 토스트 핸들러
+  const showSnack = (message, type = "success") => {
+    setSnackMessage(message);
+    setSnackColor(type);
+    setState({ open: true, Transition: SlideTransition });
+  };
+
+  const handleSnackClose = () => {
+    setState({ ...state, open: false });
+  };
 
   useEffect(() => {
     const token = getToken();
@@ -40,13 +63,13 @@ export default function PlayerNicknameEditor({
 
   const handleSubmit = async () => {
     if (players.some((player) => !player.userNickname)) {
-      alert("모든 플레이어의 닉네임을 입력해주세요.");
+      showSnack("모든 플레이어의 닉네임을 선택해주세요.", "error");
       return;
     }
 
     const token = getToken();
     if (!token) {
-      alert("로그인이 필요합니다.");
+      showSnack("로그인이 필요합니다.", "error");
       return;
     }
 
@@ -64,11 +87,14 @@ export default function PlayerNicknameEditor({
     const data = await response.json();
 
     if (response.ok) {
-      alert("닉네임이 성공적으로 저장되었습니다.");
-      setPlayers(data.players);
-      onSubmit(data.players);
+      showSnack("닉네임이 성공적으로 저장되었습니다.");
+
+      setTimeout(() => {
+        setPlayers(data.players);
+        onSubmit(data.players);
+      }, 800);
     } else {
-      alert(data.error || "닉네임 저장에 실패했습니다.");
+      showSnack(data.error || "닉네임 저장에 실패했습니다.", "error");
     }
   };
 
@@ -156,6 +182,17 @@ export default function PlayerNicknameEditor({
       >
         제출하기
       </button>
+      <Snackbar
+        open={state.open}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        slots={{ transition: state.Transition }}
+      >
+        <Alert onClose={handleSnackClose} severity={snackColor}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
