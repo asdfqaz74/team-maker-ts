@@ -17,7 +17,7 @@ export async function GET() {
         },
       },
       { $addFields: { winRate: { $divide: ["$winCount", "$count"] } } },
-      { $sort: { count: -1, winRate: -1 } },
+      { $sort: { winRate: -1, count: -1 } },
       { $limit: 3 },
       {
         $lookup: {
