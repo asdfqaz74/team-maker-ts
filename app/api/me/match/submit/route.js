@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
 import User from "@/models/User";
 import { findMember } from "@/utils/findMember";
+import { getTeamAvgElo } from "@/utils/getTeamAvgElo";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
 import dayjs from "dayjs";
@@ -43,7 +44,7 @@ export async function POST(request) {
     });
 
     for (const player of players) {
-      const { userNickname, win, position } = player;
+      const { userNickname, win, position, team } = player;
 
       const user = await User.findOne({ nickName: userNickname });
       if (!user) continue;
@@ -68,27 +69,14 @@ export async function POST(request) {
       user.totalGames += 1;
       user.monthlyTotalGames += 1;
 
-      if (win) {
-        user.wins += 1;
-        user.monthlyWins += 1;
-        if (user.eloRating && user.eloRating[position] !== undefined) {
-          user.eloRating[position] += 10;
-        }
-      } else {
-        user.losses += 1;
-        user.monthlyLosses += 1;
+      // 팀 Elo 계산
+      const myTeam = players.filter((player) => player.team === team);
+      const enemyTeam = players.filter((player) => player.team !== team);
 
-        if (user.eloRating && user.eloRating[position] !== undefined) {
-          user.eloRating[position] -= 10;
-        }
-      }
+      const myTeamAvg = await getTeamAvgElo(myTeam);
+      const enemyTeamAvg = await getTeamAvgElo(enemyTeam);
 
-      // 연승 적용
-      if (win) {
-        user.winStreak = (user.winStreak || 0) + 1;
-      } else {
-        user.winStreak = 0;
-      }
+      // Elo 변화량 계산
 
       await user.save();
     }

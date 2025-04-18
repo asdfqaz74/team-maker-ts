@@ -33,6 +33,8 @@ export default function UploadFile({ onUploadSuccess }) {
 
     const data = await response.json();
 
+    console.log(data);
+
     if (response.ok) {
       alert("파일 업로드 성공: " + data.message);
       onUploadSuccess(data.match);
