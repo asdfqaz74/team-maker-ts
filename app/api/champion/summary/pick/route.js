@@ -17,7 +17,7 @@ export async function GET() {
         },
       },
       { $addFields: { winRate: { $divide: ["$winCount", "$count"] } } },
-      { $sort: { winRate: -1 } },
+      { $sort: { count: -1, winRate: -1 } },
       { $limit: 3 },
       {
         $lookup: {
@@ -27,7 +27,6 @@ export async function GET() {
           as: "bestPick",
         },
       },
-      { $sort: { count: -1, winRate: -1 } },
       {
         $project: {
           _id: 0,
@@ -37,7 +36,11 @@ export async function GET() {
             $concat: ["/images/champions/portrait/", "$_id", ".png"],
           },
           count: 1,
-          winRate: { $multiply: [{ $divide: ["$winCount", "$count"] }, 100] },
+          winRate: {
+            $round: [
+              { $multiply: [{ $divide: ["$winCount", "$count"] }, 100] },
+            ],
+          },
         },
       },
     ]);
