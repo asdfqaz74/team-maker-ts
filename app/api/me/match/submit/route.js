@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
 import User from "@/models/User";
+import { calculateElo } from "@/utils/calculateElo";
 import { findMember } from "@/utils/findMember";
 import { getTeamAvgElo } from "@/utils/getTeamAvgElo";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
@@ -73,10 +74,30 @@ export async function POST(request) {
       const myTeam = players.filter((player) => player.team === team);
       const enemyTeam = players.filter((player) => player.team !== team);
 
-      const myTeamAvg = await getTeamAvgElo(myTeam);
-      const enemyTeamAvg = await getTeamAvgElo(enemyTeam);
+      const myTeamAvg = await getTeamAvgElo(myTeam, position);
+      const enemyTeamAvg = await getTeamAvgElo(enemyTeam, position);
 
       // Elo 변화량 계산
+      const myElo = user.eloRating?.[position] || 1000;
+
+      const delta = calculateElo({
+        myTeamAvg,
+        enemyTeamAvg,
+        win,
+        streak: user.winStreak || 0,
+      });
+
+      user.eloRating[position] = myElo + delta;
+
+      if (win) {
+        user.wins += 1;
+        user.monthlyWins += 1;
+        user.winStreak = (user.winStreak || 0) + 1;
+      } else {
+        user.losses += 1;
+        user.monthlyLosses += 1;
+        user.winStreak = 0;
+      }
 
       await user.save();
     }
