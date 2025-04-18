@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function UploadFile({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
@@ -23,23 +24,32 @@ export default function UploadFile({ onUploadSuccess }) {
       return;
     }
 
+    setIsUploading(true);
+
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${baseUrl}/match/upload`, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${baseUrl}/match/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    console.log(data);
+      console.log(data);
 
-    if (response.ok) {
-      alert("파일 업로드 성공: " + data.message);
-      onUploadSuccess(data.match);
-    } else {
-      alert("파일 업로드 실패: " + data.error);
+      if (response.ok) {
+        alert("파일 업로드 성공: " + data.message);
+        onUploadSuccess(data.match);
+      } else {
+        alert("파일 업로드 실패: " + data.error);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("파일 업로드 중 오류가 발생했습니다.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -66,7 +76,9 @@ export default function UploadFile({ onUploadSuccess }) {
         )}
       </div>
       <button
-        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700"
+        className={`mt-2 px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 ${
+          isUploading ? "cursor-not-allowed bg-gray-500" : ""
+        }`}
         onClick={handleUpload}
       >
         업로드
