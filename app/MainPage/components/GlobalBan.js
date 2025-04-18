@@ -52,7 +52,7 @@ export default function GlobalBan() {
                   alt={champion.name}
                   width={140}
                   height={180}
-                  className="object-cover w-full h-full"
+                  className="object-center w-full h-full"
                   priority
                 />
               </div>
