@@ -27,6 +27,7 @@ export async function GET() {
           as: "bestPick",
         },
       },
+      { $sort: { count: -1, winRate: -1 } },
       {
         $project: {
           _id: 0,
