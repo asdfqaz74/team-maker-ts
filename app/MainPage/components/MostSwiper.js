@@ -1,41 +1,63 @@
 "use client";
 
-import { useState } from "react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { useState, useRef } from "react";
+import { Navigation, Autoplay, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 import Image from "next/image";
 
 export default function MostSwiper({ champions }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const secondIndex = (activeIndex + 1) % champions.length;
-  const background = champions?.[secondIndex]?.logo || "";
+  const shiftedChampions = [...champions.slice(1), champions[0]];
+
+  // 스와이퍼 참초 객체
+  const contentSwiperRef = useRef(null);
+  const bgSwiperRef = useRef(null);
+
+  // 버튼 동기화
+  const handleNext = () => {
+    contentSwiperRef.current?.slideNext();
+    bgSwiperRef.current?.slideNext();
+  };
+
+  const handlePrev = () => {
+    contentSwiperRef.current?.slidePrev();
+    bgSwiperRef.current?.slidePrev();
+  };
 
   return (
     <div className="relative w-full h-[37.5rem] rounded-2xl">
-      {/* 배경 이미지 preloading */}
-      <div className="hidden">
-        {champions.map((champion, idx) => (
-          <Image
-            key={idx}
-            src={champion.logo}
-            alt=""
-            width={1}
-            height={1}
-            priority
-          />
-        ))}
-      </div>
-
-      {/* 배경 이미지 */}
-      <Image
-        src={background}
-        alt="배경 이미지"
-        fill
-        className="object-cover z-0 rounded-xl opacity-50 transition-opacity duration-300"
-        priority
-      />
+      {/* 배경 이미지 Swiper */}
+      <Swiper
+        modules={[Autoplay, EffectFade]}
+        effect="fade"
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        loop
+        speed={1000}
+        slidesPerView={1}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        allowTouchMove={false}
+        onSwiper={(swiper) => (bgSwiperRef.current = swiper)}
+        className="absolute inset-0 opacity-70 z-0 rounded-2xl"
+      >
+        {shiftedChampions.map((champion, idx) => {
+          return (
+            <SwiperSlide key={idx}>
+              <div className="relative w-full h-[37.5rem]">
+                <Image
+                  src={champion.logo}
+                  alt={champion.name}
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </div>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
 
       {/* 타이틀 */}
       <Image
@@ -48,7 +70,7 @@ export default function MostSwiper({ champions }) {
 
       {/* Swiper 콘텐츠 */}
 
-      <div className="relative w-full h-full z-10 py-10 px-5">
+      <div className="absolute inset-0 z-10 py-10 px-5">
         <Swiper
           modules={[Navigation, Autoplay]}
           navigation={{
@@ -61,7 +83,9 @@ export default function MostSwiper({ champions }) {
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           speed={1000}
-          className="w-full h-full"
+          allowTouchMove={false}
+          onSwiper={(swiper) => (contentSwiperRef.current = swiper)}
+          className="w-full h-full z-10"
         >
           {champions.map((champion, idx) => {
             const isSecondSlide = idx === (activeIndex + 1) % champions.length;
@@ -108,23 +132,29 @@ export default function MostSwiper({ champions }) {
       </div>
 
       {/* 커스텀 버튼 */}
-      <div className="swiper-custom-prev absolute -left-20 top-1/2 -translate-y-1/2 z-30 w-[60px] h-[60px] cursor-pointer">
+      <button
+        className="swiper-custom-prev absolute -left-20 top-1/2 -translate-y-1/2 z-30 w-[60px] h-[60px] cursor-pointer"
+        onClick={handlePrev}
+      >
         <Image
           src="/images/MainPage/Left circle.png"
           alt="이전 슬라이드"
           fill
           className="object-contain"
         />
-      </div>
+      </button>
 
-      <div className="swiper-custom-next absolute -right-20 top-1/2 -translate-y-1/2 z-30 w-[50px] h-[50px] cursor-pointer rotate-180">
+      <button
+        className="swiper-custom-next absolute -right-20 top-1/2 -translate-y-1/2 z-30 w-[50px] h-[50px] cursor-pointer rotate-180"
+        onClick={handleNext}
+      >
         <Image
           src="/images/MainPage/Left circle.png"
           alt="다음 슬라이드"
           fill
           className="object-contain"
         />
-      </div>
+      </button>
     </div>
   );
 }
