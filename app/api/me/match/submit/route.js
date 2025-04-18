@@ -83,6 +83,13 @@ export async function POST(request) {
         }
       }
 
+      // 연승 적용
+      if (win) {
+        user.winStreak = (user.winStreak || 0) + 1;
+      } else {
+        user.winStreak = 0;
+      }
+
       await user.save();
     }
 

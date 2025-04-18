@@ -35,6 +35,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   lastMonthlyReset: { type: Date, default: () => new Date() },
+  winStreak: { type: Number, default: 0 },
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
