@@ -13,6 +13,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import RecentPositionGraph from "./RecentPositionGraph";
+import RecentWinRateGraph from "./RecentWinRateGraph";
 
 function createData(top, jug, mid, adc, sup) {
   return { top, jug, mid, adc, sup };
@@ -38,6 +39,9 @@ export default function PlayerDetail({ open, onClose, player }) {
   const recentMatches = userDetail?.recentMatches;
   const recentMatchesData = userDetail?.recentMatchesData;
   const positionData = recentMatchesData?.[0]?.position;
+  const win = recentMatchesData?.[0]?.totalWins;
+  const lose = recentMatchesData?.[0]?.totalLosses;
+  const winRate = recentMatchesData?.[0]?.winRate;
 
   // 표에 나타날 데이터
   const rows = [
@@ -131,6 +135,7 @@ export default function PlayerDetail({ open, onClose, player }) {
           <span className="text-4xl text-white font-bold">최근 5게임</span>
           <div className="flex justify-between">
             <RecentPositionGraph data={positionData} />
+            <RecentWinRateGraph win={win} lose={lose} winRate={winRate} />
           </div>
         </div>
       </div>
