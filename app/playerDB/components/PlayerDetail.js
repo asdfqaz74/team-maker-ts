@@ -58,10 +58,6 @@ export default function PlayerDetail({ open, onClose, player }) {
   if (isError) return <div>Error: {error.message}</div>;
   if (!userDetail) return <div>No data available</div>;
 
-  console.log("user", user);
-  console.log("recentMatches", recentMatches);
-  console.log("recentMatchesData", recentMatchesData);
-
   return (
     <Dialog
       open={open}
