@@ -1,6 +1,6 @@
 import Script from "next/script";
 
-const PID = process.env.PID;
+const PID = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID;
 
 export default function GoogleAdSense() {
   return (
