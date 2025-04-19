@@ -1,7 +1,17 @@
 import Image from "next/image";
+import Arrow from "@/public/images/components/arrow.svg";
+import { useState } from "react";
 
 export default function MatchResultTable({ data = [] }) {
-  console.log("MatchResultTable data", data);
+  const [isClicked, setIsClicked] = useState({});
+
+  const toggleMatch = (matchId) => () => {
+    setIsClicked((prev) => ({
+      ...prev,
+      [matchId]: !prev[matchId],
+    }));
+  };
+
   return (
     <>
       {data.map((match) => {
@@ -9,8 +19,8 @@ export default function MatchResultTable({ data = [] }) {
         const isWin = me.win;
         const teamPlayerData = match.teamPlayerData;
         const enemyPlayerData = match.enemyPlayerData;
-        console.log("MatchResultTable me", me);
-        console.log("enemyPlayerData", enemyPlayerData);
+        const isOpen = isClicked[match.matchId];
+
         return (
           <div
             className={`relative w-full h-[9.375rem] rounded-xl ${
@@ -95,13 +105,20 @@ export default function MatchResultTable({ data = [] }) {
             </div>
 
             {/* 표 열고 닫기 */}
-            <div
-              className={`w-[3.125rem] h-full absolute right-0 cursor-pointer ${
+            <button
+              onClick={toggleMatch(match.matchId)}
+              className={`w-[3.125rem] h-full absolute right-0 cursor-pointer transition-colors duration-500 ${
                 isWin
                   ? "bg-[#476096] hover:bg-[#5C7BBC]"
                   : "bg-[#8D4D5B] hover:bg-[#A85D6B]"
               }`}
-            ></div>
+            >
+              {!isOpen ? (
+                <Arrow className="absolute bottom-0" />
+              ) : (
+                <Arrow className="absolute bottom-0 rotate-180" />
+              )}
+            </button>
           </div>
         );
       })}
