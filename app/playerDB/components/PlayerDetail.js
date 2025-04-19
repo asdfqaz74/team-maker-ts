@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import RecentPositionGraph from "./RecentPositionGraph";
 import RecentWinRateGraph from "./RecentWinRateGraph";
+import RecentPlayedChampions from "./RecentPlayedChampions";
 
 function createData(top, jug, mid, adc, sup) {
   return { top, jug, mid, adc, sup };
@@ -42,6 +43,7 @@ export default function PlayerDetail({ open, onClose, player }) {
   const win = recentMatchesData?.[0]?.totalWins;
   const lose = recentMatchesData?.[0]?.totalLosses;
   const winRate = recentMatchesData?.[0]?.winRate;
+  const recentPlayedChampions = recentMatchesData?.[0]?.championImages;
 
   // 표에 나타날 데이터
   const rows = [
@@ -128,10 +130,19 @@ export default function PlayerDetail({ open, onClose, player }) {
             </Table>
           </TableContainer>
           <Divider sx={{ borderColor: "#fff" }} />
-          <span className="text-4xl text-white font-bold">최근 5게임</span>
-          <div className="flex justify-between">
-            <RecentPositionGraph data={positionData} />
-            <RecentWinRateGraph win={win} lose={lose} winRate={winRate} />
+          <div className="flex flex-col gap-10">
+            <span className="text-4xl text-white font-bold">최근 5게임</span>
+            <div className="flex justify-between px-10">
+              <div className="flex flex-col items-center gap-10">
+                <span className="text-white font-semibold">포지션</span>
+                <RecentPositionGraph data={positionData} />
+              </div>
+              <div className="flex flex-col items-center gap-10">
+                <span className="text-white font-semibold">승률</span>
+                <RecentWinRateGraph win={win} lose={lose} winRate={winRate} />
+              </div>
+              <RecentPlayedChampions data={recentPlayedChampions} />
+            </div>
           </div>
         </div>
       </div>
