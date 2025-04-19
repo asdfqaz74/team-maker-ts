@@ -21,8 +21,8 @@ export default function PlayerInfo() {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   // 모달 열기
-  const handleOpen = (player) => {
-    setSelectedPlayer(player);
+  const handleOpen = (id) => {
+    setSelectedPlayer(id);
     setOpen(true);
   };
 
