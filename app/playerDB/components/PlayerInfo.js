@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-function createData(name, nickName, position, eloRating, winRate) {
-  return { name, nickName, position, eloRating, winRate };
+function createData(name, nickName, position, eloRating, winRate, _id) {
+  return { name, nickName, position, eloRating, winRate, _id };
 }
 
 export default function PlayerInfo() {
@@ -34,7 +34,8 @@ export default function PlayerInfo() {
       player.nickName,
       player.position,
       player.eloRating,
-      player.winRate
+      player.winRate,
+      player._id
     )
   );
 
@@ -51,14 +52,14 @@ export default function PlayerInfo() {
               <TableCell>이름</TableCell>
               <TableCell>닉네임</TableCell>
               <TableCell>포지션</TableCell>
-              <TableCell>메인 ELO</TableCell>
+              <TableCell>최고 Elo</TableCell>
               <TableCell>승률</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow
-                key={row.name}
+                key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
