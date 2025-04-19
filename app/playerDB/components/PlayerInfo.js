@@ -9,12 +9,26 @@ import {
   TableRow,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import PlayerDetail from "./PlayerDetail";
+import { useState } from "react";
 
 function createData(name, nickName, position, eloRating, winRate, _id) {
   return { name, nickName, position, eloRating, winRate, _id };
 }
 
 export default function PlayerInfo() {
+  const [open, setOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+
+  // 모달 열기
+  const handleOpen = (player) => {
+    setSelectedPlayer(player);
+    setOpen(true);
+  };
+
+  // 모달 닫기
+  const handleClose = () => setOpen(false);
+
   const {
     data: playerInfo = [],
     isLoading,
@@ -28,6 +42,7 @@ export default function PlayerInfo() {
     staleTime: 1000 * 60 * 5,
   });
 
+  // 표에 나타날 데이터
   const rows = playerInfo.map((player) =>
     createData(
       player.name,
@@ -60,20 +75,31 @@ export default function PlayerInfo() {
             {rows.map((row) => (
               <TableRow
                 key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "#2e2b4f",
+                  },
+                  backgroundColor: "#1e1e1e",
+                }}
+                onClick={() => handleOpen(row)}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{ color: "#dcdcdc" }}>
                   {row?.name}
                 </TableCell>
-                <TableCell>{row?.nickName}</TableCell>
-                <TableCell>{row?.position}</TableCell>
-                <TableCell>{row?.eloRating}</TableCell>
-                <TableCell>{row?.winRate}</TableCell>
+                <TableCell sx={{ color: "#dcdcdc" }}>{row?.nickName}</TableCell>
+                <TableCell sx={{ color: "#dcdcdc" }}>{row?.position}</TableCell>
+                <TableCell sx={{ color: "#dcdcdc" }}>
+                  {row?.eloRating}
+                </TableCell>
+                <TableCell sx={{ color: "#dcdcdc" }}>{row?.winRate}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <PlayerDetail open={open} onClose={handleClose} player={selectedPlayer} />
     </div>
   );
 }
