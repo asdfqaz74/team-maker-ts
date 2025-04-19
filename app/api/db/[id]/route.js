@@ -2,11 +2,11 @@ import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
 import User from "@/models/User";
 
-export async function GET(request, { params }) {
+export async function GET(request, context) {
   await connectDB();
 
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     // 유저 기본 정보 조회
     const user = await User.findById(id)
@@ -69,7 +69,7 @@ export async function GET(request, { params }) {
       },
     ]);
 
-    const mostPlayedChampionImage = `images/champions/centered/${mostPlayedChampion[0]._id}.jpg`;
+    const mostPlayedChampionImage = `/images/champions/centered/${mostPlayedChampion[0]._id}.jpg`;
 
     user.mostPlayedChampion = mostPlayedChampionImage;
 
@@ -88,18 +88,77 @@ export async function GET(request, { params }) {
     }
 
     // 유저의 최근 5경기의 승률
-    const recentMatchesWinRate = recentMatches.reduce((acc, match) => {
-      const me = match.players.find(
-        (player) => player.userNickname === user.nickName
-      );
-      if (me) {
-        acc.totalGames += 1;
-        if (me.win) {
-          acc.wins += 1;
-        }
-      }
-      return acc;
-    });
+    const recentMatchesWinRate = await Match.aggregate([
+      // 1. 유저가 포함된 경기만 필터링
+      {
+        $match: { "players.userNickname": user.nickName },
+      },
+
+      // 2. 최신 5경기만 자르기
+      {
+        $sort: { createdAt: -1 }, // 최신 순 정렬
+      },
+      {
+        $limit: 5,
+      },
+
+      // 3. players 배열 펼치기
+      {
+        $unwind: "$players",
+      },
+
+      // 4. 유저 본인만 다시 필터링
+      {
+        $match: { "players.userNickname": user.nickName },
+      },
+
+      // 5. 그룹화 및 승률 계산
+      {
+        $group: {
+          _id: null,
+          totalMatches: { $sum: 1 },
+          totalWins: {
+            $sum: { $cond: ["$players.win", 1, 0] },
+          },
+          totalLosses: {
+            $sum: { $cond: ["$players.win", 0, 1] },
+          },
+          champion: { $addToSet: "$players.champion" },
+        },
+      },
+
+      // 6. winRate (정수 %로 표현)
+      {
+        $addFields: {
+          winRate: {
+            $cond: [
+              { $eq: ["$totalMatches", 0] },
+              0,
+              {
+                $round: [
+                  {
+                    $multiply: [
+                      { $divide: ["$totalWins", "$totalMatches"] },
+                      100,
+                    ],
+                  },
+                  0,
+                ],
+              },
+            ],
+          },
+          championImages: {
+            $map: {
+              input: "$champion",
+              as: "champ",
+              in: {
+                $concat: ["/images/champions/portrait/", "$$champ", ".png"],
+              },
+            },
+          },
+        },
+      },
+    ]);
 
     // 경기 데이터 구조화
     const matchesFormatted = recentMatches.map((match) => {
@@ -118,6 +177,7 @@ export async function GET(request, { params }) {
       const teamPlayerData = teamPlayer.map((player) => ({
         nickName: player.userNickname,
         champion: player.champion,
+        championImage: `/images/champions/portrait/${player.champion}.png`,
         kda: {
           kills: player.kills,
           deaths: player.deaths,
@@ -165,6 +225,7 @@ export async function GET(request, { params }) {
             deaths: me.deaths,
             assists: me.assists,
           },
+          championImage: `/images/champions/portrait/${me.champion}.png`,
         },
         teamPlayerData,
         enemyPlayerData,
@@ -175,6 +236,7 @@ export async function GET(request, { params }) {
       {
         user,
         recentMatches: matchesFormatted,
+        recentMatchesWinRate,
       },
       { status: 200 }
     );
