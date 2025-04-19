@@ -43,7 +43,7 @@ export default function RecentPositionGraph({ data }) {
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, 10])
+      .domain([0, 4])
       .range([height - margin.bottom, margin.top]);
 
     const tooltip = d3
