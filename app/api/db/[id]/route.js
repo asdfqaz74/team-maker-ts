@@ -199,6 +199,7 @@ export async function GET(request, context) {
       const enemyPlayerData = enemyPlayer.map((player) => ({
         nickName: player.userNickname,
         champion: player.champion,
+        championImage: `/images/champions/portrait/${player.champion}.png`,
         kda: {
           kills: player.kills,
           deaths: player.deaths,

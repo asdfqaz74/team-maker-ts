@@ -15,6 +15,7 @@ import Image from "next/image";
 import RecentPositionGraph from "./RecentPositionGraph";
 import RecentWinRateGraph from "./RecentWinRateGraph";
 import RecentPlayedChampions from "./RecentPlayedChampions";
+import MatchResultTable from "./MatchResultTable";
 
 function createData(top, jug, mid, adc, sup) {
   return { top, jug, mid, adc, sup };
@@ -144,6 +145,7 @@ export default function PlayerDetail({ open, onClose, player }) {
               <RecentPlayedChampions data={recentPlayedChampions} />
             </div>
           </div>
+          <MatchResultTable data={recentMatches} />
         </div>
       </div>
     </Dialog>
