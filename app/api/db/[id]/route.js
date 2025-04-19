@@ -88,7 +88,7 @@ export async function GET(request, context) {
     }
 
     // 유저의 최근 5경기의 승률
-    const recentMatchesWinRate = await Match.aggregate([
+    const recentMatchesData = await Match.aggregate([
       // 1. 유저가 포함된 경기만 필터링
       {
         $match: { "players.userNickname": user.nickName },
@@ -124,6 +124,7 @@ export async function GET(request, context) {
             $sum: { $cond: ["$players.win", 0, 1] },
           },
           champion: { $addToSet: "$players.champion" },
+          position: { $push: "$players.position" },
         },
       },
 
@@ -236,7 +237,7 @@ export async function GET(request, context) {
       {
         user,
         recentMatches: matchesFormatted,
-        recentMatchesWinRate,
+        recentMatchesData,
       },
       { status: 200 }
     );
