@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import RecentPositionGraph from "./RecentPositionGraph";
 import RecentWinRateGraph from "./RecentWinRateGraph";
@@ -35,6 +35,7 @@ export default function PlayerDetail({ open, onClose, player }) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
   });
 
   const user = userDetail?.user;
