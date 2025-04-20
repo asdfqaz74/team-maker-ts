@@ -2,13 +2,34 @@ import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
 import User from "@/models/User";
 
+const formatPlayerData = (player) => ({
+  nickName: player.userNickname,
+  champion: player.champion,
+  championImage: `/images/champions/portrait/${player.champion}.png`,
+  kda: {
+    kills: player.kills,
+    deaths: player.deaths,
+    assists: player.assists,
+  },
+  damage: {
+    dealt: player.totalDamageDealt,
+    taken: player.totalDamageTaken,
+  },
+  wards: {
+    placed: player.wardsPlaced,
+    bought: player.boughtWards,
+    killed: player.wardsKilled,
+  },
+  cs: player.minionsKilled,
+});
+
 export async function GET(request, context) {
   await connectDB();
 
   try {
     const { id } = await context.params;
 
-    // 유저 정보는 먼저 따로 불러와야 mostPlayedChampion과 recentMatch에서 닉네임 필터 가능
+    // 유저 정보 먼저 조회
     const user = await User.findById(id)
       .select("name nickName position eloRating")
       .lean();
@@ -23,6 +44,7 @@ export async function GET(request, context) {
     // 닉네임을 기준으로 다른 쿼리를 병렬 처리
     const [mostPlayedChampionAgg, recentMatches, recentMatchesDataAgg] =
       await Promise.all([
+        // mostPlayedChampionAgg
         Match.aggregate([
           { $match: { "players.userNickname": user.nickName } },
           { $unwind: "$players" },
@@ -50,11 +72,15 @@ export async function GET(request, context) {
           { $sort: { count: -1, winRate: -1 } },
           { $limit: 1 },
         ]),
+
+        // recentMatches
         Match.find({
           "players.userNickname": user.nickName,
         })
           .sort({ createdAt: -1 })
           .limit(5),
+
+        // recentMatchesDataAgg
         Match.aggregate([
           { $match: { "players.userNickname": user.nickName } },
           { $sort: { createdAt: -1 } },
@@ -127,55 +153,6 @@ export async function GET(request, context) {
       );
       const myTeam = me.team;
 
-      const teamPlayer = match.players.filter(
-        (player) => player.team === myTeam
-      );
-      const enemyPlayer = match.players.filter(
-        (player) => player.team !== myTeam
-      );
-
-      const teamPlayerData = teamPlayer.map((player) => ({
-        nickName: player.userNickname,
-        champion: player.champion,
-        championImage: `/images/champions/portrait/${player.champion}.png`,
-        kda: {
-          kills: player.kills,
-          deaths: player.deaths,
-          assists: player.assists,
-        },
-        damage: {
-          dealt: player.totalDamageDealt,
-          taken: player.totalDamageTaken,
-        },
-        wards: {
-          placed: player.wardsPlaced,
-          bought: player.boughtWards,
-          killed: player.wardsKilled,
-        },
-        cs: player.minionsKilled,
-      }));
-
-      const enemyPlayerData = enemyPlayer.map((player) => ({
-        nickName: player.userNickname,
-        champion: player.champion,
-        championImage: `/images/champions/portrait/${player.champion}.png`,
-        kda: {
-          kills: player.kills,
-          deaths: player.deaths,
-          assists: player.assists,
-        },
-        damage: {
-          dealt: player.totalDamageDealt,
-          taken: player.totalDamageTaken,
-        },
-        wards: {
-          placed: player.wardsPlaced,
-          bought: player.boughtWards,
-          killed: player.wardsKilled,
-        },
-        cs: player.minionsKilled,
-      }));
-
       return {
         matchId: match._id,
         me: {
@@ -189,8 +166,12 @@ export async function GET(request, context) {
           },
           championImage: `/images/champions/portrait/${me.champion}.png`,
         },
-        teamPlayerData,
-        enemyPlayerData,
+        teamPlayerData: match.players
+          .filter((player) => player.team === myTeam)
+          .map(formatPlayerData),
+        enemyPlayerData: match.players
+          .filter((player) => player.team !== myTeam)
+          .map(formatPlayerData),
         maxDamage,
         maxTaken,
       };
