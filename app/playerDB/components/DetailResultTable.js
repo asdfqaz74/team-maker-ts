@@ -117,8 +117,14 @@ export default function DetailResultTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center" sx={{ width: "8.75rem" }}>
-                  <span className="block truncate whitespace-nowrap overflow-hidden w-[8.75rem]">
+                <TableCell
+                  align="center"
+                  sx={{
+                    width: "8.75rem",
+                    padding: "0",
+                  }}
+                >
+                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem]">
                     {row.nickName}
                   </span>
                 </TableCell>
@@ -261,8 +267,14 @@ export default function DetailResultTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center" sx={{ maxWidth: "8.75rem" }}>
-                  <span className="w-[8.75rem] truncate whitespace-nowrap overflow-hidden">
+                <TableCell
+                  align="center"
+                  sx={{
+                    width: "8.75rem",
+                    padding: "0",
+                  }}
+                >
+                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem]">
                     {row.nickName}
                   </span>
                 </TableCell>
