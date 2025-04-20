@@ -222,6 +222,7 @@ export async function GET(request, context) {
         me: {
           champion: me.champion,
           win: me.win,
+          team: me.team,
           kda: {
             kills: me.kills,
             deaths: me.deaths,
