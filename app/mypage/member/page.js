@@ -5,12 +5,15 @@ import PlayerList from "./PlayerList";
 
 import { getToken } from "@/utils/getToken";
 import PlayerDB from "./PlayerDB";
+import { useToast } from "@/app/components/ToastContext";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("top");
+
+  const { showSnack } = useToast();
 
   const handleCreatePlayerButton = () => {
     setButtonClicked((c) => !c);
@@ -30,10 +33,10 @@ export default function MemberPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          alert(data.error);
+          showSnack(data.error, "error");
           return;
         }
-        alert("선수가 추가되었습니다.");
+        showSnack("선수가 추가되었습니다.", "success");
         setName("");
         setNickname("");
         setPosition("top");
@@ -41,7 +44,7 @@ export default function MemberPage() {
       })
       .catch((err) => {
         console.error(err);
-        alert("에러가 발생했습니다.");
+        showSnack("에러가 발생했습니다.", "error");
       });
   };
 

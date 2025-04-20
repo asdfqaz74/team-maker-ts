@@ -7,11 +7,13 @@ import { groupListAtom } from "@/store/group";
 import PlayerList from "./PlayerList";
 import GroupUserList from "./GroupUserList";
 import { getToken } from "@/utils/getToken";
+import { useToast } from "@/app/components/ToastContext";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [, setGroups] = useAtom(groupListAtom);
+  const { showSnack } = useToast();
 
   const handleCreateGroupButton = async () => {
     setButtonClicked((c) => !c);
@@ -21,7 +23,7 @@ export default function GroupPage() {
     const token = getToken();
 
     if (!groupName.trim()) {
-      alert("그룹 이름을 입력해주세요.");
+      showSnack("그룹 이름을 입력해주세요.", "error");
       return;
     }
 
@@ -37,7 +39,7 @@ export default function GroupPage() {
     const data = await response.json();
 
     if (response.ok) {
-      alert("그룹이 생성되었습니다.");
+      showSnack("그룹 생성 완료", "success");
       setGroupName("");
       setButtonClicked(false);
 
@@ -48,7 +50,7 @@ export default function GroupPage() {
       const newData = await response.json();
       setGroups(newData.groups);
     } else {
-      alert(data.error || "그룹 생성에 실패했습니다.");
+      showSnack(data.error, "error");
     }
   };
 
@@ -75,8 +77,10 @@ export default function GroupPage() {
         </div>
       )}
       <GroupList />
-      <PlayerList />
-      <GroupUserList />
+      <div className="flex mt-10 justify-evenly">
+        <PlayerList />
+        <GroupUserList />
+      </div>
     </>
   );
 }

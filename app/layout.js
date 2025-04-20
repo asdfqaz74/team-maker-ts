@@ -1,6 +1,7 @@
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "./ClientProvider";
+import { ToastProvider } from "./components/ToastContext";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -53,7 +54,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${notoSans.variable} antialiased max-w-[1920px] w-full`}
       >
-        <ClientProvider>{children}</ClientProvider>
+        <ClientProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ClientProvider>
       </body>
     </html>
   );

@@ -8,18 +8,20 @@ import {
 } from "@/store/group";
 import { useEffect } from "react";
 import { getToken } from "@/utils/getToken";
+import { useToast } from "@/app/components/ToastContext";
 
 export default function PlayerList() {
   const [players, setPlayers] = useAtom(groupPlayersAtom);
   const [checkedPlayers, setCheckedPlayers] = useAtom(checkedPlayersAtom);
   const [selectedGroup] = useAtom(selectedGroupAtom);
+  const { showSnack } = useToast();
 
   useEffect(() => {
     const fetchPlayers = async () => {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        alert("로그인이 필요합니다.");
+        showSnack("로그인이 필요합니다.", "error");
         return;
       }
 
@@ -38,7 +40,7 @@ export default function PlayerList() {
     };
 
     fetchPlayers();
-  }, [setPlayers]);
+  }, [setPlayers, showSnack]);
 
   useEffect(() => {
     const fetchCheckedPlayers = async () => {
@@ -53,7 +55,7 @@ export default function PlayerList() {
       });
 
       if (!response.ok) {
-        console.error("선택된 그룹 선수 조회 실패");
+        showSnack("선택된 그룹 선수 조회 실패", "error");
         setCheckedPlayers([]);
         return;
       }
@@ -64,11 +66,11 @@ export default function PlayerList() {
     };
 
     fetchCheckedPlayers();
-  }, [selectedGroup, setCheckedPlayers]);
+  }, [selectedGroup, setCheckedPlayers, showSnack]);
 
   const toggleChecked = async (playerId) => {
     if (!selectedGroup) {
-      alert("그룹을 선택해주세요.");
+      showSnack("그룹을 선택해주세요.", "error");
       return;
     }
 
@@ -99,7 +101,7 @@ export default function PlayerList() {
         }
       });
     } else {
-      alert(data.error || "선수 체크 상태 변경에 실패했습니다.");
+      showSnack(data.error || "선수 체크 상태 변경에 실패했습니다.", "error");
     }
   };
 

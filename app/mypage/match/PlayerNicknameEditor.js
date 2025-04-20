@@ -22,7 +22,7 @@ export default function PlayerNicknameEditor({
   useEffect(() => {
     const token = getToken();
     if (!token) {
-      alert("로그인이 필요합니다.");
+      showSnack("로그인이 필요합니다.", "error");
       return;
     }
 
@@ -33,7 +33,7 @@ export default function PlayerNicknameEditor({
     })
       .then((res) => res.json())
       .then((data) => setUserList(data || []));
-  }, []);
+  }, [showSnack]);
 
   const handleSelectChange = (index, nickName) => {
     const updated = [...players];

@@ -5,6 +5,7 @@ import { selectedPlayerAtom, fetchPlayersAtom } from "@/store/player";
 import { useState, useEffect } from "react";
 import { getToken } from "@/utils/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/app/components/ToastContext";
 
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
@@ -19,6 +20,8 @@ export default function PlayerDB() {
     adc: selectedPlayer?.eloRating?.adc || 1000,
     sup: selectedPlayer?.eloRating?.sup || 1000,
   });
+
+  const { showSnack } = useToast();
 
   useEffect(() => {
     if (selectedPlayer) {
@@ -56,11 +59,11 @@ export default function PlayerDB() {
       return data;
     },
     onSuccess: () => {
-      alert("선수 정보가 수정되었습니다.");
+      showSnack("선수 정보가 수정되었습니다.", "success");
       queryClient.invalidateQueries({ queryKey: ["players"] });
     },
     onError: (error) => {
-      alert(error.message || "선수 정보 수정에 실패했습니다.");
+      showSnack(error.message || "선수 정보 수정에 실패했습니다.", "error");
     },
   });
 

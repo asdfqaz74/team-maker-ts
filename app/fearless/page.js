@@ -5,11 +5,7 @@ import SetBan from "./SetBan";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
-import { Alert, Slide, Snackbar } from "@mui/material";
-
-function SlideTransition(props) {
-  return <Slide {...props} direction="left" />;
-}
+import { useToast } from "../components/ToastContext";
 
 export default function Page() {
   const [bans, setBans] = useState({
@@ -17,24 +13,7 @@ export default function Page() {
     "2경기": [],
   });
 
-  // 토스트 관리를 위한 상태
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackColor, setSnackColor] = useState("success");
-  const [state, setState] = useState({
-    open: false,
-    Transition: SlideTransition,
-  });
-
-  // 토스트 핸들러
-  const showSnack = (message, type = "success") => {
-    setSnackMessage(message);
-    setSnackColor(type);
-    setState({ open: true, Transition: SlideTransition });
-  };
-
-  const handleSnackClose = () => {
-    setState({ ...state, open: false });
-  };
+  const { showSnack } = useToast();
 
   const handleSelectChange = (set, newSelected) => {
     setBans((prev) => ({ ...prev, [set]: newSelected }));
@@ -105,17 +84,6 @@ export default function Page() {
       >
         디스코드용 복사하기
       </button>
-      <Snackbar
-        open={state.open}
-        autoHideDuration={3000}
-        onClose={handleSnackClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        slots={{ transition: state.Transition }}
-      >
-        <Alert onClose={handleSnackClose} severity={snackColor}>
-          {snackMessage}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
