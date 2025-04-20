@@ -17,7 +17,6 @@ export default function DetailResultTable({
   maxDamage,
   maxTaken,
 }) {
-  console.log("blueTeamRows", blueTeamRows);
   return (
     <div>
       <TableContainer component={Paper} sx={{ borderRadius: "0" }}>

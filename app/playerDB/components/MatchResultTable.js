@@ -25,8 +25,6 @@ export default function MatchResultTable({ data = [] }) {
     }));
   };
 
-  console.log("data", data);
-
   return (
     <>
       {data.map((match) => {
@@ -111,7 +109,7 @@ export default function MatchResultTable({ data = [] }) {
               {/* 해당 게임에 나왔던 챔피언들 */}
               <div className="absolute w-[15.625rem] right-16 transform -translate-y-1/2 top-1/2 flex justify-between">
                 {/* 아군 */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 text-[#DCDCDC]">
                   {teamPlayerData.map((player) => (
                     <div
                       key={player.nickName}
@@ -131,7 +129,7 @@ export default function MatchResultTable({ data = [] }) {
                 </div>
 
                 {/* 적군 */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 text-[#DCDCDC]">
                   {enemyPlayerData.map((player) => (
                     <div
                       key={player.nickName}

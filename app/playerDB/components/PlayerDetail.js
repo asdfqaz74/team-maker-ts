@@ -94,11 +94,21 @@ export default function PlayerDetail({ open, onClose, player }) {
             <Table sx={{ minWidth: 650 }} aria-label="Elo Rating Table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">TOP</TableCell>
-                  <TableCell align="center">JUG</TableCell>
-                  <TableCell align="center">MID</TableCell>
-                  <TableCell align="center">ADC</TableCell>
-                  <TableCell align="center">SUP</TableCell>
+                  <TableCell align="center" sx={{ backgroundColor: "#DCDCDC" }}>
+                    TOP
+                  </TableCell>
+                  <TableCell align="center" sx={{ backgroundColor: "#DCDCDC" }}>
+                    JUG
+                  </TableCell>
+                  <TableCell align="center" sx={{ backgroundColor: "#DCDCDC" }}>
+                    MID
+                  </TableCell>
+                  <TableCell align="center" sx={{ backgroundColor: "#DCDCDC" }}>
+                    ADC
+                  </TableCell>
+                  <TableCell align="center" sx={{ backgroundColor: "#DCDCDC" }}>
+                    SUP
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
