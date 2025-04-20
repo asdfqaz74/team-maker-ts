@@ -21,6 +21,8 @@ export default function PlayerNicknameEditor({
   const [openModal, setOpenModal] = useState(false);
   const [bans, setBans] = useState([]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [snackMessage, setSnackMessage] = useState("");
   const [snackColor, setSnackColor] = useState("success");
   const [state, setState] = useState({
@@ -75,26 +77,34 @@ export default function PlayerNicknameEditor({
 
     const banChampionsId = bans.map((champ) => champ.id);
 
-    const response = await fetch("/api/me/match/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ players, maxDamage, banChampionsId }),
-    });
+    try {
+      setIsSubmitting(true);
+      const response = await fetch("/api/me/match/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ players, maxDamage, banChampionsId }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      showSnack("닉네임이 성공적으로 저장되었습니다.");
+      if (response.ok) {
+        showSnack("닉네임이 성공적으로 저장되었습니다.");
 
-      setTimeout(() => {
-        setPlayers(data.players);
-        onSubmit(data.players);
-      }, 800);
-    } else {
-      showSnack(data.error || "닉네임 저장에 실패했습니다.", "error");
+        setTimeout(() => {
+          setPlayers(data.players);
+          onSubmit(data.players);
+        }, 800);
+      } else {
+        showSnack(data.error || "닉네임 저장에 실패했습니다.", "error");
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      showSnack("서버와의 연결에 실패했습니다.", "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -177,10 +187,12 @@ export default function PlayerNicknameEditor({
       </ul>
 
       <button
-        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded cursor-pointer hover:bg-blue-700"
+        className={`mt-4 bg-blue-600 text-white px-6 py-2 rounded cursor-pointer hover:bg-blue-700 ${
+          isSubmitting ? "bg-gray-600" : ""
+        }`}
         onClick={handleSubmit}
       >
-        제출하기
+        {isSubmitting ? "제출 중..." : "제출하기"}
       </button>
       <Snackbar
         open={state.open}
