@@ -163,8 +163,8 @@ export default function PlayerNicknameEditor({
       </ul>
 
       <button
-        className={`mt-4 bg-blue-600 text-white px-6 py-2 rounded cursor-pointer hover:bg-blue-700 ${
-          isSubmitting ? "bg-gray-600" : ""
+        className={`mt-4 bg-blue-600 text-white px-6 py-2 rounded cursor-pointer ${
+          isSubmitting ? "bg-gray-600" : "hover:bg-blue-700"
         }`}
         onClick={handleSubmit}
       >
