@@ -34,6 +34,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -46,6 +47,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "8.75rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -58,6 +60,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "11.5625rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -70,6 +73,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "18.125rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -81,6 +85,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -92,6 +97,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -189,6 +195,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -201,6 +208,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "8.75rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -213,6 +221,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "11.5625rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -225,6 +234,7 @@ export default function DetailResultTable({
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                   width: "18.125rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -236,6 +246,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
@@ -247,6 +258,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  border: "none",
                 }}
                 align="center"
               >
