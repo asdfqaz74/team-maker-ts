@@ -20,8 +20,12 @@ export default function DetailResultTable({
   console.log("blueTeamRows", blueTeamRows);
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ width: "100%" }} aria-label="detail result table">
+      <TableContainer component={Paper} sx={{ borderRadius: "0" }}>
+        <Table
+          sx={{ width: "100%" }}
+          size="small"
+          aria-label="detail result table"
+        >
           <TableHead>
             <TableRow>
               <TableCell
@@ -41,6 +45,7 @@ export default function DetailResultTable({
                   color: "#3F8FC4",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  width: "8.75rem",
                 }}
                 align="center"
               >
@@ -52,6 +57,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  width: "11.5625rem",
                 }}
                 align="center"
               >
@@ -63,6 +69,7 @@ export default function DetailResultTable({
                   color: "#fff",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                  width: "18.125rem",
                 }}
                 align="center"
               >
@@ -110,8 +117,12 @@ export default function DetailResultTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center">{row.nickName}</TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ width: "8.75rem" }}>
+                  <span className="block truncate whitespace-nowrap overflow-hidden w-[8.75rem]">
+                    {row.nickName}
+                  </span>
+                </TableCell>
+                <TableCell align="center" sx={{ width: "11.5625rem" }}>
                   <div className="flex justify-center items-center gap-2 font-bold text-2xl">
                     <span>{row.kda.kills}</span>
                     <span>/</span>
@@ -129,6 +140,163 @@ export default function DetailResultTable({
                       maxTaken={maxTaken}
                     />
                   </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="flex flex-col justify-center items-center">
+                    <span className="text-rose-500">{row.wards.bought}</span>
+                    <div className="flex gap-1">
+                      <span>{row.wards.placed}</span>
+                      <span>/</span>
+                      <span>{row.wards.killed}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <span>{row.cs}</span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* 레드팀 */}
+      <TableContainer
+        component={Paper}
+        sx={{ borderTopRightRadius: "0", borderTopLeftRadius: "0" }}
+      >
+        <Table
+          sx={{ width: "100%" }}
+          size="small"
+          aria-label="detail result table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  backgroundColor: `${!isMyTeamWin ? "#0B89CF" : "#E34646"}`,
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                }}
+                align="center"
+              >
+                {!isMyTeamWin ? "승리" : "패배"}
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#10131C",
+                  color: "#DA5E66",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  width: "8.75rem",
+                }}
+                align="center"
+              >
+                레드 팀
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#10131C",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  width: "11.5625rem",
+                }}
+                align="center"
+              >
+                K / D / A
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#10131C",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  width: "18.125rem",
+                }}
+                align="center"
+              >
+                피해량
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#10131C",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                }}
+                align="center"
+              >
+                와드
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#10131C",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                }}
+                align="center"
+              >
+                CS
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {redTeamRows.map((row, idx) => (
+              <TableRow
+                key={idx}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                }}
+              >
+                <TableCell align="center">
+                  <div className="flex justify-center items-center">
+                    <Image
+                      src={row.championImage}
+                      alt="초상화"
+                      width={50}
+                      height={50}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell align="center" sx={{ maxWidth: "8.75rem" }}>
+                  <span className="w-[8.75rem] truncate whitespace-nowrap overflow-hidden">
+                    {row.nickName}
+                  </span>
+                </TableCell>
+                <TableCell align="center" sx={{ width: "11.5625rem" }}>
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                    <span>{row.kda.kills}</span>
+                    <span>/</span>
+                    <span className="text-[#E73F50]">{row.kda.deaths}</span>
+                    <span>/</span>
+                    <span>{row.kda.assists}</span>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                    <DamageGraph
+                      dealt={row.damage.dealt}
+                      taken={row.damage.taken}
+                      maxDealt={maxDamage}
+                      maxTaken={maxTaken}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="flex flex-col justify-center items-center">
+                    <span className="text-rose-500">{row.wards.bought}</span>
+                    <div className="flex gap-1">
+                      <span>{row.wards.placed}</span>
+                      <span>/</span>
+                      <span>{row.wards.killed}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <span>{row.cs}</span>
                 </TableCell>
               </TableRow>
             ))}

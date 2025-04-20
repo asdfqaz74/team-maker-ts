@@ -4,11 +4,6 @@ import { useEffect, useRef } from "react";
 export default function DamageGraph({ dealt, taken, maxDealt, maxTaken }) {
   const ref = useRef();
 
-  console.log("dealt", dealt);
-  console.log("taken", taken);
-  console.log("maxDealt", maxDealt);
-  console.log("maxTaken", maxTaken);
-
   useEffect(() => {
     const svg = d3.select(ref.current);
     const width = 70;
