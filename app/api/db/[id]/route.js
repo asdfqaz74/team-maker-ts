@@ -163,6 +163,12 @@ export async function GET(request, context) {
 
     // 경기 데이터 구조화
     const matchesFormatted = recentMatches.map((match) => {
+      const maxDamage = match.maxDamage;
+      const findMaxTaken = Math.max(
+        ...match.players.map((player) => player.totalDamageTaken)
+      );
+      const maxTaken = findMaxTaken + 1000;
+
       const me = match.players.find(
         (player) => player.userNickname === user.nickName
       );
@@ -232,6 +238,8 @@ export async function GET(request, context) {
         },
         teamPlayerData,
         enemyPlayerData,
+        maxDamage,
+        maxTaken,
       };
     });
 

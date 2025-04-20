@@ -1,17 +1,17 @@
 import Image from "next/image";
 import Arrow from "@/public/images/components/arrow.svg";
 import { useState } from "react";
-import {
-  Paper,
-  Table,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import DetailResultTable from "./DetailResultTable";
 
 function createData(championImage, nickName, kda, damage, wards, cs) {
-  return { championImage, nickName, kda, damage, wards, cs };
+  return {
+    championImage,
+    nickName,
+    kda,
+    damage,
+    wards,
+    cs,
+  };
 }
 
 export default function MatchResultTable({ data = [] }) {
@@ -24,15 +24,48 @@ export default function MatchResultTable({ data = [] }) {
     }));
   };
 
+  console.log("data", data);
+
   return (
     <>
       {data.map((match) => {
         const me = match.me;
         const isWin = me.win;
+        const maxDamage = match.maxDamage;
+        const maxTaken = match.maxTaken;
         const teamPlayerData = match.teamPlayerData;
         const enemyPlayerData = match.enemyPlayerData;
         const isOpen = isClicked[match.matchId];
         const myTeam = me.team;
+        const isMyTeamWin = myTeam === "Blue" ? isWin : !isWin;
+
+        // 블루 팀의 row 데이터
+        const blueTeamRows = (
+          myTeam === "Blue" ? teamPlayerData : enemyPlayerData
+        ).map((player) =>
+          createData(
+            player.championImage,
+            player.nickName,
+            player.kda,
+            player.damage,
+            player.wards,
+            player.cs
+          )
+        );
+
+        // 레드 팀의 row 데이터
+        const redTeamRows = (
+          myTeam === "Red" ? teamPlayerData : enemyPlayerData
+        ).map((player) =>
+          createData(
+            player.championImage,
+            player.nickName,
+            player.kda,
+            player.damage,
+            player.wards,
+            player.cs
+          )
+        );
 
         return (
           <div className="w-full" key={match.matchId}>
@@ -134,85 +167,13 @@ export default function MatchResultTable({ data = [] }) {
 
             {/* 게임 상세 정보 */}
             {isOpen && (
-              <div>
-                <TableContainer component={Paper}>
-                  <Table
-                    sx={{ width: "100%" }}
-                    aria-label="detail result table"
-                  >
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            backgroundColor: `${isWin ? "#0B89CF" : "#E34646"}`,
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          {isWin ? "승리" : "패배"}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#10131C",
-                            color: "#3F8FC4",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          블루 팀
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#10131C",
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          K / D / A
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#10131C",
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          피해량
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#10131C",
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          와드
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#10131C",
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem",
-                          }}
-                          align="center"
-                        >
-                          CS
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                  </Table>
-                </TableContainer>
-              </div>
+              <DetailResultTable
+                blueTeamRows={blueTeamRows}
+                redTeamRows={redTeamRows}
+                isMyTeamWin={isMyTeamWin}
+                maxDamage={maxDamage}
+                maxTaken={maxTaken}
+              />
             )}
           </div>
         );
