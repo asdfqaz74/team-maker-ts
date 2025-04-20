@@ -1,35 +1,9 @@
-"use client";
-
-import { Alert, Slide, Snackbar } from "@mui/material";
 import { useState } from "react";
 
-function SlideTransition(props) {
-  return <Slide {...props} direction="left" />;
-}
-
-export default function UploadFile({ onUploadSuccess }) {
+export default function UploadFile({ onUploadSuccess, showSnack }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-
-  // 토스트 관리를 위한 상태
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackColor, setSnackColor] = useState("success");
-  const [state, setState] = useState({
-    open: false,
-    Transition: SlideTransition,
-  });
-
-  // 토스트 핸들러
-  const showSnack = (message, type = "success") => {
-    setSnackMessage(message);
-    setSnackColor(type);
-    setState({ open: true, Transition: SlideTransition });
-  };
-
-  const handleSnackClose = () => {
-    setState({ ...state, open: false });
-  };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
@@ -64,9 +38,7 @@ export default function UploadFile({ onUploadSuccess }) {
       if (response.ok) {
         showSnack("파일 업로드 성공");
 
-        setTimeout(() => {
-          onUploadSuccess(data.match);
-        }, 800);
+        onUploadSuccess(data.match);
       } else {
         showSnack(`파일 업로드 실패: ${data.error}`, "error");
       }
@@ -108,17 +80,6 @@ export default function UploadFile({ onUploadSuccess }) {
       >
         업로드
       </button>
-      <Snackbar
-        open={state.open}
-        autoHideDuration={3000}
-        onClose={handleSnackClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        slots={{ transition: state.Transition }}
-      >
-        <Alert onClose={handleSnackClose} severity={snackColor}>
-          {snackMessage}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

@@ -4,16 +4,12 @@ import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ChampionPalette from "@/app/components/ChampionPalette";
-import { Alert, Snackbar, Slide } from "@mui/material";
-
-function SlideTransition(props) {
-  return <Slide {...props} direction="left" />;
-}
 
 export default function PlayerNicknameEditor({
   playersData,
   maxDamage,
   onSubmit,
+  showSnack,
 }) {
   const [players, setPlayers] = useState(() => playersData ?? []);
   const [userList, setUserList] = useState([]);
@@ -22,24 +18,6 @@ export default function PlayerNicknameEditor({
   const [bans, setBans] = useState([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackColor, setSnackColor] = useState("success");
-  const [state, setState] = useState({
-    open: false,
-    Transition: SlideTransition,
-  });
-
-  // 토스트 핸들러
-  const showSnack = (message, type = "success") => {
-    setSnackMessage(message);
-    setSnackColor(type);
-    setState({ open: true, Transition: SlideTransition });
-  };
-
-  const handleSnackClose = () => {
-    setState({ ...state, open: false });
-  };
 
   useEffect(() => {
     const token = getToken();
@@ -93,10 +71,8 @@ export default function PlayerNicknameEditor({
       if (response.ok) {
         showSnack("닉네임이 성공적으로 저장되었습니다.");
 
-        setTimeout(() => {
-          setPlayers(data.players);
-          onSubmit(data.players);
-        }, 800);
+        setPlayers(data.players);
+        onSubmit(data.players);
       } else {
         showSnack(data.error || "닉네임 저장에 실패했습니다.", "error");
       }
@@ -194,17 +170,6 @@ export default function PlayerNicknameEditor({
       >
         {isSubmitting ? "제출 중..." : "제출하기"}
       </button>
-      <Snackbar
-        open={state.open}
-        autoHideDuration={3000}
-        onClose={handleSnackClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        slots={{ transition: state.Transition }}
-      >
-        <Alert onClose={handleSnackClose} severity={snackColor}>
-          {snackMessage}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
