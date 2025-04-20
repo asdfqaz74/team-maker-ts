@@ -105,9 +105,10 @@ export default function DetailResultTable({
                 key={idx}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
+                  backgroundColor: idx % 2 === 0 ? "#233F59" : "#203047",
                 }}
               >
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: "none" }}>
                   <div className="flex justify-center items-center">
                     <Image
                       src={row.championImage}
@@ -122,14 +123,18 @@ export default function DetailResultTable({
                   sx={{
                     width: "8.75rem",
                     padding: "0",
+                    border: "none",
                   }}
                 >
-                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem]">
+                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem] text-white font-semibold">
                     {row.nickName}
                   </span>
                 </TableCell>
-                <TableCell align="center" sx={{ width: "11.5625rem" }}>
-                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                <TableCell
+                  align="center"
+                  sx={{ width: "11.5625rem", border: "none" }}
+                >
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl text-white">
                     <span>{row.kda.kills}</span>
                     <span>/</span>
                     <span className="text-[#E73F50]">{row.kda.deaths}</span>
@@ -137,7 +142,7 @@ export default function DetailResultTable({
                     <span>{row.kda.assists}</span>
                   </div>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: "none" }}>
                   <div className="flex justify-center items-center gap-2 font-bold text-2xl">
                     <DamageGraph
                       dealt={row.damage.dealt}
@@ -147,8 +152,8 @@ export default function DetailResultTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center">
-                  <div className="flex flex-col justify-center items-center">
+                <TableCell align="center" sx={{ border: "none" }}>
+                  <div className="flex flex-col justify-center items-center text-white">
                     <span className="text-rose-500">{row.wards.bought}</span>
                     <div className="flex gap-1">
                       <span>{row.wards.placed}</span>
@@ -157,8 +162,8 @@ export default function DetailResultTable({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell align="center">
-                  <span>{row.cs}</span>
+                <TableCell align="center" sx={{ border: "none" }}>
+                  <span className="text-white">{row.cs}</span>
                 </TableCell>
               </TableRow>
             ))}
@@ -255,9 +260,10 @@ export default function DetailResultTable({
                 key={idx}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
+                  backgroundColor: idx % 2 === 0 ? "#402937" : "#2A2131",
                 }}
               >
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: "none" }}>
                   <div className="flex justify-center items-center">
                     <Image
                       src={row.championImage}
@@ -272,14 +278,18 @@ export default function DetailResultTable({
                   sx={{
                     width: "8.75rem",
                     padding: "0",
+                    border: "none",
                   }}
                 >
-                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem]">
+                  <span className="block truncate text-center whitespace-nowrap overflow-hidden w-[8.75rem] text-white font-semibold">
                     {row.nickName}
                   </span>
                 </TableCell>
-                <TableCell align="center" sx={{ width: "11.5625rem" }}>
-                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                <TableCell
+                  align="center"
+                  sx={{ width: "11.5625rem", border: "none" }}
+                >
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl text-white">
                     <span>{row.kda.kills}</span>
                     <span>/</span>
                     <span className="text-[#E73F50]">{row.kda.deaths}</span>
@@ -287,7 +297,7 @@ export default function DetailResultTable({
                     <span>{row.kda.assists}</span>
                   </div>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: "none" }}>
                   <div className="flex justify-center items-center gap-2 font-bold text-2xl">
                     <DamageGraph
                       dealt={row.damage.dealt}
@@ -297,8 +307,8 @@ export default function DetailResultTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center">
-                  <div className="flex flex-col justify-center items-center">
+                <TableCell align="center" sx={{ border: "none" }}>
+                  <div className="flex flex-col justify-center items-center text-white">
                     <span className="text-rose-500">{row.wards.bought}</span>
                     <div className="flex gap-1">
                       <span>{row.wards.placed}</span>
@@ -307,8 +317,8 @@ export default function DetailResultTable({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell align="center">
-                  <span>{row.cs}</span>
+                <TableCell align="center" sx={{ border: "none" }}>
+                  <span className="text-white">{row.cs}</span>
                 </TableCell>
               </TableRow>
             ))}

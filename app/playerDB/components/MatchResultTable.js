@@ -2,6 +2,7 @@ import Image from "next/image";
 import Arrow from "@/public/images/components/arrow.svg";
 import { useState } from "react";
 import DetailResultTable from "./DetailResultTable";
+import { motion, AnimatePresence } from "framer-motion";
 
 function createData(championImage, nickName, kda, damage, wards, cs) {
   return {
@@ -70,12 +71,12 @@ export default function MatchResultTable({ data = [] }) {
         return (
           <div className="w-full" key={match.matchId}>
             <div
-              className={`relative w-full h-[9.375rem] rounded-xl ${
+              className={`relative w-full h-[9.375rem] rounded-tl-2xl ${
                 isWin ? "bg-[#2E3D59]" : "bg-[#59343B]"
               }`}
             >
               <div
-                className={`absolute w-[1.875rem] h-full rounded-l-xl ${
+                className={`absolute w-[1.875rem] h-full rounded-tl-xl ${
                   isWin ? "bg-[#5C8EF2]" : "bg-[#F24464]"
                 }`}
               ></div>
@@ -166,15 +167,26 @@ export default function MatchResultTable({ data = [] }) {
             </div>
 
             {/* 게임 상세 정보 */}
-            {isOpen && (
-              <DetailResultTable
-                blueTeamRows={blueTeamRows}
-                redTeamRows={redTeamRows}
-                isMyTeamWin={isMyTeamWin}
-                maxDamage={maxDamage}
-                maxTaken={maxTaken}
-              />
-            )}
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key="slide-down"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  style={{ overflow: "hidden" }}
+                >
+                  <DetailResultTable
+                    blueTeamRows={blueTeamRows}
+                    redTeamRows={redTeamRows}
+                    isMyTeamWin={isMyTeamWin}
+                    maxDamage={maxDamage}
+                    maxTaken={maxTaken}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         );
       })}

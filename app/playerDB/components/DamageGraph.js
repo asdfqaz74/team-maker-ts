@@ -26,7 +26,7 @@ export default function DamageGraph({ dealt, taken, maxDealt, maxTaken }) {
       .attr("x", width / 2)
       .attr("y", 12)
       .attr("text-anchor", "middle")
-      .attr("fill", "#000")
+      .attr("fill", "#fff")
       .attr("font-size", "12px")
       .attr("font-weight", "bold")
       .text(dealt.toLocaleString());
@@ -37,7 +37,7 @@ export default function DamageGraph({ dealt, taken, maxDealt, maxTaken }) {
       .attr("x", width + spacing + width / 2)
       .attr("y", 12)
       .attr("text-anchor", "middle")
-      .attr("fill", "#000")
+      .attr("fill", "#fff")
       .attr("font-size", "12px")
       .attr("font-weight", "bold")
       .text(taken.toLocaleString());
