@@ -56,17 +56,19 @@ export default function Summary() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/MainPage/summary-bg.png')] bg-cover bg-center px-80 py-20 ">
-      <Image
-        src="/images/MainPage/SummaryLogo.png"
-        alt="요약 3개"
-        width={400}
-        height={100}
-      />
-      <div className="flex w-full justify-between my-10">
-        <Pick data={bestData} isLoading={bestLoading} title={"BEST"} />
-        <Pick data={worstData} isLoading={worstLoading} title={"WORST"} />
-        <Pick data={banData} isLoading={banLoading} title={"BAN"} />
+    <div className="flex flex-col bg-[url('/images/MainPage/summary-bg.png')] bg-cover bg-center 2xl:px-80 xl:px-60 lg:px-40 px-5 py-20 ">
+      <div className="mx-auto xl:mx-0 flex flex-col">
+        <Image
+          src="/images/MainPage/SummaryLogo.png"
+          alt="요약 3개"
+          width={400}
+          height={100}
+        />
+        <div className="flex xl:flex-row flex-col xl:justify-between gap-4 my-10 shrink-0 mx-auto xl:mx-0">
+          <Pick data={bestData} isLoading={bestLoading} title={"BEST"} />
+          <Pick data={worstData} isLoading={worstLoading} title={"WORST"} />
+          <Pick data={banData} isLoading={banLoading} title={"BAN"} />
+        </div>
       </div>
     </div>
   );

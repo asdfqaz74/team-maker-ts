@@ -10,8 +10,8 @@ export default function Pick({ data, isLoading, title }) {
   const color = titleColor[title] || "#000000";
 
   return (
-    <div className="border border-[#0FA4FE] p-10 rounded-2xl">
-      <div className="font-[BlackOps] text-3xl flex gap-4 items-center justify-center">
+    <div className="border border-[#0FA4FE] p-10 rounded-2xl min-w-[17.5rem] max-w-[25rem] mx-auto lg:mx-0">
+      <div className="font-[BlackOps] text-3xl flex gap-4 items-center justify-center whitespace-nowrap">
         <p style={{ color }}>{title}</p>
         <p>PICK 3</p>
       </div>
@@ -19,7 +19,7 @@ export default function Pick({ data, isLoading, title }) {
         {data &&
           data.map((champion) => (
             <div
-              className="bg-white/10 flex w-60 rounded-2xl p-2 gap-4 items-center"
+              className="bg-white/10 flex w-[13.75rem] mx-auto rounded-2xl p-2 gap-4 items-center"
               key={champion.en_name}
             >
               <Image
@@ -35,10 +35,10 @@ export default function Pick({ data, isLoading, title }) {
                   {title === "BAN" ? (
                     <p>{champion.count}회</p>
                   ) : (
-                    <>
+                    <div className="flex gap-2 text-xs md:text-base whitespace-nowrap">
                       <p>{champion.count}게임</p>
                       <p>{champion.winRate}%</p>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>

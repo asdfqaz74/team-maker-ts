@@ -13,7 +13,7 @@ export default function MostSwiper({ champions }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const shiftedChampions = [...champions.slice(1), champions[0]];
 
-  const { is2xl, isxl, islg, ismd, issm } = useBreakpoint();
+  const { ismd } = useBreakpoint();
 
   // 스와이퍼 참초 객체
   const contentSwiperRef = useRef(null);
