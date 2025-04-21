@@ -14,10 +14,14 @@ import {
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
+
 import Burger from "@/public/images/components/Burger.svg";
 import Chart from "@/public/images/components/Chart.svg";
 import Home from "@/public/images/components/Home.svg";
 import Settings from "@/public/images/components/Settings.svg";
+import Gamepad from "@/public/images/components/Gamepad.svg";
+import Сalculator from "@/public/images/components/Сalculator.svg";
+
 import { Box, Divider, Drawer } from "@mui/material";
 
 export default function Header() {
@@ -73,8 +77,6 @@ export default function Header() {
     setOpen(isOpen);
   };
 
-  console.log(open);
-
   return (
     <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap">
       <span className="text-[1.875rem] font-[Alumni] block md:hidden 2xl:block">
@@ -113,14 +115,28 @@ export default function Header() {
             <li>
               <Divider sx={{ borderColor: "#fff" }} />
             </li>
-            <li>팀 메이커</li>
+            <li>
+              <Link href={"/teamMaker"} className="flex gap-3 items-center">
+                <Gamepad />
+                <span>팀 메이커</span>
+              </Link>
+            </li>
+
             <li>
               <Link href={"/playerDB"} className="flex gap-3 items-center">
                 <Chart />
                 <span>플레이어 정보</span>
               </Link>
             </li>
-            {isLoggedIn && <li>피어리스 도우미</li>}
+            {isLoggedIn && (
+              <li>
+                <Link href={"/fearless"} className="flex gap-3 items-center">
+                  <Сalculator />
+                  <span>피어리스 도우미</span>
+                </Link>
+              </li>
+            )}
+
             {isLoggedIn && (
               <li className="">
                 <Link href={"/mypage"} className="flex gap-3 items-center">
@@ -129,6 +145,9 @@ export default function Header() {
                 </Link>
               </li>
             )}
+            <li>
+              <Divider sx={{ borderColor: "#fff" }} />
+            </li>
             <li className="">
               {isLoggedIn ? (
                 <button
