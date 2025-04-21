@@ -18,7 +18,7 @@ import Burger from "@/public/images/components/Burger.svg";
 import Chart from "@/public/images/components/Chart.svg";
 import Home from "@/public/images/components/Home.svg";
 import Settings from "@/public/images/components/Settings.svg";
-import { Divider, Drawer } from "@mui/material";
+import { Box, Divider, Drawer } from "@mui/material";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
@@ -62,10 +62,18 @@ export default function Header() {
     }
   }, [setToken]);
 
-  // 사이드 메뉴 핸들러
-  const handleSideMenu = () => {
-    setOpen((prev) => !prev);
+  const toggleDrawer = (isOpen) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setOpen(isOpen);
   };
+
+  console.log(open);
 
   return (
     <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap">
@@ -76,14 +84,14 @@ export default function Header() {
       <button
         className="block md:hidden cursor-pointer"
         type="button"
-        onClick={handleSideMenu}
+        onClick={toggleDrawer(true)}
       >
         <Burger />
       </button>
       <Drawer
         anchor="right"
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={toggleDrawer(false)}
         slotProps={{
           paper: {
             sx: {
@@ -94,35 +102,49 @@ export default function Header() {
           },
         }}
       >
-        <ul className="flex flex-col gap-4 text-white text-2xl">
-          <li className="">
-            <Link href={"/"} className="flex gap-3 items-center">
-              <Home />
-              <span>홈</span>
-            </Link>
-          </li>
-          <li>
-            <Divider sx={{ borderColor: "#fff" }} />
-          </li>
-          <li>팀 메이커</li>
-          <li>플레이어 정보</li>
-          {isLoggedIn && <li>피어리스 도우미</li>}
-          {isLoggedIn && <li className="text-[#0FA4FE]">마이페이지</li>}
-          <li className="">
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="cursor-pointer text-[#F53B3B]"
-              >
-                로그아웃
-              </button>
-            ) : (
-              <Link href="/auth/login">
-                <span className="text-[#0FA4FE]">로그인</span>
+        <Box role="presentation" onClick={toggleDrawer(false)}>
+          <ul className="flex flex-col gap-4 text-white text-2xl">
+            <li className="">
+              <Link href={"/"} className="flex gap-3 items-center">
+                <Home />
+                <span>홈</span>
               </Link>
+            </li>
+            <li>
+              <Divider sx={{ borderColor: "#fff" }} />
+            </li>
+            <li>팀 메이커</li>
+            <li>
+              <Link href={"/playerDB"} className="flex gap-3 items-center">
+                <Chart />
+                <span>플레이어 정보</span>
+              </Link>
+            </li>
+            {isLoggedIn && <li>피어리스 도우미</li>}
+            {isLoggedIn && (
+              <li className="">
+                <Link href={"/mypage"} className="flex gap-3 items-center">
+                  <Settings />
+                  <span>마이페이지</span>
+                </Link>
+              </li>
             )}
-          </li>
-        </ul>
+            <li className="">
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="cursor-pointer text-[#F53B3B]"
+                >
+                  로그아웃
+                </button>
+              ) : (
+                <Link href="/auth/login">
+                  <span className="text-[#0FA4FE]">로그인</span>
+                </Link>
+              )}
+            </li>
+          </ul>
+        </Box>
       </Drawer>
 
       {/* 데스크탑 메뉴 */}
