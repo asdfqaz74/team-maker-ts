@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
-import { useMediaQuery } from "@mui/material";
+import useBreakpoint from "@/utils/useBreakpion";
 
 export default function GlobalBan() {
   const {
@@ -16,7 +16,7 @@ export default function GlobalBan() {
     queryFn: fetchGlobalBan,
   });
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { ismd } = useBreakpoint();
 
   return (
     <div className="bg-[url('/images/MainPage/globalban-bg.png')] 2xl:px-80 xl:px-60 lg:px-40 md:px-20 px-10 bg-cover bg-center py-20">
@@ -32,18 +32,18 @@ export default function GlobalBan() {
           {[...Array(5)].map((_, idx) => (
             <li
               key={idx}
-              className="relative flex flex-col bg-[#1B4A85] w-[10rem] h-[10rem] px-4 pt-4 pb-2 rounded-xl items-center justify-end shadow-lg overflow-visible"
+              className="relative flex flex-col md:bg-[#1B4A85] w-[10rem] h-[10rem] px-4 pt-4 pb-2 rounded-xl items-center justify-end shadow-lg overflow-visible"
             >
-              <div className="absolute bg-gray-700 -top-12 w-[8.75rem] h-[12.5rem] rounded-xl animate-pulse" />
+              <div className="absolute bg-gray-700 -top-12 w-[6.25rem] h-[6.25rem] md:w-[8.75rem] md:h-[12.5rem] rounded-xl animate-pulse" />
             </li>
           ))}
         </ul>
       )}
 
       {!isLoading && !isError && (
-        <ul className="grid grid-cols-2 gap-32 md:flex md:justify-between md:gap-6 mt-30 mb-20 px-auto">
+        <ul className="grid grid-cols-2 gap-32 md:flex md:justify-between md:gap-6 mt-30 mb-20">
           {champions.map((champion, idx) => {
-            const imageSrc = isDesktop
+            const imageSrc = ismd
               ? `/images/champions/loading/${champion.en_name}.jpg`
               : `/images/champions/portrait/${champion.en_name}.png`;
             return (
@@ -55,8 +55,8 @@ export default function GlobalBan() {
                   <Image
                     src={imageSrc}
                     alt={champion.name}
-                    width={!isDesktop ? 100 : 140}
-                    height={!isDesktop ? 100 : 180}
+                    width={!ismd ? 100 : 140}
+                    height={!ismd ? 100 : 180}
                     className="object-center"
                     priority
                   />

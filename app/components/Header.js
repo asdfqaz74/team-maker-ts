@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { tokenAtom, isLoggedInAtom, userAtom } from "@/store/auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useResetAtom } from "jotai/utils";
 import {
@@ -14,12 +14,15 @@ import {
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
+import useBreakpoint from "@/utils/useBreakpion";
+import Burger from "@/public/images/components/Burger.svg";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+
+  const { isxl, islg, ismd, issm } = useBreakpoint();
 
   const resetAtoms = useResetAtom(tokenAtom);
   const resetUser = useResetAtom(userAtom);
@@ -54,54 +57,54 @@ export default function Header() {
     if (storedToken) {
       setToken(storedToken);
     }
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  }, [setToken]);
 
   return (
-    <div className="flex items-center py-4 px-40 justify-between bg-[#030222] sticky top-0 z-50">
-      <span className="text-[1.875rem] font-[Alumni]">
+    <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] sticky top-0 z-50 whitespace-nowrap">
+      <span className="text-[1.875rem] font-[Alumni] block md:hidden 2xl:block">
         <Link href={"/"}>Tea M aker</Link>
       </span>
-      <ul className="flex justify-end text-[1rem] font-bold">
-        <li className="px-5">
-          <Link href="/">홈</Link>
-        </li>
-        <li className="px-5">팀 메이커</li>
-        <li className="px-5">
-          <Link href={"/playerDB"}>플레이어 정보</Link>
-        </li>
-        {isLoggedIn && (
+      {ismd ? (
+        <ul className="flex justify-end text-[1rem] font-bold">
           <li className="px-5">
-            <Link href="/fearless">피어리스 도우미</Link>
+            <Link href="/">홈</Link>
           </li>
-        )}
-        {isLoggedIn && (
+          <li className="px-5">팀 메이커</li>
           <li className="px-5">
-            <Link href="/mypage">
-              <span className="text-[#0FA4FE]">마이페이지</span>
-            </Link>
+            <Link href={"/playerDB"}>플레이어 정보</Link>
           </li>
-        )}
-        <li className="px-5">
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="cursor-pointer text-[#F53B3B]"
-            >
-              로그아웃
-            </button>
-          ) : (
-            <Link href="/auth/login">
-              <span className="text-[#0FA4FE]">로그인</span>
-            </Link>
+          {isLoggedIn && (
+            <li className="px-5">
+              <Link href="/fearless">피어리스 도우미</Link>
+            </li>
           )}
-        </li>
-      </ul>
+          {isLoggedIn && (
+            <li className="px-5">
+              <Link href="/mypage">
+                <span className="text-[#0FA4FE]">마이페이지</span>
+              </Link>
+            </li>
+          )}
+          <li className="px-5">
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="cursor-pointer text-[#F53B3B]"
+              >
+                로그아웃
+              </button>
+            ) : (
+              <Link href="/auth/login">
+                <span className="text-[#0FA4FE]">로그인</span>
+              </Link>
+            )}
+          </li>
+        </ul>
+      ) : (
+        <button className="cursor-pointer">
+          <Burger />
+        </button>
+      )}
     </div>
   );
 }
