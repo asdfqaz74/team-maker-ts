@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { tokenAtom, isLoggedInAtom, userAtom } from "@/store/auth";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useResetAtom } from "jotai/utils";
 import {
@@ -15,11 +15,17 @@ import {
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
 import Burger from "@/public/images/components/Burger.svg";
+import Chart from "@/public/images/components/Chart.svg";
+import Home from "@/public/images/components/Home.svg";
+import Settings from "@/public/images/components/Settings.svg";
+import { Divider, Drawer } from "@mui/material";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
 
   const resetAtoms = useResetAtom(tokenAtom);
   const resetUser = useResetAtom(userAtom);
@@ -56,15 +62,68 @@ export default function Header() {
     }
   }, [setToken]);
 
+  // 사이드 메뉴 핸들러
+  const handleSideMenu = () => {
+    setOpen((prev) => !prev);
+  };
+
   return (
-    <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-full top-0 left-0 z-50 whitespace-nowrap">
+    <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap">
       <span className="text-[1.875rem] font-[Alumni] block md:hidden 2xl:block">
         <Link href={"/"}>Tea M aker</Link>
       </span>
       {/* 모바일 메뉴 */}
-      <button className="block md:hidden">
+      <button
+        className="block md:hidden cursor-pointer"
+        type="button"
+        onClick={handleSideMenu}
+      >
         <Burger />
       </button>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+        slotProps={{
+          paper: {
+            sx: {
+              backgroundColor: "#1a1a2f",
+              padding: "1.25rem",
+              width: "18.75rem",
+            },
+          },
+        }}
+      >
+        <ul className="flex flex-col gap-4 text-white text-2xl">
+          <li className="">
+            <Link href={"/"} className="flex gap-3 items-center">
+              <Home />
+              <span>홈</span>
+            </Link>
+          </li>
+          <li>
+            <Divider sx={{ borderColor: "#fff" }} />
+          </li>
+          <li>팀 메이커</li>
+          <li>플레이어 정보</li>
+          {isLoggedIn && <li>피어리스 도우미</li>}
+          {isLoggedIn && <li className="text-[#0FA4FE]">마이페이지</li>}
+          <li className="">
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="cursor-pointer text-[#F53B3B]"
+              >
+                로그아웃
+              </button>
+            ) : (
+              <Link href="/auth/login">
+                <span className="text-[#0FA4FE]">로그인</span>
+              </Link>
+            )}
+          </li>
+        </ul>
+      </Drawer>
 
       {/* 데스크탑 메뉴 */}
       <ul className="hidden md:flex justify-end text-[1rem] font-bold">
