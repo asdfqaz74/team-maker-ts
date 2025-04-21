@@ -20,7 +20,7 @@ export default function GlobalBan() {
 
   return (
     <div className="bg-[url('/images/MainPage/globalban-bg.png')] 2xl:px-80 xl:px-60 lg:px-40 md:px-20 px-10 bg-cover bg-center py-20">
-      <div className="flex flex-col justify-center items-center sm:text-[3.125rem] text-3xl">
+      <div className="flex flex-col justify-center items-center sm:text-[3.125rem] text-3xl pt-10 md:pt-0">
         <span className="text-[#B217CE] font-[BlackOps]">TODAY</span>
         <span className="text-[#ffffff] font-[BlackOps] whitespace-nowrap">
           GLOBAL BAN
