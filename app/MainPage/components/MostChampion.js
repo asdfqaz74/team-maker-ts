@@ -24,7 +24,7 @@ export default function MostChampion() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="px-60 py-20 bg-[url('/images/MainPage/mainpage-2.png')] flex justify-evenly">
+    <div className="px-80 py-20 bg-[url('/images/MainPage/mainpage-2.png')] bg-cover bg-center flex justify-evenly">
       {mostChampion && <MostSwiper champions={mostChampion} />}
     </div>
   );

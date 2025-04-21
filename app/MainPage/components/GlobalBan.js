@@ -16,7 +16,7 @@ export default function GlobalBan() {
   });
 
   return (
-    <div className="bg-[url('/images/MainPage/globalban-bg.png')] px-60 py-20">
+    <div className="bg-[url('/images/MainPage/globalban-bg.png')] bg-cover bg-center px-80 py-20">
       <div className="flex flex-col justify-center items-center">
         <span className="text-[#B217CE] text-[3.125rem] font-[BlackOps]">
           TODAY

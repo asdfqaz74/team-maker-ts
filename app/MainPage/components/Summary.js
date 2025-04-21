@@ -56,7 +56,7 @@ export default function Summary() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/MainPage/summary-bg.png')] px-60 py-20 ">
+    <div className="flex flex-col bg-[url('/images/MainPage/summary-bg.png')] bg-cover bg-center px-80 py-20 ">
       <Image
         src="/images/MainPage/SummaryLogo.png"
         alt="요약 3개"
