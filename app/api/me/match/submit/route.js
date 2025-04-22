@@ -47,16 +47,6 @@ export async function POST(request) {
     for (const player of players) {
       const { userNickname, win, position, team } = player;
 
-      console.log("디버깅 플레이어 팀 비교", {
-        team,
-        teamType: typeof team,
-        players: players.map((p) => ({
-          nick: p.userNickname,
-          team: p.team,
-          teamType: typeof p.team,
-        })),
-      });
-
       const user = await User.findOne({ nickName: userNickname });
       if (!user) continue;
 
