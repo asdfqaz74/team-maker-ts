@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Navigation, Autoplay, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -15,9 +15,14 @@ export default function MostSwiper({ champions }) {
   // 스와이퍼 참초 객체
   const contentSwiperRef = useRef(null);
   const bgSwiperRef = useRef(null);
-  const swiperIndexRef = useRef(null);
 
   const { ismd } = useBreakpoint();
+
+  // 슬라이드 변경 시 동기화
+  const handleSlideChange = useCallback((swiper) => {
+    setActiveIndex(swiper.realIndex);
+    bgSwiperRef.current?.slideToLoop(swiper.realIndex);
+  }, []);
 
   // 버튼 동기화
   const handleNext = () => {
@@ -40,10 +45,7 @@ export default function MostSwiper({ champions }) {
         loop
         speed={1000}
         slidesPerView={1}
-        onSlideChange={(swiper) => {
-          swiperIndexRef.current = swiper.realIndex;
-          bgSwiperRef.current?.slideToLoop(swiper.realIndex);
-        }}
+        onSlideChange={handleSlideChange}
         allowTouchMove={false}
         onSwiper={(swiper) => (bgSwiperRef.current = swiper)}
         className="absolute inset-0 opacity-70 z-0 rounded-2xl"
@@ -108,10 +110,7 @@ export default function MostSwiper({ champions }) {
           }}
           loop={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
-          onSlideChange={(swiper) => {
-            setActiveIndex(swiper.realIndex);
-            bgSwiperRef.current?.slideToLoop(swiper.realIndex);
-          }}
+          onSlideChange={handleSlideChange}
           speed={1000}
           allowTouchMove={false}
           onSwiper={(swiper) => (contentSwiperRef.current = swiper)}
