@@ -88,7 +88,7 @@ export default function MostSwiper({ champions }) {
 
       {/* 타이틀 */}
       <Image
-        src="/images/MainPage/MostLogo.png"
+        src="/images/MainPage/MostLogo.webp"
         alt="모스트 챔피언 5"
         width={400}
         height={100}
@@ -193,7 +193,7 @@ export default function MostSwiper({ champions }) {
             onClick={handlePrev}
           >
             <Image
-              src="/images/MainPage/Left circle.png"
+              src="/images/MainPage/Left circle.webp"
               alt="이전 슬라이드"
               fill
               className="object-contain"
@@ -205,7 +205,7 @@ export default function MostSwiper({ champions }) {
             onClick={handleNext}
           >
             <Image
-              src="/images/MainPage/Left circle.png"
+              src="/images/MainPage/Left circle.webp"
               alt="다음 슬라이드"
               fill
               className="object-contain"

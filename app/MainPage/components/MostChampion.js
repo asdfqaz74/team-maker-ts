@@ -24,7 +24,7 @@ export default function MostChampion() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="2xl:px-80 xl:px-60 lg:px-40 md:px-20 px-10 py-20 bg-[url('/images/MainPage/mainpage-2.png')] bg-cover bg-center flex justify-evenly">
+    <div className="2xl:px-80 xl:px-60 lg:px-40 md:px-20 px-10 py-20 bg-[url('/images/MainPage/mainpage-2.webp')] bg-cover bg-center flex justify-evenly">
       {mostChampion && <MostSwiper champions={mostChampion} />}
     </div>
   );

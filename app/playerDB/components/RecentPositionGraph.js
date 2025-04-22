@@ -11,11 +11,11 @@ export default function RecentPositionGraph({ data }) {
     const margin = { top: 20, right: 0, bottom: 50, left: 0 };
 
     const positionImage = {
-      top: "/images/components/top.png",
-      jug: "/images/components/jug.png",
-      mid: "/images/components/mid.png",
-      adc: "/images/components/adc.png",
-      sup: "/images/components/sup.png",
+      top: "/images/components/top.webp",
+      jug: "/images/components/jug.webp",
+      mid: "/images/components/mid.webp",
+      adc: "/images/components/adc.webp",
+      sup: "/images/components/sup.webp",
     };
 
     const positionCount = data.reduce(

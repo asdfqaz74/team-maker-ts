@@ -2,7 +2,7 @@ export default function MostSwiperSkeleton() {
   return (
     <div className="relative w-full h-[37.5rem] rounded-2xl overflow-hidden">
       {/* 배경 */}
-      <div className="absolute inset-0 bg-[url('/images/MainPage/mainpage-2.png')] opacity-40 z-0 rounded-2xl" />
+      <div className="absolute inset-0 bg-[url('/images/MainPage/mainpage-2.webp')] opacity-40 z-0 rounded-2xl" />
 
       {/* 타이틀 자리 */}
       <div className="absolute top-10 left-96 z-20 w-[400px] h-[100px] bg-gray-500 rounded animate-pulse" />
