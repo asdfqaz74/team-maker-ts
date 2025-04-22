@@ -33,7 +33,7 @@ export async function GET() {
           en_name: "$_id",
           name: { $arrayElemAt: ["$bestPick.name", 0] },
           image: {
-            $concat: ["/images/champions/portrait/", "$_id", ".png"],
+            $concat: ["/images/champions/portrait/", "$_id", ".webp"],
           },
           count: 1,
           winRate: {

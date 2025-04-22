@@ -45,7 +45,7 @@ export default function GlobalBan() {
           {champions.map((champion, idx) => {
             const imageSrc = ismd
               ? `/images/champions/loading/${champion.en_name}.webp`
-              : `/images/champions/portrait/${champion.en_name}.png`;
+              : `/images/champions/portrait/${champion.en_name}.webp`;
             return (
               <li
                 key={idx}

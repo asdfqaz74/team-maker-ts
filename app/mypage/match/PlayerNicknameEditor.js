@@ -103,7 +103,7 @@ export default function PlayerNicknameEditor({
                   </p>
                 </div>
                 <Image
-                  src={`/images/champions/portrait/${p.champion}.png`}
+                  src={`/images/champions/portrait/${p.champion}.webp`}
                   alt={p.champion}
                   width={100}
                   height={100}

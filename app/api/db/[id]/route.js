@@ -5,7 +5,7 @@ import User from "@/models/User";
 const formatPlayerData = (player) => ({
   nickName: player.userNickname,
   champion: player.champion,
-  championImage: `/images/champions/portrait/${player.champion}.png`,
+  championImage: `/images/champions/portrait/${player.champion}.wepb`,
   kda: {
     kills: player.kills,
     deaths: player.deaths,
@@ -125,7 +125,11 @@ export async function GET(request, context) {
                   input: "$champion",
                   as: "champ",
                   in: {
-                    $concat: ["/images/champions/portrait/", "$$champ", ".png"],
+                    $concat: [
+                      "/images/champions/portrait/",
+                      "$$champ",
+                      ".webp",
+                    ],
                   },
                 },
               },
@@ -164,7 +168,7 @@ export async function GET(request, context) {
             deaths: me.deaths,
             assists: me.assists,
           },
-          championImage: `/images/champions/portrait/${me.champion}.png`,
+          championImage: `/images/champions/portrait/${me.champion}.webp`,
         },
         teamPlayerData: match.players
           .filter((player) => player.team === myTeam)

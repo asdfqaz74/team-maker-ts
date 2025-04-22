@@ -14,7 +14,7 @@ export async function GET() {
         id: champion._id,
         name: champion.name,
         en_name: champion.en_name,
-        image: `/images/champions/portrait/${champion.en_name}.png`,
+        image: `/images/champions/portrait/${champion.en_name}.webp`,
       };
     });
 

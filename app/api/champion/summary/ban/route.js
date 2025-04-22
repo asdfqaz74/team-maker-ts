@@ -33,7 +33,7 @@ export async function GET() {
             $concat: [
               "/images/champions/portrait/",
               { $arrayElemAt: ["$MostBan.en_name", 0] },
-              ".png",
+              ".webp",
             ],
           },
           count: 1,
