@@ -87,7 +87,9 @@ export async function POST(request) {
         streak: user.winStreak || 0,
       });
 
-      user.eloRating[position] = myElo + delta;
+      const safeDelta = Number(delta) || 0;
+
+      user.eloRating[position] = myElo + safeDelta;
 
       if (win) {
         user.wins += 1;

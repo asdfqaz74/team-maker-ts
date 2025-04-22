@@ -5,13 +5,17 @@ export async function getTeamAvgElo(team, targetPosition) {
     (player) => player.position === targetPosition
   );
 
+  if (positionPlayers.length === 0) return 1000;
+
   const elos = await Promise.all(
     positionPlayers.map(async (player) => {
       const user = await User.findOne({ nickName: player.userNickname });
-      return user?.eloRating[targetPosition] ?? 1000;
+      const rawElo = user?.eloRating?.[targetPosition];
+      return typeof rawElo === "number" && !isNaN(rawElo) ? rawElo : 1000;
     })
   );
 
-  const avg = elos.reduce((acc, elo) => acc + elo, 0) / elos.length;
+  const sum = elos.reduce((acc, elo) => acc + elo, 0);
+  const avg = elos.length > 0 ? sum / elos.length : 1000;
   return Math.round(avg);
 }
