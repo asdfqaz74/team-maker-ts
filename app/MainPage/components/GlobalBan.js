@@ -44,7 +44,7 @@ export default function GlobalBan() {
         <ul className="grid grid-cols-2 gap-32 md:flex md:justify-between md:gap-6 mt-30 mb-20">
           {champions.map((champion, idx) => {
             const imageSrc = ismd
-              ? `/images/champions/loading/${champion.en_name}.jpg`
+              ? `/images/champions/loading/${champion.en_name}.webp`
               : `/images/champions/portrait/${champion.en_name}.png`;
             return (
               <li

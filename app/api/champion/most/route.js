@@ -29,10 +29,10 @@ export async function GET() {
           en_name: "$_id",
           name: { $arrayElemAt: ["$championInfo.name", 0] },
           image: {
-            $concat: ["/images/champions/loading/", "$_id", ".jpg"],
+            $concat: ["/images/champions/loading/", "$_id", ".webp"],
           },
           logo: {
-            $concat: ["/images/champions/centered/", "$_id", ".jpg"],
+            $concat: ["/images/champions/centered/", "$_id", ".webp"],
           },
           count: 1,
         },

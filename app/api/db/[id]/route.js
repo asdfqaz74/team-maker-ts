@@ -135,7 +135,7 @@ export async function GET(request, context) {
       ]);
 
     const mostPlayedChampionImage = mostPlayedChampionAgg[0]
-      ? `/images/champions/centered/${mostPlayedChampionAgg[0]._id}.jpg`
+      ? `/images/champions/centered/${mostPlayedChampionAgg[0]._id}.webp`
       : null;
 
     user.mostPlayedChampion = mostPlayedChampionImage;

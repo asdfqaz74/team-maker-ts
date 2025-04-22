@@ -21,7 +21,7 @@ export default function TodayBanChampion({
             >
               <div className="absolute -top-12 w-[8.75rem] h-[12.5rem] rounded-xl overflow-hidden">
                 <Image
-                  src={`/images/champions/loading/${champion.en_name}.jpg`}
+                  src={`/images/champions/loading/${champion.en_name}.webp`}
                   alt={champion.name}
                   width={140}
                   height={180}
