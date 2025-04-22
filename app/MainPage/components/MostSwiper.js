@@ -60,7 +60,6 @@ export default function MostSwiper({ champions }) {
                     src={champion.logo}
                     alt={champion.name}
                     fill
-                    priority
                     className="object-cover"
                   />
                 </div>
@@ -77,7 +76,6 @@ export default function MostSwiper({ champions }) {
                     src={champion.logo}
                     alt={champion.name}
                     fill
-                    priority
                     className="object-cover"
                   />
                 </div>
@@ -150,7 +148,6 @@ export default function MostSwiper({ champions }) {
                       src={champion.image}
                       alt={champion.name}
                       fill
-                      priority
                       className={`object-cover rounded-2xl ${
                         isSecondSlide ? "object-center" : "object-[center_20%]"
                       }`}
