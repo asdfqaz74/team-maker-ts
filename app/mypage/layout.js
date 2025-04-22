@@ -14,7 +14,7 @@ export default function MyPageLayout({ children }) {
   ];
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen mt-20">
       <aside className="w-48 p-4 border-r">
         <h2 className="text-lg font-bold mb-4">마이페이지</h2>
         <ul className="space-y-2 text-sm">

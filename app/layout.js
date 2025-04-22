@@ -51,7 +51,9 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         ></script>
       </head>
-      <body className={`${notoSans.variable} antialiased w-full`}>
+      <body
+        className={`${notoSans.variable} antialiased w-full pt-[4.8125rem]`}
+      >
         <ClientProvider>
           <ToastProvider>{children}</ToastProvider>
         </ClientProvider>

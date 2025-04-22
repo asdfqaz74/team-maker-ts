@@ -78,7 +78,7 @@ export default function Header() {
   };
 
   return (
-    <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap">
+    <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap h-[4.8125rem]">
       <span className="text-[1.875rem] font-[Alumni] block md:hidden 2xl:block">
         <Link href={"/"}>Tea M aker</Link>
       </span>
@@ -106,62 +106,62 @@ export default function Header() {
       >
         <Box role="presentation" onClick={toggleDrawer(false)}>
           <ul className="flex flex-col gap-4 text-white text-2xl">
-            <li className="">
-              <Link href={"/"} className="flex gap-3 items-center">
+            <Link href={"/"}>
+              <li className="flex gap-3 items-center">
                 <Home />
                 <span>홈</span>
-              </Link>
-            </li>
+              </li>
+            </Link>
             <li>
               <Divider sx={{ borderColor: "#fff" }} />
             </li>
-            <li>
-              <Link href={"/teamMaker"} className="flex gap-3 items-center">
+            <Link href={"/teamMaker"}>
+              <li className="flex gap-3 items-center">
                 <Gamepad />
                 <span>팀 메이커</span>
-              </Link>
-            </li>
+              </li>
+            </Link>
 
-            <li>
-              <Link href={"/playerDB"} className="flex gap-3 items-center">
+            <Link href={"/playerDB"}>
+              <li className="flex gap-3 items-center">
                 <Chart />
                 <span>플레이어 정보</span>
-              </Link>
-            </li>
+              </li>
+            </Link>
             {isLoggedIn && (
-              <li>
-                <Link href={"/fearless"} className="flex gap-3 items-center">
+              <Link href={"/fearless"}>
+                <li className="flex gap-3 items-center">
                   <Сalculator />
                   <span>피어리스 도우미</span>
-                </Link>
-              </li>
+                </li>
+              </Link>
             )}
 
             {isLoggedIn && (
-              <li className="">
-                <Link href={"/mypage"} className="flex gap-3 items-center">
+              <Link href={"/mypage"}>
+                <li className="flex gap-3 items-center">
                   <Settings />
                   <span>마이페이지</span>
-                </Link>
-              </li>
+                </li>
+              </Link>
             )}
             <li>
               <Divider sx={{ borderColor: "#fff" }} />
             </li>
-            <li className="">
-              {isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  className="cursor-pointer text-[#F53B3B]"
-                >
-                  로그아웃
-                </button>
-              ) : (
-                <Link href="/auth/login">
-                  <span className="text-[#0FA4FE]">로그인</span>
-                </Link>
-              )}
-            </li>
+            {isLoggedIn ? (
+              <li
+                onClick={handleLogout}
+                className="cursor-pointer text-[#F53B3B] hover:bg-white/10 rounded px-2 py-2"
+              >
+                로그아웃
+              </li>
+            ) : (
+              <Link href="/auth/login">
+                <li className="text-[#0FA4FE] hover:bg-white/10 rounded px-2 py-2 cursor-pointer">
+                  로그인
+                </li>
+              </Link>
+            )}
           </ul>
         </Box>
       </Drawer>
