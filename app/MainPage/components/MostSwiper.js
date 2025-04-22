@@ -12,12 +12,12 @@ import useBreakpoint from "@/utils/useBreakpion";
 export default function MostSwiper({ champions }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const shiftedChampions = [...champions.slice(1), champions[0]];
-
-  const { ismd } = useBreakpoint();
-
   // 스와이퍼 참초 객체
   const contentSwiperRef = useRef(null);
   const bgSwiperRef = useRef(null);
+  const swiperIndexRef = useRef(null);
+
+  const { ismd } = useBreakpoint();
 
   // 버튼 동기화
   const handleNext = () => {
@@ -41,14 +41,11 @@ export default function MostSwiper({ champions }) {
         speed={1000}
         slidesPerView={1}
         onSlideChange={(swiper) => {
-          const realIdx = swiper.realIndex;
-          setActiveIndex(realIdx);
-          bgSwiperRef.current?.slideToLoop(realIdx);
+          swiperIndexRef.current = swiper.realIndex;
+          bgSwiperRef.current?.slideToLoop(swiper.realIndex);
         }}
         allowTouchMove={false}
         onSwiper={(swiper) => (bgSwiperRef.current = swiper)}
-        observeParents
-        observer
         className="absolute inset-0 opacity-70 z-0 rounded-2xl"
       >
         {ismd &&
@@ -112,20 +109,17 @@ export default function MostSwiper({ champions }) {
           loop={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           onSlideChange={(swiper) => {
-            const realIdx = swiper.realIndex;
-            setActiveIndex(realIdx);
-            bgSwiperRef.current?.slideToLoop(realIdx);
+            setActiveIndex(swiper.realIndex);
+            bgSwiperRef.current?.slideToLoop(swiper.realIndex);
           }}
           speed={1000}
           allowTouchMove={false}
           onSwiper={(swiper) => (contentSwiperRef.current = swiper)}
-          observeParents
-          observer
           className="w-full h-full z-10"
         >
           {champions.map((champion, idx) => {
             const isSecondSlide = idx === (activeIndex + 1) % champions.length;
-            const isFirstSlide = idx === activeIndex % champions.length;
+            const isFirstSlide = idx === activeIndex;
 
             const sizeClass = ismd
               ? isSecondSlide
