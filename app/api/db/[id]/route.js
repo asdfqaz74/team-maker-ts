@@ -5,7 +5,7 @@ import User from "@/models/User";
 const formatPlayerData = (player) => ({
   nickName: player.userNickname,
   champion: player.champion,
-  championImage: `/images/champions/portrait/${player.champion}.wepb`,
+  championImage: `/images/champions/portrait/${player.champion}.webp`,
   kda: {
     kills: player.kills,
     deaths: player.deaths,
