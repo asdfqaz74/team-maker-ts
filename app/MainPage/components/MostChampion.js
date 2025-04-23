@@ -20,6 +20,8 @@ export default function MostChampion() {
     staleTime: 1000 * 60 * 5, // 5분
   });
 
+  console.log("mostChampion", mostChampion);
+
   if (isLoading) return <MostSwiperSkeleton />;
   if (isError) return <div>Error: {error.message}</div>;
 

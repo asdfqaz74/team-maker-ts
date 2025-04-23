@@ -1,208 +1,148 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { Navigation, Autoplay, EffectFade } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
 import Image from "next/image";
-import useBreakpoint from "@/utils/useBreakpion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectFade, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function MostSwiper({ champions }) {
+  // 인덱스 상태
   const [activeIndex, setActiveIndex] = useState(0);
-  const shiftedChampions = [...champions.slice(1), champions[0]];
-  // 스와이퍼 참초 객체
+
+  // Swiper 인스턴스 참조
   const contentSwiperRef = useRef(null);
   const bgSwiperRef = useRef(null);
 
-  const { ismd } = useBreakpoint();
+  // activeIndex가 변경될 때마다 배경 슬라이더를 업데이트
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const next = (activeIndex + 1) % champions.length;
+      setTimeout(() => setActiveIndex(next), 0);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [activeIndex, champions.length]);
 
-  // 슬라이드 변경 시 동기화
-  const handleSlideChange = useCallback((swiper) => {
-    setActiveIndex(swiper.realIndex);
-    bgSwiperRef.current?.slideToLoop(swiper.realIndex);
-  }, []);
+  // activeIndex가 변경될 때마다 배경 슬라이더와 콘텐츠 슬라이더를 동기화
+  useEffect(() => {
+    bgSwiperRef.current?.slideTo(activeIndex);
+    contentSwiperRef.current?.slideTo(activeIndex);
+  }, [activeIndex]);
 
-  // 버튼 동기화
-  const handleNext = () => {
-    contentSwiperRef.current?.slideNext();
-    bgSwiperRef.current?.slideNext();
-  };
+  // 이전 및 다음 버튼 클릭 핸들러
+  const handlePrevClick = useCallback(() => {
+    const prev = activeIndex === 0 ? champions.length - 1 : activeIndex - 1;
+    setActiveIndex(prev);
+  }, [activeIndex, champions.length]);
 
-  const handlePrev = () => {
-    contentSwiperRef.current?.slidePrev();
-    bgSwiperRef.current?.slidePrev();
-  };
+  const handleNextClick = useCallback(() => {
+    const next = (activeIndex + 1) % champions.length;
+    setActiveIndex(next);
+  }, [activeIndex, champions.length]);
+
+  // champions 배열을 5개로 맞추기 위해 null을 추가
+  const paddedChampions = [null, ...champions, null, null];
 
   return (
-    <div className="relative w-full h-[37.5rem] rounded-2xl">
-      {/* 배경 이미지 Swiper */}
-      <Swiper
-        modules={[Autoplay, EffectFade]}
-        effect="fade"
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loop
-        speed={1000}
-        slidesPerView={1}
-        onSlideChange={handleSlideChange}
-        allowTouchMove={false}
-        onSwiper={(swiper) => (bgSwiperRef.current = swiper)}
-        className="absolute inset-0 opacity-70 z-0 rounded-2xl"
-      >
-        {ismd &&
-          shiftedChampions.map((champion, idx) => {
-            return (
-              <SwiperSlide key={idx}>
-                <div className="relative w-full h-[37.5rem]">
-                  <Image
-                    src={champion.logo}
-                    alt={champion.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </SwiperSlide>
-            );
-          })}
-
-        {!ismd &&
-          champions.map((champion, idx) => {
-            return (
-              <SwiperSlide key={idx}>
-                <div className="relative w-full h-[37.5rem]">
-                  <Image
-                    src={champion.logo}
-                    alt={champion.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </SwiperSlide>
-            );
-          })}
-      </Swiper>
-
-      {/* 타이틀 */}
+    <div className="relative w-full h-[37.5rem]">
       <Image
         src="/images/MainPage/MostLogo.webp"
-        alt="모스트 챔피언 5"
+        alt="MostLogo"
         width={400}
         height={100}
-        className="absolute -top-10 md:top-5 md:left-10 z-20"
+        className="absolute top-0 left-0 z-10"
+        loading="lazy"
       />
 
-      {/* Swiper 콘텐츠 */}
+      <Swiper
+        modules={[EffectFade]}
+        slidesPerView={1}
+        allowTouchMove={false}
+        effect="fade"
+        onSwiper={(swiper) => (bgSwiperRef.current = swiper)}
+      >
+        {champions.map((champion) => (
+          <SwiperSlide key={`bg-${champion.en_name}`}>
+            <div className="relative w-full h-[37.5rem]">
+              <Image
+                src={champion.logo}
+                alt={champion.name}
+                fill
+                className="object-cover w-full h-full"
+                loading="lazy"
+              />
+              <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-      <div className="absolute inset-0 z-10 py-10 px-5">
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          navigation={{
-            nextEl: ".swiper-custom-next",
-            prevEl: ".swiper-custom-prev",
-          }}
-          spaceBetween={30}
-          breakpoints={{
-            1536: { slidesPerView: 4 },
-            1280: { slidesPerView: 3 },
-            768: { slidesPerView: 2 },
-            0: { slidesPerView: 1 },
-          }}
-          loop={true}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          onSlideChange={handleSlideChange}
-          speed={1000}
-          allowTouchMove={false}
-          onSwiper={(swiper) => (contentSwiperRef.current = swiper)}
-          className="w-full h-full z-10"
-        >
-          {champions.map((champion, idx) => {
-            const isSecondSlide = idx === (activeIndex + 1) % champions.length;
-            const isFirstSlide = idx === activeIndex;
-
-            const sizeClass = ismd
-              ? isSecondSlide
-                ? "w-60 h-90 translate-y-40"
-                : "w-50 aspect-square translate-y-80"
-              : isFirstSlide
-              ? "w-60 h-90 translate-y-40"
-              : "";
-
-            return (
-              <SwiperSlide key={idx} className="flex justify-center items-end">
-                <div
-                  className={`relative rounded-2xl shadow-lg overflow-hidden transition-all duration-300 border border-amber-50 ${sizeClass}`}
+      <div className="absolute left-10 inset-0 flex items-end z-10">
+        <div className="relative w-full h-full px-5">
+          <Swiper
+            modules={[Navigation]}
+            slidesPerView={4}
+            allowTouchMove={false}
+            onSwiper={(swiper) => (contentSwiperRef.current = swiper)}
+            className="w-full h-full flex justify-center"
+          >
+            {paddedChampions.map((champion, idx) => {
+              const isActive = idx === activeIndex + 1;
+              const sizeClass = isActive
+                ? "w-[12.5rem] h-[25rem]"
+                : "w-[9.375rem] h-[12.5rem]";
+              return (
+                <SwiperSlide
+                  key={`card-${champion?.en_name || "blank-" + idx}`}
+                  className={`relative flex gap-10`}
                 >
-                  <div
-                    className={`absolute w-full h-full rounded-2xl overflow-hidden 
-                      }`}
-                  >
-                    <Image
-                      src={champion.image}
-                      alt={champion.name}
-                      fill
-                      className={`object-cover rounded-2xl ${
-                        isSecondSlide ? "object-center" : "object-[center_20%]"
-                      }`}
-                    />
+                  <div className={`absolute bottom-0 ${sizeClass}`}>
+                    {champion && (
+                      <Image
+                        src={champion.image}
+                        alt={champion.name}
+                        fill
+                        className="object-cover object-center rounded-2xl"
+                        loading="lazy"
+                      />
+                    )}
                   </div>
-                </div>
-                {ismd && isSecondSlide && (
-                  <div className="absolute top-0 md:-left-72 md:top-32 lg:top-0 lg:left-auto lg:right-12 xl:-right-52 2xl:-right-[31.25rem]">
-                    <div className="flex flex-col gap-4">
-                      <p className="text-4xl font-bold">{champion.name}</p>
-                      <div className="flex gap-4 items-end">
-                        <p className="text-xl font-semibold">총 게임 수</p>
-                        <p>{champion.count} 게임</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {!ismd && isFirstSlide && (
-                  <div className="absolute top-10 bg-gray-900 p-2">
-                    <div className="flex flex-col gap-4">
-                      <p className="text-4xl font-bold">{champion.name}</p>
-                      <div className="flex gap-4 items-end">
-                        <p className="text-xl font-semibold">총 게임 수</p>
-                        <p>{champion.count} 게임</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
       </div>
 
-      {/* 커스텀 버튼 */}
-      {ismd && (
-        <>
-          <button
-            className="swiper-custom-prev absolute -left-20 top-1/2 -translate-y-1/2 z-30 w-[60px] h-[60px] cursor-pointer"
-            onClick={handlePrev}
-          >
-            <Image
-              src="/images/MainPage/Left circle.webp"
-              alt="이전 슬라이드"
-              fill
-              className="object-contain"
-            />
-          </button>
+      <button
+        className="swiper-custom-prev absolute top-1/2 left-5 z-20 -translate-y-1/2 cursor-pointer"
+        onClick={handlePrevClick}
+      >
+        <Image
+          src="/images/MainPage/Left Circle.webp"
+          alt="ArrowLeft"
+          width={30}
+          height={30}
+          className="w-5 h-5"
+          loading="lazy"
+        />
+      </button>
 
-          <button
-            className="swiper-custom-next absolute -right-20 top-1/2 -translate-y-1/2 z-30 w-[50px] h-[50px] cursor-pointer rotate-180"
-            onClick={handleNext}
-          >
-            <Image
-              src="/images/MainPage/Left circle.webp"
-              alt="다음 슬라이드"
-              fill
-              className="object-contain"
-            />
-          </button>
-        </>
-      )}
+      <button
+        className="swiper-custom-next absolute top-1/2 right-5 z-20 -translate-y-1/2 rotate-180 cursor-pointer"
+        onClick={handleNextClick}
+      >
+        <Image
+          src="/images/MainPage/Left Circle.webp"
+          alt="ArrowRight"
+          width={30}
+          height={30}
+          className="w-5 h-5"
+          loading="lazy"
+        />
+      </button>
     </div>
   );
 }
