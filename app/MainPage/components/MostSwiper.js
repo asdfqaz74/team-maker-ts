@@ -19,11 +19,10 @@ export default function MostSwiper({ champions }) {
   // activeIndex가 변경될 때마다 배경 슬라이더를 업데이트
   useEffect(() => {
     const interval = setInterval(() => {
-      const next = (activeIndex + 1) % champions.length;
-      setTimeout(() => setActiveIndex(next), 0);
+      setActiveIndex((prev) => (prev + 1) % champions.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [activeIndex, champions.length]);
+  }, [champions.length]);
 
   // activeIndex가 변경될 때마다 배경 슬라이더와 콘텐츠 슬라이더를 동기화
   useEffect(() => {
