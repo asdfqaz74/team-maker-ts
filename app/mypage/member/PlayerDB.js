@@ -75,7 +75,7 @@ export default function PlayerDB() {
   if (!selectedPlayer) return <p>선수를 선택해주세요.</p>;
 
   return (
-    <div>
+    <div className="text-black">
       <span>{selectedPlayer?.name}</span>
       <label className="block font-semibold mb-2">ELO 관리</label>
       <div className="flex gap-4">

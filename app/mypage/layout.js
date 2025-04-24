@@ -1,4 +1,8 @@
 "use client";
+import User from "@/public/images/components/User.svg";
+import Users from "@/public/images/components/Users.svg";
+import Rocket from "@/public/images/components/Rocket.svg";
+import Gamepad from "@/public/images/components/Gamepad2.svg";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -7,29 +11,32 @@ export default function MyPageLayout({ children }) {
   const pathname = usePathname();
 
   const menu = [
-    { label: "내 정보", path: "/mypage/myinfo" },
-    { label: "내전 멤버 관리", path: "/mypage/member" },
-    { label: "그룹 관리", path: "/mypage/group" },
-    { label: "경기 추가하기", path: "/mypage/match" },
+    { label: "내 정보", path: "/mypage/myinfo", icon: <User /> },
+    { label: "내전 멤버 관리", path: "/mypage/member", icon: <Users /> },
+    { label: "그룹 관리", path: "/mypage/group", icon: <Rocket /> },
+    { label: "경기 추가하기", path: "/mypage/match", icon: <Gamepad /> },
   ];
 
   return (
-    <div className="flex min-h-screen mt-20">
-      <aside className="w-48 p-4 border-r">
-        <h2 className="text-lg font-bold mb-4">마이페이지</h2>
-        <ul className="space-y-2 text-sm">
+    <div className="flex min-h-screen bg-white">
+      <aside className="w-48 bg-[#030222] fixed h-screen">
+        <h2 className="text-2xl font-bold pl-4 mb-10 text-[#0FA4FE]">
+          MY PAGE
+        </h2>
+        <ul className="flex flex-col gap-10 text-sm">
           {menu.map((item) => {
             const isActive = pathname === item.path;
             return (
               <li key={item.path}>
                 <Link
                   href={item.path}
-                  className={`block px-2 py-1 rounded hover:text-blue-500 ${
+                  className={`flex items-center gap-4 pl-4 rounded-l-full hover:text-blue-500 ${
                     isActive
-                      ? "text-blue-600 font-semibold bg-white shadow-sm"
-                      : "text-gray-700"
+                      ? "text-black font-semibold py-2 bg-white"
+                      : "text-white"
                   }`}
                 >
+                  {item.icon}
                   {item.label}
                 </Link>
               </li>
@@ -39,7 +46,9 @@ export default function MyPageLayout({ children }) {
       </aside>
 
       {/* 본문 */}
-      <main className="flex-1 max-w-4xl px-8 py-6 mx-auto">{children}</main>
+      <main className="ml-48 w-full px-8 py-6 bg-white">
+        <div className="bg-[#F2FAFF] rounded-2xl px-8 py-6">{children}</div>
+      </main>
     </div>
   );
 }

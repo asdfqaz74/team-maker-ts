@@ -50,14 +50,14 @@ export default function MemberPage() {
 
   return (
     <>
-      <div className="flex justify-between items-end">
-        <h1 className="text-4xl">내전 멤버 관리</h1>
+      <div className="w-full text-black">
+        <h1 className="text-2xl font-bold">내전 멤버 관리</h1>
         <button className="cursor-pointer" onClick={handleCreatePlayerButton}>
           선수 추가
         </button>
       </div>
       {buttonClicked && (
-        <div className="flex flex-col">
+        <div className="flex flex-col text-black">
           <span>선수 추가하기</span>
           <div className="flex gap-4">
             <span>이름</span>

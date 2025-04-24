@@ -32,7 +32,7 @@ export default function PlayerList() {
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-black">
       <h2 className="text-2xl font-bold mb-4">내전 플레이어 목록</h2>
       <ul className="space-y-3">
         {players.map((player) => (
