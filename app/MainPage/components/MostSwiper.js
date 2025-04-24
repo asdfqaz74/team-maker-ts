@@ -82,8 +82,10 @@ export default function MostSwiper({ champions }) {
                   />
                   <div className="w-full h-full bg-black opacity-50"></div>
                   {/* 챔피언 정보 */}
-                  <div className="absolute top-10 right-40 flex flex-col items-start gap-4">
-                    <span className="text-4xl">{champion.name}</span>
+                  <div className="absolute w-[12.5rem] top-10 right-40 flex flex-col items-start gap-4">
+                    <span className="text-4xl whitespace-nowrap">
+                      {champion.name}
+                    </span>
                     <div className="flex gap-4">
                       <span>게임 수</span>
                       <span>{champion.count} 회</span>
@@ -171,7 +173,7 @@ export default function MostSwiper({ champions }) {
 
       {/* 모바일 버전 */}
       {!ismd && (
-        <div className="relative w-[25rem] h-[37.5rem]">
+        <div className="relative w-[21.875rem] max-w-[25rem] h-[37.5rem]">
           <Image
             src="/images/MainPage/MostLogo.webp"
             alt="MostLogo"
