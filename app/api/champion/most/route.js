@@ -11,6 +11,17 @@ export async function GET() {
         $group: {
           _id: "$players.champion",
           count: { $sum: 1 },
+          winCount: { $sum: { $cond: ["$players.win", 1, 0] } },
+        },
+      },
+      {
+        $addFields: {
+          winRate: {
+            $round: [
+              { $multiply: [{ $divide: ["$winCount", "$count"] }, 100] },
+              0,
+            ],
+          },
         },
       },
       { $sort: { count: -1 } },
@@ -35,6 +46,7 @@ export async function GET() {
             $concat: ["/images/champions/centered/", "$_id", ".webp"],
           },
           count: 1,
+          winRate: 1,
         },
       },
     ]);

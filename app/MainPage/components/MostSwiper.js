@@ -45,7 +45,7 @@ export default function MostSwiper({ champions }) {
   const paddedChampions = [null, ...champions, null, null];
 
   return (
-    <div className="relative w-full h-[37.5rem]">
+    <div className="relative w-[75rem] h-[37.5rem]">
       <Image
         src="/images/MainPage/MostLogo.webp"
         alt="MostLogo"
@@ -55,6 +55,7 @@ export default function MostSwiper({ champions }) {
         loading="lazy"
       />
 
+      {/* 챔피언 배경화면 */}
       <Swiper
         modules={[EffectFade]}
         slidesPerView={1}
@@ -72,13 +73,26 @@ export default function MostSwiper({ champions }) {
                 className="object-cover w-full h-full"
                 loading="lazy"
               />
-              <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+              <div className="w-full h-full bg-black opacity-50"></div>
+              {/* 챔피언 정보 */}
+              <div className="absolute top-10 right-40 flex flex-col items-start gap-4">
+                <span className="text-4xl">{champion.name}</span>
+                <div className="flex gap-4">
+                  <span>게임 수</span>
+                  <span>{champion.count} 회</span>
+                </div>
+                <div className="flex gap-4">
+                  <span>승률</span>
+                  <span>{champion.winRate}%</span>
+                </div>
+              </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      <div className="absolute left-10 inset-0 flex items-end z-10">
+      {/* 챔피언 카드 */}
+      <div className="absolute left-24 inset-0 flex items-end z-10">
         <div className="relative w-full h-full px-5">
           <Swiper
             modules={[Navigation]}
@@ -90,12 +104,12 @@ export default function MostSwiper({ champions }) {
             {paddedChampions.map((champion, idx) => {
               const isActive = idx === activeIndex + 1;
               const sizeClass = isActive
-                ? "w-[12.5rem] h-[25rem]"
+                ? "w-[12.5rem] h-[25rem] -left-5"
                 : "w-[9.375rem] h-[12.5rem]";
               return (
                 <SwiperSlide
                   key={`card-${champion?.en_name || "blank-" + idx}`}
-                  className={`relative flex gap-10`}
+                  className="relative flex gap-10"
                 >
                   <div className={`absolute bottom-0 ${sizeClass}`}>
                     {champion && (
@@ -115,6 +129,7 @@ export default function MostSwiper({ champions }) {
         </div>
       </div>
 
+      {/* 커스텀 버튼 */}
       <button
         className="swiper-custom-prev absolute top-1/2 left-5 z-20 -translate-y-1/2 cursor-pointer"
         onClick={handlePrevClick}
