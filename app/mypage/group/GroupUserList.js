@@ -33,11 +33,11 @@ export default function GroupUserList() {
 
   return (
     <div className="">
-      <h3 className="text-white text-lg">선택한 그룹의 유저</h3>
+      <h3 className=" text-lg">선택한 그룹의 유저</h3>
       {users.length === 0 ? (
         <p className="text-gray-400">해당 그룹에 유저가 없습니다.</p>
       ) : (
-        <ul className="text-white">
+        <ul className="">
           {users.map((user) => (
             <li key={user._id}>{user.name}</li>
           ))}

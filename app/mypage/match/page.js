@@ -10,7 +10,7 @@ export default function MatchPage() {
   const { showSnack } = useToast();
 
   return (
-    <div>
+    <div className="w-full text-black">
       <h1>매칭 관리</h1>
       <p>매칭 관리 페이지입니다.</p>
       {parsed ? (

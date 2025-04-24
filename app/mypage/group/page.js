@@ -55,7 +55,7 @@ export default function GroupPage() {
   };
 
   return (
-    <>
+    <div className="w-full text-black">
       <div className="flex justify-between items-end">
         <h1 className="text-4xl">그룹 관리</h1>
         <button className="cursor-pointer" onClick={handleCreateGroupButton}>
@@ -81,6 +81,6 @@ export default function GroupPage() {
         <PlayerList />
         <GroupUserList />
       </div>
-    </>
+    </div>
   );
 }

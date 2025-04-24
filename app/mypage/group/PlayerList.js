@@ -106,11 +106,11 @@ export default function PlayerList() {
   };
 
   return (
-    <div>
+    <div className="">
       <span>선수목록</span>
       <ul>
         {players.map((player) => (
-          <li key={player._id} className="text-white">
+          <li key={player._id} className="">
             <input
               type="checkbox"
               checked={checkedPlayers.includes(player._id)}
