@@ -173,7 +173,7 @@ export default function MostSwiper({ champions }) {
 
       {/* 모바일 버전 */}
       {!ismd && (
-        <div className="relative w-[21.875rem] max-w-[25rem] h-[37.5rem]">
+        <div className="relative w-full max-w-[25rem] h-[37.5rem]">
           <Image
             src="/images/MainPage/MostLogo.webp"
             alt="MostLogo"
