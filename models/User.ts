@@ -1,7 +1,37 @@
-import mongoose from "mongoose";
-import Group from "./Group";
+import { Schema, Document, models, model } from "mongoose";
 
-const EloSchema = new mongoose.Schema(
+// 타입 정의
+// Elo 타입
+export interface IElo extends Document {
+  top: number;
+  jug: number;
+  mid: number;
+  adc: number;
+  sup: number;
+}
+
+// 사용자 타입
+export interface IUser extends Document {
+  name: string;
+  nickName: string;
+  position: string;
+  mainCharacter: string;
+  eloRating: IElo;
+  totalGames: number;
+  wins: number;
+  losses: number;
+  monthlyTotalGames: number;
+  monthlyWins: number;
+  monthlyLosses: number;
+  group: Schema.Types.ObjectId[];
+  createdBy: Schema.Types.ObjectId;
+  lastMonthlyReset: Date;
+  winStreak: number;
+}
+
+// 스키마 정의
+// Elo 스키마
+const EloSchema = new Schema<IElo>(
   {
     top: { type: Number, default: 1000 },
     jug: { type: Number, default: 1000 },
@@ -12,7 +42,8 @@ const EloSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const UserSchema = new mongoose.Schema({
+// User 스키마
+const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   nickName: { type: String, required: true },
   position: {
@@ -28,9 +59,9 @@ const UserSchema = new mongoose.Schema({
   monthlyTotalGames: { type: Number, default: 0 },
   monthlyWins: { type: Number, default: 0 },
   monthlyLosses: { type: Number, default: 0 },
-  group: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
+  group: [{ type: Schema.Types.ObjectId, ref: "Group" }],
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Member",
     required: true,
   },
@@ -38,4 +69,7 @@ const UserSchema = new mongoose.Schema({
   winStreak: { type: Number, default: 0 },
 });
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+// 모듈 export
+const User = models.User || model<IUser>("User", UserSchema);
+
+export default User;

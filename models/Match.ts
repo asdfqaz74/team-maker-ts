@@ -1,35 +1,67 @@
-import mongoose from "mongoose";
-import Member from "./Member";
+import { Schema, Document, models, model, Types } from "mongoose";
 
-const PlayerStatsSchema = new mongoose.Schema({
-  userNickname: String,
-  champion: String,
-  team: { type: String, enum: ["Blue", "Red"] },
-  position: String,
-  kills: Number,
-  deaths: Number,
-  assists: Number,
-  totalDamageDealt: Number,
-  totalDamageTaken: Number,
-  boughtWards: Number,
-  wardsPlaced: Number,
-  wardsKilled: Number,
-  minionsKilled: Number,
-  win: Boolean,
-});
+// 타입 정의
+// 선수 타입
+export interface IPlayerStats extends Document {
+  userNickname?: string;
+  champion: string;
+  team: "Blue" | "Red";
+  position: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  totalDamageDealt: number;
+  totalDamageTaken: number;
+  boughtWards: number;
+  wardsPlaced: number;
+  wardsKilled: number;
+  minionsKilled: number;
+  win: boolean;
+}
 
-const MatchSchema = new mongoose.Schema(
+// 매치 타입
+export interface IMatch extends Document {
+  players: Types.DocumentArray<IPlayerStats>;
+  uploadedBy: Schema.Types.ObjectId;
+  maxDamage: number;
+  banChampion: Schema.Types.ObjectId[];
+}
+
+// 스키마 정의
+// 선수 스키마
+const PlayerSchema = new Schema<IPlayerStats>(
   {
-    players: [PlayerStatsSchema],
+    userNickname: { type: String, required: false },
+    champion: { type: String, required: true },
+    team: { type: String, enum: ["Blue", "Red"], required: true },
+    position: { type: String, required: true },
+    kills: { type: Number, required: true },
+    deaths: { type: Number, required: true },
+    assists: { type: Number, required: true },
+    totalDamageDealt: { type: Number, required: true },
+    totalDamageTaken: { type: Number, required: true },
+    boughtWards: { type: Number, required: true },
+    wardsPlaced: { type: Number, required: true },
+    wardsKilled: { type: Number, required: true },
+    minionsKilled: { type: Number, required: true },
+    win: { type: Boolean, required: true },
+  },
+  { _id: false }
+);
+
+// 매치 스키마
+const MatchSchema = new Schema<IMatch>(
+  {
+    players: [PlayerSchema],
     uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Member",
       required: true,
     },
     maxDamage: Number,
     banChampion: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Champion",
         required: true,
       },
@@ -38,4 +70,7 @@ const MatchSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Match || mongoose.model("Match", MatchSchema);
+// 모델 export
+const Match = models.Match || model<IMatch>("Match", MatchSchema);
+
+export default Match;

@@ -1,10 +1,23 @@
-import mongoose from "mongoose";
+import { Schema, Document, models, model } from "mongoose";
 
-const MemberSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-});
+// 타입 정의
+export interface IMember extends Document {
+  userId: string;
+  password: string;
+  name: string;
+  email: string;
+}
 
-export default mongoose.models.Member || mongoose.model("Member", MemberSchema);
+// 스키마 정의
+const MemberSchema = new Schema<IMember>(
+  {
+    userId: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+  },
+  { timestamps: true }
+);
+
+// 모델 export
+const Member = models.Member || model<IMember>("Member", MemberSchema);

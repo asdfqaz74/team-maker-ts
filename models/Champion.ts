@@ -1,13 +1,27 @@
-import mongoose from "mongoose";
+import { Schema, Document, models, model } from "mongoose";
 
-const ChampionSchema = new mongoose.Schema({
-  name: String,
-  title: String,
-  image: String,
-  small: String,
-  loading: String,
-  en_name: String,
+// 타입 정의
+export interface IChampion extends Document {
+  name: string;
+  title: string;
+  image: string;
+  small: string;
+  loading: string;
+  en_name: string;
+}
+
+// 스키마 정의
+const ChampionSchema = new Schema<IChampion>({
+  name: { type: String, required: true },
+  title: { type: String, required: true },
+  image: { type: String, required: true },
+  small: { type: String, required: true },
+  loading: { type: String, required: true },
+  en_name: { type: String, required: true },
 });
 
-export default mongoose.models.Champion ||
-  mongoose.model("Champion", ChampionSchema);
+// 모델 export
+const Champion =
+  models.Champion || model<IChampion>("Champion", ChampionSchema);
+
+export default Champion;

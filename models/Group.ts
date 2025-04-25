@@ -1,10 +1,17 @@
-import mongoose from "mongoose";
+import { Schema, Document, models, model } from "mongoose";
 
-const GroupSchema = new mongoose.Schema(
+// 타입 정의
+export interface IGroup extends Document {
+  name: string;
+  createdBy: Schema.Types.ObjectId;
+}
+
+// 스키마 정의
+const GroupSchema = new Schema<IGroup>(
   {
     name: { type: String, required: true },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Member",
       required: true,
     },
@@ -12,4 +19,7 @@ const GroupSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Group || mongoose.model("Group", GroupSchema);
+// 모델 export
+const Group = models.Group || model<IGroup>("Group", GroupSchema);
+
+export default Group;
