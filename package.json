@@ -33,8 +33,11 @@
     "@netlify/plugin-nextjs": "^5.10.5",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^22.15.1",
+    "@types/react": "^19.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "^5.8.3"
   }
 }
