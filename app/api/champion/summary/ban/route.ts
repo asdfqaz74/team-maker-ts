@@ -1,11 +1,13 @@
-import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
+import { connectDB } from "@/lib/mongoose";
+import { BanChampion } from "@/types/champion";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   await connectDB();
 
   try {
-    const result = await Match.aggregate([
+    const result: BanChampion[] = await Match.aggregate([
       { $unwind: "$banChampion" },
       {
         $group: {
@@ -41,10 +43,10 @@ export async function GET() {
       },
     ]);
 
-    return Response.json(result, { status: 200 });
-  } catch (error) {
+    return NextResponse.json(result, { status: 200 });
+  } catch (error: any) {
     console.error("밴 챔피언 통계 오류:", error);
-    return Response.json(
+    return NextResponse.json(
       { error: error.message || "밴 챔피언 집계 실패" },
       { status: 500 }
     );
