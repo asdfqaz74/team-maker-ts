@@ -1,25 +1,42 @@
 "use client";
 
-import { Alert, Slide, Snackbar } from "@mui/material";
+import { Alert, Slide, SlideProps, Snackbar } from "@mui/material";
 import { createContext, useContext, useState } from "react";
 
-const ToastContext = createContext(null);
-
-function SlideTransition(props) {
-  return <Slide {...props} direction="left" />;
+interface ShowSnackType {
+  message: string;
+  type: "success" | "error" | "warning" | "info";
 }
 
-export function ToastProvider({ children }) {
+type ToastContextType = {
+  showSnack: (message: string, type: ShowSnackType["type"]) => void;
+};
+
+const ToastContext = createContext<ToastContextType | null>(null);
+
+function SlideTransition(props: SlideProps) {
+  return (
+    <Slide {...props} direction="left">
+      {props.children}
+    </Slide>
+  );
+}
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
   // 토스트 관리를 위한 상태
   const [snackMessage, setSnackMessage] = useState("");
-  const [snackColor, setSnackColor] = useState("success");
+  const [snackColor, setSnackColor] =
+    useState<ShowSnackType["type"]>("success");
   const [state, setState] = useState({
     open: false,
     Transition: SlideTransition,
   });
 
   // 토스트 핸들러
-  const showSnack = (message, type = "success") => {
+  const showSnack = (
+    message: string,
+    type: ShowSnackType["type"] = "success"
+  ) => {
     setSnackMessage(message);
     setSnackColor(type);
     setState({ open: true, Transition: SlideTransition });
@@ -47,4 +64,10 @@ export function ToastProvider({ children }) {
   );
 }
 
-export const useToast = () => useContext(ToastContext);
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error("useToast는 ToastProvider 안에서만 사용할 수 있습니다.");
+  }
+  return context;
+};

@@ -1,6 +1,17 @@
+import { SelectedBanChampion } from "@/types/champion";
 import Image from "next/image";
 
-export default function BanChampion({ onClick, set, banList }) {
+interface BanChampionProps {
+  onClick: () => void;
+  set: "1 경기" | "2 경기";
+  banList: SelectedBanChampion[];
+}
+
+export default function BanChampion({
+  onClick,
+  set,
+  banList,
+}: BanChampionProps) {
   return (
     <div className="flex flex-col my-10">
       <div className="flex justify-between items-center mb-4">
@@ -12,7 +23,7 @@ export default function BanChampion({ onClick, set, banList }) {
           설정하기
         </button>
       </div>
-      <div className="">
+      <div>
         <ul className="flex justify-evenly">
           {banList &&
             banList.map((champ) => (

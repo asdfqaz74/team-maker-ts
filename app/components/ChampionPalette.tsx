@@ -4,13 +4,21 @@ import { Dialog } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Image from "next/image";
+import { ChampionList, SelectedBanChampion } from "@/types/champion";
+
+interface ChampionPaletteProps {
+  open: boolean;
+  onClose: () => void;
+  selected: SelectedBanChampion[];
+  setSelected: (newSelected: SelectedBanChampion[]) => void;
+}
 
 export default function ChampionPalette({
   open,
   onClose,
   selected,
   setSelected,
-}) {
+}: ChampionPaletteProps) {
   const [searchChampion, setSearchChampion] = useState("");
 
   const {
@@ -30,7 +38,7 @@ export default function ChampionPalette({
     champ.name.includes(searchChampion)
   );
 
-  const toggleChampion = (champ) => {
+  const toggleChampion = (champ: ChampionList) => {
     const exists = selected.find((c) => c.id === champ.id);
     const newList = exists
       ? selected.filter((c) => c.id !== champ.id)

@@ -6,16 +6,23 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
 import { useToast } from "../components/ToastContext";
+import { SelectedBanChampion } from "@/types/champion";
 
 export default function Page() {
-  const [bans, setBans] = useState({
+  const [bans, setBans] = useState<{
+    "1경기": SelectedBanChampion[];
+    "2경기": SelectedBanChampion[];
+  }>({
     "1경기": [],
     "2경기": [],
   });
 
   const { showSnack } = useToast();
 
-  const handleSelectChange = (set, newSelected) => {
+  const handleSelectChange = (
+    set: "1경기" | "2경기",
+    newSelected: SelectedBanChampion[]
+  ) => {
     setBans((prev) => ({ ...prev, [set]: newSelected }));
   };
 
@@ -30,7 +37,8 @@ export default function Page() {
   });
 
   // 디스코드 복사용 포맷팅
-  const formatList = (arr) => arr.map((champion) => champion.name).join(" ");
+  const formatList = (arr: SelectedBanChampion[]) =>
+    arr.map((champion) => champion.name).join(" ");
 
   const handleCopy = async () => {
     const text = [
@@ -48,12 +56,16 @@ export default function Page() {
 
     try {
       await navigator.clipboard.writeText(text);
-    } catch (error) {
-      console.error("Failed to copy: ", error);
-      showSnack("클립보드 복사에 실패했습니다.", "error");
-    } finally {
-      showSnack("디스코드용 복사 완료", "success");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showSnack("클립보드 복사에 실패했습니다.", "error");
+      } else {
+        showSnack("알 수 없는 에러가 발생했습니다.", "error");
+      }
+      return;
     }
+
+    showSnack("디스코드용 텍스트가 클립보드에 복사되었습니다.", "success");
   };
 
   return (
