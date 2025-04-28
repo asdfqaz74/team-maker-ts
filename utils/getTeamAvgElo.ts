@@ -1,6 +1,10 @@
+import { IPlayerStats } from "@/models/Match";
 import User from "@/models/User";
 
-export async function getTeamAvgElo(team, targetPosition) {
+export async function getTeamAvgElo(
+  team: IPlayerStats[],
+  targetPosition: string
+): Promise<number> {
   const positionPlayers = team.filter(
     (player) => player.position === targetPosition
   );
@@ -17,5 +21,8 @@ export async function getTeamAvgElo(team, targetPosition) {
 
   const sum = elos.reduce((acc, elo) => acc + elo, 0);
   const avg = elos.length > 0 ? sum / elos.length : 1000;
-  return Math.round(avg);
+
+  const result = Math.round(avg);
+
+  return result;
 }

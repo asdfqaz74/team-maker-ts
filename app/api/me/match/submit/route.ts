@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/mongoose";
-import Match from "@/models/Match";
+import Match, { IPlayerStats } from "@/models/Match";
 import User from "@/models/User";
 import { calculateElo } from "@/utils/calculateElo";
 import { findMember } from "@/utils/findMember";
@@ -8,7 +8,13 @@ import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
 import dayjs from "dayjs";
 
-export async function POST(request) {
+interface CreateMatchBody {
+  players: IPlayerStats[];
+  maxDamage: number;
+  banChampionsId: string[];
+}
+
+export async function POST(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -26,7 +32,7 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-    const body = await request.json();
+    const body: CreateMatchBody = await request.json();
 
     const { players, maxDamage, banChampionsId } = body;
 

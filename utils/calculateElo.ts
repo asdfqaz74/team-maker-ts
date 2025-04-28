@@ -1,3 +1,13 @@
+interface Props {
+  myTeamAvg: number;
+  enemyTeamAvg: number;
+  win: boolean;
+  streak?: number;
+  k?: number;
+  applyUnderdogBonus?: boolean;
+  applyStreakBonus?: boolean;
+}
+
 export function calculateElo({
   myTeamAvg,
   enemyTeamAvg,
@@ -6,7 +16,7 @@ export function calculateElo({
   k = 20,
   applyUnderdogBonus = true,
   applyStreakBonus = true,
-}) {
+}: Props): number {
   // 기대 승률 계산
   const expectedWinRate =
     1 / (1 + Math.pow(10, (enemyTeamAvg - myTeamAvg) / 400));
@@ -29,5 +39,7 @@ export function calculateElo({
     delta += 1;
   }
 
-  return Math.round(delta);
+  const finalElo = Math.round(delta);
+
+  return finalElo;
 }
