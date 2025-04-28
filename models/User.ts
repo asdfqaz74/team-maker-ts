@@ -2,7 +2,7 @@ import { Schema, Document, models, model } from "mongoose";
 
 // 타입 정의
 // Elo 타입
-export interface IElo extends Document {
+export interface IElo {
   top: number;
   jug: number;
   mid: number;
@@ -10,11 +10,13 @@ export interface IElo extends Document {
   sup: number;
 }
 
+export type PositionType = keyof IElo;
+
 // 사용자 타입
 export interface IUser extends Document {
   name: string;
   nickName: string;
-  position: string;
+  position: PositionType;
   mainCharacter: string;
   eloRating: IElo;
   totalGames: number;

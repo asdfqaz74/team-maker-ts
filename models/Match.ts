@@ -1,4 +1,5 @@
 import { Schema, Document, models, model, Types } from "mongoose";
+import { PositionType } from "./User";
 
 // 타입 정의
 // 선수 타입
@@ -6,7 +7,7 @@ export interface IPlayerStats extends Document {
   userNickname?: string;
   champion: string;
   team: "Blue" | "Red";
-  position: string;
+  position: PositionType;
   kills: number;
   deaths: number;
   assists: number;
