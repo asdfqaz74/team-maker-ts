@@ -24,7 +24,7 @@ function DesktopSwiperView({
   const paddedChampions = [null, ...champions, null, null];
 
   return (
-    <div className="relative w-[75rem] h-[37.5rem]">
+    <div className="relative md:w-[43.75rem] xl:w-[62.5rem] w-[75rem] h-[37.5rem]">
       <Image
         src="/images/MainPage/MostLogo.webp"
         alt="MostLogo"
@@ -54,7 +54,7 @@ function DesktopSwiperView({
               />
               <div className="w-full h-full bg-black opacity-50"></div>
               {/* 챔피언 정보 */}
-              <div className="absolute w-[12.5rem] top-10 right-40 flex flex-col items-start gap-4">
+              <div className="absolute w-[12.5rem] xl:top-10 xl:right-40 bottom-40 right-20 flex flex-col items-start gap-4">
                 <span className="text-4xl whitespace-nowrap">
                   {champion.name}
                 </span>
@@ -89,8 +89,8 @@ function DesktopSwiperView({
             {paddedChampions.map((champion, idx) => {
               const isActive = idx === activeIndex + 1;
               const sizeClass = isActive
-                ? "w-[12.5rem] h-[25rem] -left-5"
-                : "w-[9.375rem] h-[12.5rem]";
+                ? "xl:w-[12.5rem] xl:h-[25rem] w-[6.25rem] h-[12.5rem] -left-5 xl:-left-7 md:-left-5"
+                : "xl:w-[9.375rem] xl:h-[12.5rem] w-[4.6875rem] h-[6.25rem]";
               return (
                 <SwiperSlide
                   key={`card-${champion?.en_name || "blank-" + idx}`}
@@ -116,7 +116,7 @@ function DesktopSwiperView({
 
       {/* 커스텀 버튼 */}
       <button
-        className="swiper-custom-prev absolute top-1/2 -left-20 z-20 -translate-y-1/2 cursor-pointer"
+        className="swiper-custom-prev absolute top-1/2 -left-20 z-20 -translate-y-1/2 cursor-pointer xl:block hidden"
         onClick={handlePrevClick}
       >
         <Image
@@ -129,7 +129,7 @@ function DesktopSwiperView({
       </button>
 
       <button
-        className="swiper-custom-next absolute top-1/2 -right-20 z-20 -translate-y-1/2 rotate-180 cursor-pointer"
+        className="swiper-custom-next absolute top-1/2 -right-20 z-20 -translate-y-1/2 rotate-180 cursor-pointer xl:block hidden"
         onClick={handleNextClick}
       >
         <Image
