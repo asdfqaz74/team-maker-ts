@@ -1,11 +1,13 @@
 import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
+import { WorstChampion } from "@/types/champion";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   await connectDB();
 
   try {
-    const result = await Match.aggregate([
+    const result: WorstChampion[] = await Match.aggregate([
       { $unwind: "$players" },
       {
         $group: {
@@ -50,10 +52,10 @@ export async function GET() {
       },
     ]);
 
-    return Response.json(result, { status: 200 });
-  } catch (error) {
+    return NextResponse.json(result, { status: 200 });
+  } catch (error: any) {
     console.error("워스트 챔피언 불러오기 에러: ", error);
-    return Response.json(
+    return NextResponse.json(
       { error: error.message || "서버 에러가 발생했습니다." },
       { status: 500 }
     );

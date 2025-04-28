@@ -1,13 +1,30 @@
+import { BanChampion, PickChampion, WorstChampion } from "@/types/champion";
 import Image from "next/image";
 
 const titleColor = {
   BEST: "#0FA4FE",
   WORST: "#F53B3B",
   BAN: "#B217CE",
+} as const;
+
+type DataByTitle = {
+  BEST: PickChampion[];
+  WORST: WorstChampion[];
+  BAN: BanChampion[];
 };
 
-export default function Pick({ data, isLoading, title }) {
-  const color = titleColor[title] || "#000000";
+interface PickProps<T extends keyof DataByTitle> {
+  data: DataByTitle[T];
+  isLoading: boolean;
+  title: T;
+}
+
+export default function Pick<T extends keyof DataByTitle>({
+  data,
+  isLoading,
+  title,
+}: PickProps<T>) {
+  const color = titleColor[title];
 
   return (
     <div className="border border-[#0FA4FE] p-10 rounded-2xl min-w-[17.5rem] max-w-[25rem] mx-auto lg:mx-0">
@@ -37,7 +54,7 @@ export default function Pick({ data, isLoading, title }) {
                   ) : (
                     <div className="flex gap-2 text-xs md:text-base whitespace-nowrap">
                       <p>{champion.count}게임</p>
-                      <p>{champion.winRate}%</p>
+                      {"winRate" in champion && <p>{champion.winRate}%</p>}
                     </div>
                   )}
                 </div>

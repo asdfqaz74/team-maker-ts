@@ -13,11 +13,17 @@ export interface MongoChampion {
 
 type ConvertMongoId<T> = Omit<T, "_id"> & { id: string };
 
+// summary 에 쓰일 챔피언 타입
 export interface BanChampion extends BaseChampion {
   count: number;
 }
 
 export interface PickChampion extends BaseChampion {
+  winRate: number;
+  count: number;
+}
+
+export interface WorstChampion extends BaseChampion {
   winRate: number;
   count: number;
 }

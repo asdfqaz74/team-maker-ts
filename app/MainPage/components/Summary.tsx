@@ -6,6 +6,7 @@ import { fetchBestWinChampion } from "@/lib/api/fetchBestWinChampion";
 import { fetchWorstWinChampion } from "@/lib/api/fetchWorstWinChampion";
 import { fetchBanChampion } from "@/lib/api/fetchBanChampion";
 import Image from "next/image";
+import { BanChampion, PickChampion, WorstChampion } from "@/types/champion";
 
 export default function Summary() {
   const {
@@ -13,7 +14,7 @@ export default function Summary() {
     isLoading: bestLoading,
     isError: bestError,
     error: bestErr,
-  } = useQuery({
+  } = useQuery<PickChampion[]>({
     queryKey: ["bestWinChampion"],
     queryFn: fetchBestWinChampion,
     staleTime: 1000 * 60 * 60,
@@ -25,7 +26,7 @@ export default function Summary() {
     isLoading: worstLoading,
     isError: worstError,
     error: worstErr,
-  } = useQuery({
+  } = useQuery<WorstChampion[]>({
     queryKey: ["worstWinChampion"],
     queryFn: fetchWorstWinChampion,
     staleTime: 1000 * 60 * 60,
@@ -36,7 +37,7 @@ export default function Summary() {
     isLoading: banLoading,
     isError: banError,
     error: banErr,
-  } = useQuery({
+  } = useQuery<BanChampion[]>({
     queryKey: ["banChampion"],
     queryFn: fetchBanChampion,
     staleTime: 1000 * 60 * 60,
@@ -65,9 +66,17 @@ export default function Summary() {
           height={100}
         />
         <div className="flex xl:flex-row flex-col xl:justify-between gap-4 my-10 shrink-0 mx-auto xl:mx-0">
-          <Pick data={bestData} isLoading={bestLoading} title={"BEST"} />
-          <Pick data={worstData} isLoading={worstLoading} title={"WORST"} />
-          <Pick data={banData} isLoading={banLoading} title={"BAN"} />
+          <Pick<"BEST">
+            data={bestData}
+            isLoading={bestLoading}
+            title={"BEST"}
+          />
+          <Pick<"WORST">
+            data={worstData}
+            isLoading={worstLoading}
+            title={"WORST"}
+          />
+          <Pick<"BAN"> data={banData} isLoading={banLoading} title={"BAN"} />
         </div>
       </div>
     </div>
