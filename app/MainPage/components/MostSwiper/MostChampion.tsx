@@ -4,8 +4,9 @@ import { fetchMostChampionTop5 } from "@/lib/api/fetchMostChampionTop5";
 import { useQuery } from "@tanstack/react-query";
 
 import MostSwiper from "./MostSwiper";
-import MostSwiperSkeleton from "./MostSwiperSkeleton";
+
 import { SwiperChampion } from "@/types/champion";
+import MostSwiperSkeleton from "./MostSwiperSkeleton";
 
 export default function MostChampion() {
   const {

@@ -1,5 +1,5 @@
 import GlobalBan from "./components/GlobalBan";
-import MostChampion from "./components/MostChampion";
+import MostChampion from "./components/MostSwiper/MostChampion";
 import Summary from "./components/Summary";
 
 export default function MainPage() {
