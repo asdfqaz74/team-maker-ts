@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import MostSwiper from "./MostSwiper";
 import MostSwiperSkeleton from "./MostSwiperSkeleton";
+import { SwiperChampion } from "@/types/champion";
 
 export default function MostChampion() {
   const {
@@ -12,13 +13,15 @@ export default function MostChampion() {
     isLoading,
     isError,
     error,
-  } = useQuery({
+  } = useQuery<SwiperChampion[]>({
     queryKey: ["mostChampion"],
     queryFn: fetchMostChampionTop5,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: 1000 * 60 * 5, // 5분
   });
+
+  console.log("mostChampion", mostChampion);
 
   if (isLoading) return <MostSwiperSkeleton />;
   if (isError) return <div>Error: {error.message}</div>;

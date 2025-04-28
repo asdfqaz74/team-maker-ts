@@ -1,11 +1,12 @@
 import { connectDB } from "@/lib/mongoose";
 import Match from "@/models/Match";
+import { SwiperChampion } from "@/types/champion";
 
 export async function GET() {
   await connectDB();
 
   try {
-    const result = await Match.aggregate([
+    const result: SwiperChampion[] = await Match.aggregate([
       { $unwind: "$players" },
       {
         $group: {
@@ -52,7 +53,7 @@ export async function GET() {
     ]);
 
     return Response.json(result, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("챔피언을 불러오는 중 에러 발생: ", error);
     return Response.json(
       { error: error.message || "서버 에러가 발생하였습니다." },

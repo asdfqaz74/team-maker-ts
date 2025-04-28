@@ -1,21 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { EffectFade, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useBreakpoint from "@/utils/useBreakpion";
+import { SwiperChampion } from "@/types/champion";
 
-export default function MostSwiper({ champions }) {
+export default function MostSwiper({
+  champions,
+}: {
+  champions: SwiperChampion[];
+}) {
   // 인덱스 상태
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Swiper 인스턴스 참조
-  const contentSwiperRef = useRef(null);
-  const bgSwiperRef = useRef(null);
+  const contentSwiperRef = useRef<SwiperClass | null>(null);
+  const bgSwiperRef = useRef<SwiperClass | null>(null);
 
   // activeIndex가 변경될 때마다 배경 슬라이더를 업데이트
   useEffect(() => {

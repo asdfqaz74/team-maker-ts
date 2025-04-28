@@ -48,3 +48,13 @@ export interface GlobalBanChampion {
   name: string;
   en_name: string;
 }
+
+// 스와이퍼용 챔피언 타입
+export interface SwiperChampion {
+  count: number;
+  winRate: number;
+  name: string;
+  en_name: string;
+  image: string;
+  logo: string;
+}
