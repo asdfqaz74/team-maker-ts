@@ -1,6 +1,6 @@
 import { SwiperChampion } from "@/types/champion";
 import Image from "next/image";
-import { RefObject } from "react";
+import { RefObject, memo } from "react";
 import { EffectFade, Navigation } from "swiper/modules";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
@@ -13,7 +13,7 @@ interface Props {
   bgSwiperRef: RefObject<SwiperClass | null>;
 }
 
-export default function DesktopSwiperView({
+function DesktopSwiperView({
   champions,
   activeIndex,
   handlePrevClick,
@@ -143,3 +143,5 @@ export default function DesktopSwiperView({
     </div>
   );
 }
+
+export default memo(DesktopSwiperView);

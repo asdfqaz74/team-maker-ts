@@ -1,6 +1,6 @@
 import { SwiperChampion } from "@/types/champion";
 import Image from "next/image";
-import { RefObject } from "react";
+import { memo, RefObject } from "react";
 import { EffectFade, Navigation } from "swiper/modules";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
@@ -10,11 +10,7 @@ interface Props {
   bgSwiperRef: RefObject<SwiperClass | null>;
 }
 
-export default function MobileSwiperView({
-  champions,
-  contentSwiperRef,
-  bgSwiperRef,
-}: Props) {
+function MobileSwiperView({ champions, contentSwiperRef, bgSwiperRef }: Props) {
   return (
     <div className="relative w-full max-w-[25rem] h-[37.5rem]">
       <Image
@@ -96,3 +92,5 @@ export default function MobileSwiperView({
     </div>
   );
 }
+
+export default memo(MobileSwiperView);
