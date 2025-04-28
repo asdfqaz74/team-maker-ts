@@ -20,7 +20,9 @@ export async function GET() {
   const today = getToday();
 
   try {
-    let todayBan: TodayBan | null = await GlobalBan.findOne({ date: today });
+    let todayBan: TodayBan | null = (await GlobalBan.findOne({
+      date: today,
+    }).lean()) as TodayBan | null;
 
     if (todayBan) {
       const champions = todayBan.champions.map(
