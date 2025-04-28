@@ -21,3 +21,5 @@ const MemberSchema = new Schema<IMember>(
 
 // 모델 export
 const Member = models.Member || model<IMember>("Member", MemberSchema);
+
+export default Member;
