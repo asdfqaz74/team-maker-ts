@@ -2,6 +2,17 @@ import GlobalBan from "@/models/GlobalBan";
 import { connectDB } from "@/lib/mongoose";
 import Champion from "@/models/Champion";
 import getToday from "@/utils/getToday";
+import { GlobalBanChampion } from "@/types/champion";
+import { NextResponse } from "next/server";
+
+interface TodayBan {
+  date: string;
+  champions: {
+    name: string;
+    en_name: string;
+    _id: string;
+  }[];
+}
 
 export async function GET() {
   await connectDB();
@@ -9,13 +20,16 @@ export async function GET() {
   const today = getToday();
 
   try {
-    let todayBan = await GlobalBan.findOne({ date: today });
+    let todayBan: TodayBan | null = await GlobalBan.findOne({ date: today });
 
     if (todayBan) {
-      return Response.json(todayBan.champions, { status: 200 });
+      const champions = todayBan.champions.map(
+        ({ _id, ...champion }) => champion
+      );
+      return NextResponse.json(champions, { status: 200 });
     }
 
-    const champions = await Champion.aggregate([
+    const champions: GlobalBanChampion[] = await Champion.aggregate([
       { $sample: { size: 5 } },
       {
         $project: {
@@ -28,10 +42,10 @@ export async function GET() {
 
     await GlobalBan.create({ date: today, champions });
 
-    return Response.json(champions, { status: 200 });
-  } catch (error) {
+    return NextResponse.json(champions, { status: 200 });
+  } catch (error: any) {
     console.error("챔피언을 불러오는 중 에러 발생: ", error);
-    return Response.json(
+    return NextResponse.json(
       { error: error.message || "서버 에러가 발생하였습니다." },
       { status: 500 }
     );

@@ -42,3 +42,9 @@ export interface SelectedBanChampion {
   name: string;
   image: string;
 }
+
+// 글로벌 밴 챔피언 타입
+export interface GlobalBanChampion {
+  name: string;
+  en_name: string;
+}
