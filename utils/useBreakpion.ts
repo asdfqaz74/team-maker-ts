@@ -1,6 +1,14 @@
 import { useMediaQuery } from "@mui/material";
 
-export default function useBreakpoint() {
+interface BreakPoint {
+  is2xl: boolean;
+  isxl: boolean;
+  islg: boolean;
+  ismd: boolean;
+  issm: boolean;
+}
+
+export default function useBreakpoint(): BreakPoint {
   const is2xl = useMediaQuery("(min-width: 1536px)");
   const isxl = useMediaQuery("(min-width: 1280px)");
   const islg = useMediaQuery("(min-width: 1024px)");
