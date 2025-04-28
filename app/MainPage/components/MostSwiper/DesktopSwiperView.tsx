@@ -24,7 +24,7 @@ function DesktopSwiperView({
   const paddedChampions = [null, ...champions, null, null];
 
   return (
-    <div className="relative md:w-[43.75rem] xl:w-[62.5rem] w-[75rem] h-[37.5rem]">
+    <div className="relative md:w-[43.75rem] xl:w-[75rem] w-[75rem] h-[37.5rem]">
       <Image
         src="/images/MainPage/MostLogo.webp"
         alt="MostLogo"
@@ -116,7 +116,7 @@ function DesktopSwiperView({
 
       {/* 커스텀 버튼 */}
       <button
-        className="swiper-custom-prev absolute top-1/2 -left-20 z-20 -translate-y-1/2 cursor-pointer xl:block hidden"
+        className="swiper-custom-prev absolute top-1/2 left-5  z-20 -translate-y-1/2 cursor-pointer xl:block hidden"
         onClick={handlePrevClick}
       >
         <Image
@@ -129,7 +129,7 @@ function DesktopSwiperView({
       </button>
 
       <button
-        className="swiper-custom-next absolute top-1/2 -right-20 z-20 -translate-y-1/2 rotate-180 cursor-pointer xl:block hidden"
+        className="swiper-custom-next absolute top-1/2 right-5 z-20 -translate-y-1/2 rotate-180 cursor-pointer xl:block hidden"
         onClick={handleNextClick}
       >
         <Image
