@@ -1,4 +1,4 @@
-export const fetchMe = async (token) => {
+export const fetchMe = async (token: string | null) => {
   const response = await fetch("/api/me", {
     headers: {
       Authorization: `Bearer ${token}`,

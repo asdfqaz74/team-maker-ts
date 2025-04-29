@@ -1,12 +1,17 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
+import {
+  ExceptPasswordMember,
+  ExceptPasswordMemberDocument,
+} from "@/types/member";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
 import jwt from "jsonwebtoken";
 
-const SECRET = process.env.JWT_SECRET;
+const SECRET = process.env.JWT_SECRET!;
 
-export async function GET(request) {
+// 사용자 정보 조회
+export async function GET(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -17,9 +22,11 @@ export async function GET(request) {
 
   try {
     const decoded = verifyToken(token);
-    const member = await Member.findOne({ userId: decoded.userId }).select(
-      "-password"
-    );
+    const member = await Member.findOne({
+      userId: decoded.userId,
+    })
+      .select("-password -_id")
+      .lean<ExceptPasswordMember>();
 
     if (!member) {
       return Response.json(
@@ -27,6 +34,8 @@ export async function GET(request) {
         { status: 404 }
       );
     }
+
+    console.log("member", member);
 
     return Response.json({ user: member }, { status: 200 });
   } catch (error) {
@@ -39,7 +48,7 @@ export async function GET(request) {
 }
 
 // 아이디 수정
-export async function PATCH(request) {
+export async function PATCH(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -50,12 +59,9 @@ export async function PATCH(request) {
 
   try {
     const decoded = verifyToken(token);
-    const member = await Member.findOne({ userId: decoded.userId }).select(
-      "-password"
-    );
-
-    console.log("member", member);
-    console.log("decoded", decoded);
+    const member = await Member.findOne<ExceptPasswordMemberDocument>({
+      userId: decoded.userId,
+    }).select("-password -_id");
 
     if (!member) {
       return Response.json(
@@ -89,8 +95,6 @@ export async function PATCH(request) {
       SECRET,
       { expiresIn: "7d" }
     );
-
-    console.log("newToken", newToken);
 
     return Response.json(
       { message: "아이디가 수정되었습니다.", token: newToken },

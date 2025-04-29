@@ -7,9 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMe } from "@/lib/api/fetchMe";
 
 import Category from "@/public/images/components/Category.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/app/components/ToastContext";
 import SkeletonBox from "@/app/components/SkeletonBox";
+import { ExceptPasswordMember } from "@/types/member";
 
 export default function MyInfoPage() {
   const [, setUser] = useAtom(userAtom);
@@ -26,7 +27,10 @@ export default function MyInfoPage() {
   const [userId, setUserId] = useState("");
 
   const storedToken =
-    token || (typeof window !== "undefined" && sessionStorage.getItem("token"));
+    token ||
+    (typeof window !== "undefined" ? sessionStorage.getItem("token") : null);
+
+  const tokenToUse = storedToken || token;
 
   // 내 정보 가져오기
   const {
@@ -35,17 +39,23 @@ export default function MyInfoPage() {
     isError,
     error,
     refetch,
-  } = useQuery({
+  } = useQuery<ExceptPasswordMember>({
     queryKey: ["me"],
-    queryFn: async () => fetchMe(storedToken),
-    enabled: !!storedToken,
-    onSuccess: (data) => {
-      setUser(data);
-    },
-    onError: () => {
-      router.push("/auth/login");
-    },
+    queryFn: async () => fetchMe(tokenToUse),
+    enabled: !!tokenToUse,
   });
+  // 유저 저장
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user, setUser]);
+
+  // 토큰이 없으면 로그인 페이지로 리다이렉트
+  if (!tokenToUse) {
+    router.push("/login");
+    return null;
+  }
 
   // 에러 처리
   if (isError) {
@@ -139,13 +149,14 @@ export default function MyInfoPage() {
         setToken(data.token);
       }
 
+      showSnack("아이디 수정이 완료되었습니다.", "success");
+
       await refetch();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
       showSnack(error, "error");
     } finally {
       setIsEdit(false);
-      showSnack("아이디 수정이 완료되었습니다.", "success");
     }
   };
 
