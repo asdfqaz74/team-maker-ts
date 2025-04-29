@@ -16,6 +16,13 @@ export default function MyInfoPage() {
   const [, setUser] = useAtom(userAtom);
   const router = useRouter();
   const [token, setToken] = useAtom(tokenAtom);
+  const [storedToken, setStoredToken] = useState<string | null>(null);
+  const [isMouted, setIsMouted] = useState(false);
+
+  // 마운트가 됐는지
+  useEffect(() => {
+    setIsMouted(true);
+  }, []);
 
   // 스낵바
   const { showSnack } = useToast();
@@ -26,9 +33,10 @@ export default function MyInfoPage() {
   // 아이디 인풋 상태
   const [userId, setUserId] = useState("");
 
-  const storedToken =
-    token ||
-    (typeof window !== "undefined" ? sessionStorage.getItem("token") : null);
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    setStoredToken(token);
+  }, [token]);
 
   const tokenToUse = storedToken || token;
 
@@ -51,9 +59,13 @@ export default function MyInfoPage() {
     }
   }, [user, setUser]);
 
-  // 토큰이 없으면 로그인 페이지로 리다이렉트
-  if (!tokenToUse) {
-    router.push("/login");
+  useEffect(() => {
+    if (isMouted && !tokenToUse) {
+      router.push("/auth/login");
+    }
+  }, [router, tokenToUse, isMouted]);
+
+  if (!isMouted || !tokenToUse) {
     return null;
   }
 

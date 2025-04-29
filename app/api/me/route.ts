@@ -61,7 +61,7 @@ export async function PATCH(request: Request) {
     const decoded = verifyToken(token);
     const member = await Member.findOne<ExceptPasswordMemberDocument>({
       userId: decoded.userId,
-    }).select("-password -_id");
+    }).select("-password");
 
     if (!member) {
       return Response.json(
