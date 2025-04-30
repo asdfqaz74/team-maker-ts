@@ -2,8 +2,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongoose";
 import { findMemberWithPassword } from "@/utils/findMember";
 import jwt from "jsonwebtoken";
-
-const SECRET = process.env.JWT_SECRET!;
+import { JWT_EXPIRES_IN, SECRET } from "@/constants";
 
 export async function POST(request: Request) {
   await connectDB();
@@ -42,7 +41,7 @@ export async function POST(request: Request) {
       },
       SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: JWT_EXPIRES_IN,
       }
     );
 
