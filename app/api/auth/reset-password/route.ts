@@ -5,7 +5,7 @@ import { verifyToken } from "@/utils/verifyToken";
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-export async function POST(request) {
+export async function POST(request: Request) {
   await connectDB();
   const body = await request.json();
   const { token, newPassword } = body;

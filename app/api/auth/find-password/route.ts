@@ -3,12 +3,19 @@ import Member from "@/models/Member";
 import { sendResetEmail } from "@/lib/mailer/sendResetEmail";
 import jwt from "jsonwebtoken";
 import { findMember } from "@/utils/findMember";
+import { JWT_EXPIRES_IN_FORGOT_PASSWORD, SECRET } from "@/constants";
 
-export async function POST(request) {
+type BodyType = {
+  findPwName: string;
+  findPwEmail: string;
+  findPwId: string;
+};
+
+export async function POST(request: Request) {
   await connectDB();
 
   try {
-    const body = await request.json();
+    const body: BodyType = await request.json();
     const { findPwName, findPwEmail, findPwId } = body;
 
     const member = await findMember({
@@ -17,8 +24,8 @@ export async function POST(request) {
       userId: findPwId,
     });
 
-    const token = jwt.sign({ userId: member._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const token = jwt.sign({ userId: member._id }, SECRET, {
+      expiresIn: JWT_EXPIRES_IN_FORGOT_PASSWORD,
     });
 
     await sendResetEmail(member.email, token);
@@ -26,7 +33,7 @@ export async function POST(request) {
       { message: "비밀번호 재설정 이메일이 전송되었습니다." },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },
