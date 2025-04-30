@@ -21,8 +21,6 @@ export async function GET(request: Request) {
 
     const member = await findMember({ userId });
 
-    console.log("member", member);
-
     const users = await User.find<UserDocument>({ createdBy: member._id })
       .select("name nickName position group eloRating")
       .populate("Group", "name");

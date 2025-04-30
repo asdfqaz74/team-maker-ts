@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSetAtom } from "jotai";
 import { tokenAtom } from "@/store/auth";
+import { API } from "@/constants";
 
 type LoginResponse =
   | {
@@ -26,7 +27,7 @@ export default function LoginPage() {
   const setToken = useSetAtom(tokenAtom);
 
   const handleLogin = async () => {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch(API.AUTH.LOGIN, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

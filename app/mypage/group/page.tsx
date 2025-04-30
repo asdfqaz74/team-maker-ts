@@ -8,6 +8,7 @@ import PlayerList from "./PlayerList";
 import GroupUserList from "./GroupUserList";
 import { getToken } from "@/utils/getToken";
 import { useToast } from "@/app/components/ToastContext";
+import { API } from "@/constants";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -27,7 +28,7 @@ export default function GroupPage() {
       return;
     }
 
-    const response = await fetch("/api/me/group", {
+    const response = await fetch(API.ME.GROUP.LIST, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +44,7 @@ export default function GroupPage() {
       setGroupName("");
       setButtonClicked(false);
 
-      const response = await fetch("/api/me/group", {
+      const response = await fetch(API.ME.GROUP.LIST, {
         headers: { authorization: `Bearer ${token}` },
       });
 

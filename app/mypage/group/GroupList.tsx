@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { groupListAtom, selectedGroupAtom } from "@/store/group";
 import { getToken } from "@/utils/getToken";
+import { API } from "@/constants";
 
 export default function GroupList() {
   const [groups, setGroups] = useAtom(groupListAtom);
@@ -13,7 +14,7 @@ export default function GroupList() {
     const fetchGroups = async () => {
       const token = getToken();
 
-      const response = await fetch("/api/me/group", {
+      const response = await fetch(API.ME.GROUP.LIST, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

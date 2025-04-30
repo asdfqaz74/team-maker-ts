@@ -1,4 +1,5 @@
 import { useToast } from "@/app/components/ToastContext";
+import { API } from "@/constants";
 import { useState } from "react";
 
 type FindIdResponse =
@@ -18,7 +19,7 @@ export default function FindId() {
   const { showSnack } = useToast();
 
   const handleFindId = async () => {
-    const response = await fetch("/api/auth/find-id", {
+    const response = await fetch(API.AUTH.FIND_ID, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

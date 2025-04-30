@@ -9,6 +9,7 @@ import {
 import { useEffect } from "react";
 import { getToken } from "@/utils/getToken";
 import { useToast } from "@/app/components/ToastContext";
+import { API } from "@/constants";
 
 export default function PlayerList() {
   const [players, setPlayers] = useAtom(groupPlayersAtom);
@@ -25,7 +26,7 @@ export default function PlayerList() {
         return;
       }
 
-      const response = await fetch("/api/me/group/player", {
+      const response = await fetch(API.ME.GROUP.PLAYER, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export default function PlayerList() {
 
       const token = getToken();
 
-      const response = await fetch(`/api/me/group/player/${selectedGroup}`, {
+      const response = await fetch(API.ME.GROUP.PLAYER_ID(selectedGroup), {
         headers: {
           Authorization: `Bearer ${token}`,
         },

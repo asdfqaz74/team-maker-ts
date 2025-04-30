@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { API } from "@/constants";
 
 export default function SignupPage() {
   const [message, setMessage] = useState("");
@@ -17,7 +18,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   const onSubmit = async (data) => {
-    const response = await fetch("/api/auth/signup", {
+    const response = await fetch(API.AUTH.SIGNUP, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

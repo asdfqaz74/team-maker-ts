@@ -4,6 +4,7 @@ import { getToken } from "@/utils/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ChampionPalette from "@/app/components/ChampionPalette";
+import { API } from "@/constants";
 
 export default function PlayerNicknameEditor({
   playersData,
@@ -26,7 +27,7 @@ export default function PlayerNicknameEditor({
       return;
     }
 
-    fetch("/api/me/match/player", {
+    fetch(API.ME.MATCH.PLAYER, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -57,7 +58,7 @@ export default function PlayerNicknameEditor({
 
     try {
       setIsSubmitting(true);
-      const response = await fetch("/api/me/match/submit", {
+      const response = await fetch(API.ME.MATCH.SUBMIT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

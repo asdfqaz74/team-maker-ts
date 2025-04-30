@@ -1,4 +1,5 @@
 import { useToast } from "@/app/components/ToastContext";
+import { API } from "@/constants";
 import { useState } from "react";
 
 type FindPwResponse =
@@ -17,7 +18,7 @@ export default function FindPw() {
   const { showSnack } = useToast();
 
   const handleResetPassword = async () => {
-    const response = await fetch("/api/auth/find-password", {
+    const response = await fetch(API.AUTH.RESET_PASSWORD, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

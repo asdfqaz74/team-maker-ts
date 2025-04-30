@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { API } from "@/constants";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -14,7 +15,7 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = await fetch("/api/auth/reset-password", {
+    const response = await fetch(API.AUTH.RESET_PASSWORD, {
       method: "POST",
       body: JSON.stringify({ token, newPassword: password }),
       headers: { "Content-Type": "application/json" },
