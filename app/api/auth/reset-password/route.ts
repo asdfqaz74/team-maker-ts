@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { verifyToken } from "@/utils/verifyToken";
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;

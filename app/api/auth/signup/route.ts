@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const saltRounds = 10;
 

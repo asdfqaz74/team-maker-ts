@@ -1,10 +1,12 @@
 import { connectDB } from "@/lib/mongoose";
+import { IGroup } from "@/models/Group";
 import User from "@/models/User";
+import { UserDocument } from "@/types/user";
 import { findMember } from "@/utils/findMember";
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
 
-export async function GET(request) {
+export async function GET(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -19,12 +21,21 @@ export async function GET(request) {
 
     const member = await findMember({ userId });
 
-    const users = await User.find({ createdBy: member._id })
-      .select("name nickName position group eloRating")
-      .populate("group", "name");
+    console.log("member", member);
 
-    return Response.json(users, { status: 200 });
-  } catch (error) {
+    const users = await User.find<UserDocument>({ createdBy: member._id })
+      .select("name nickName position group eloRating")
+      .populate("Group", "name");
+
+    const formattedUsers = users.map((user) => ({
+      ...user.toObject(),
+      groupName: (user.group as IGroup).name || "그룹 없음",
+    }));
+
+    console.log("users", formattedUsers);
+
+    return Response.json(formattedUsers, { status: 200 });
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },
@@ -40,7 +51,7 @@ export async function GET(request) {
   }
 }
 
-export async function POST(request) {
+export async function POST(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -73,7 +84,7 @@ export async function POST(request) {
     });
 
     return Response.json(newUser, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },

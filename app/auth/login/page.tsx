@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation";
 import { useSetAtom } from "jotai";
 import { tokenAtom } from "@/store/auth";
 
+type LoginResponse =
+  | {
+      message: string;
+      token: string;
+    }
+  | {
+      error: string;
+    };
+
 export default function LoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -21,9 +30,10 @@ export default function LoginPage() {
       },
       body: JSON.stringify({ userId, password }),
     });
-    const data = await response.json();
 
-    if (response.ok) {
+    const data: LoginResponse = await response.json();
+
+    if ("token" in data) {
       setMessage("로그인 성공");
       // JWT 토큰을 로컬 스토리지에 저장
       sessionStorage.setItem("token", data.token);

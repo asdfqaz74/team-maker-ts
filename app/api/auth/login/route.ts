@@ -1,18 +1,27 @@
+import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongoose";
-import { findMember } from "@/utils/findMember";
-import bcrypt from "bcrypt";
+import { findMemberWithPassword } from "@/utils/findMember";
 import jwt from "jsonwebtoken";
 
-const SECRET = process.env.JWT_SECRET;
+const SECRET = process.env.JWT_SECRET!;
 
-export async function POST(request) {
+export async function POST(request: Request) {
   await connectDB();
 
   try {
     const body = await request.json();
     const { userId, password } = body;
 
-    const member = await findMember({ userId });
+    const member = await findMemberWithPassword({ userId });
+
+    console.log("member", member);
+
+    if (!member.password) {
+      return Response.json(
+        { error: "비밀번호가 설정되지 않았습니다." },
+        { status: 401 }
+      );
+    }
 
     // 비밀번호 비교
     const isMatch = await bcrypt.compare(password, member.password);
@@ -45,7 +54,7 @@ export async function POST(request) {
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },

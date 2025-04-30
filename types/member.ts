@@ -5,6 +5,7 @@ export interface ExceptPasswordMember {
   userId: string;
   name: string;
   email: string;
+  password?: string;
 }
 
 // 몽구스 Document 타입 결합

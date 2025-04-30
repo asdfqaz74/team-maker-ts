@@ -35,8 +35,6 @@ export async function GET(request: Request) {
       );
     }
 
-    console.log("member", member);
-
     return Response.json({ user: member }, { status: 200 });
   } catch (error) {
     console.error("토큰 검증 중 오류: ", error);

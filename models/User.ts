@@ -1,4 +1,5 @@
 import { Schema, Document, models, model } from "mongoose";
+import Group from "./Group";
 
 // 타입 정의
 // Elo 타입
