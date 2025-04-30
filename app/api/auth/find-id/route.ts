@@ -1,11 +1,16 @@
 import { connectDB } from "@/lib/mongoose";
 import { findMember } from "@/utils/findMember";
 
-export async function POST(request) {
+type BodyType = {
+  findIdName: string;
+  findIdEmail: string;
+};
+
+export async function POST(request: Request) {
   await connectDB();
 
   try {
-    const body = await request.json();
+    const body: BodyType = await request.json();
     const { findIdName, findIdEmail } = body;
 
     const member = await findMember({
@@ -13,14 +18,16 @@ export async function POST(request) {
       email: findIdEmail,
     });
 
+    const userId = member.userId;
+
     return Response.json(
       {
         message: "아이디 찾기 성공",
-        userId: member.userId,
+        userId: userId,
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },
