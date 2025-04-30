@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
 
-export async function POST(request) {
+export async function POST(request: Request) {
   await connectDB();
 
   const { oldId, newId } = await request.json();

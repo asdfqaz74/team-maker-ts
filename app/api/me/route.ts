@@ -5,7 +5,8 @@ import {
   ExceptPasswordMember,
   ExceptPasswordMemberDocument,
 } from "@/types/member";
-import { getTokenFromHeader } from "@/utils";
+import { getTokenFromHeader } from "@/utils/server";
+
 import { verifyToken } from "@/utils/server/verifyToken";
 import jwt from "jsonwebtoken";
 

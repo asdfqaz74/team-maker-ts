@@ -1,7 +1,7 @@
 import Group from "@/models/Group";
-import { checkToken, findMember, verifyToken } from "@/utils";
+import { checkToken, findMember, verifyToken } from "@/utils/server";
 
-export async function POST(request) {
+export async function POST(request: Request) {
   const result = await checkToken(request.headers);
 
   if (!result.ok) return result.response;
@@ -30,7 +30,7 @@ export async function POST(request) {
     });
 
     return Response.json({ group: newGroup }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },
@@ -46,7 +46,7 @@ export async function POST(request) {
   }
 }
 
-export async function GET(request) {
+export async function GET(request: Request) {
   const result = await checkToken(request.headers);
 
   if (!result.ok) return result.response;
@@ -63,7 +63,7 @@ export async function GET(request) {
     const groups = await Group.find({ createdBy: memberId });
 
     return Response.json({ groups }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },

@@ -1,9 +1,18 @@
 import { SECRET } from "@/constants";
 import jwt from "jsonwebtoken";
 
-export function verifyToken(token: string) {
+interface DecodedToken {
+  userId: string;
+  name: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
+export function verifyToken(token: string): DecodedToken {
   try {
-    return jwt.verify(token, SECRET);
+    const verified = jwt.verify(token, SECRET) as DecodedToken;
+    return verified;
   } catch (error) {
     throw new Error("INVALID_TOKEN");
   }

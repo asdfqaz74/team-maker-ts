@@ -1,17 +1,13 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { findMember } from "@/utils/server/findMember";
-import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
-import { verifyToken } from "@/utils/server/verifyToken";
+import { checkToken, findMember, verifyToken } from "@/utils/server";
 
 // 유저 정보를 가져오는 API
-export async function GET(request) {
-  await connectDB();
+export async function GET(request: Request) {
+  const result = await checkToken(request.headers);
+  if (!result.ok) return result.response;
 
-  const token = getTokenFromHeader(request.headers);
-  if (!token) {
-    return Response.json({ message: "토큰이 없습니다." }, { status: 401 });
-  }
+  const token = result.token;
 
   try {
     // 토큰 검증

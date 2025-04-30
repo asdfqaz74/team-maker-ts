@@ -1,12 +1,15 @@
 import { connectDB } from "@/lib/mongoose";
 import Match, { IPlayerStats } from "@/models/Match";
 import User from "@/models/User";
-import { calculateElo } from "@/utils/client/calculateElo";
-import { findMember } from "@/utils/server/findMember";
-import { getTeamAvgElo } from "@/utils/client/getTeamAvgElo";
-import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
-import { verifyToken } from "@/utils/server/verifyToken";
+
 import dayjs from "dayjs";
+import {
+  calculateElo,
+  findMember,
+  getTeamAvgElo,
+  getTokenFromHeader,
+  verifyToken,
+} from "@/utils/server";
 
 interface CreateMatchBody {
   players: IPlayerStats[];

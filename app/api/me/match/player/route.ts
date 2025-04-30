@@ -1,10 +1,8 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { findMember } from "@/utils/server/findMember";
-import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
-import { verifyToken } from "@/utils/server/verifyToken";
+import { findMember, getTokenFromHeader, verifyToken } from "@/utils/server";
 
-export async function GET(request) {
+export async function GET(request: Request) {
   await connectDB();
 
   const token = getTokenFromHeader(request.headers);
@@ -21,7 +19,7 @@ export async function GET(request) {
     const users = await User.find({ createdBy: member._id }).select("nickName");
 
     return Response.json(users, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },

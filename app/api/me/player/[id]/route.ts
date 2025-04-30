@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import { checkToken } from "@/utils";
+import { checkToken } from "@/utils/server";
 
 export async function PATCH(
   request: Request,

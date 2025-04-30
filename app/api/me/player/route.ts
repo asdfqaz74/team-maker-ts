@@ -1,11 +1,7 @@
-import { connectDB } from "@/lib/mongoose";
 import { IGroup } from "@/models/Group";
 import User from "@/models/User";
 import { UserDocument } from "@/types/user";
-import { checkToken } from "@/utils/server/checkToken";
-import { findMember } from "@/utils/server/findMember";
-import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
-import { verifyToken } from "@/utils/server/verifyToken";
+import { checkToken, findMember, verifyToken } from "@/utils/server";
 
 export async function GET(request: Request) {
   const result = await checkToken(request.headers);

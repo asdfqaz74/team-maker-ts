@@ -1,7 +1,10 @@
 import User from "@/models/User";
-import { checkToken, findMember, verifyToken } from "@/utils";
+import { checkToken, findMember, verifyToken } from "@/utils/server";
 
-export async function GET(request, { params }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { groupId: string } }
+) {
   const result = await checkToken(request.headers);
 
   if (!result.ok) return result.response;
@@ -22,7 +25,7 @@ export async function GET(request, { params }) {
     }).select("name");
 
     return Response.json(users, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message === "NOT_FOUND") {
       return Response.json(
         { error: "존재하지 않는 사용자입니다." },

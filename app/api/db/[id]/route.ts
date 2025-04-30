@@ -1,9 +1,23 @@
 import { connectDB } from "@/lib/mongoose";
-import Match from "@/models/Match";
-import User from "@/models/User";
+import Match, { IMatch } from "@/models/Match";
+import User, { IElo } from "@/models/User";
 
-const formatPlayerData = (player) => ({
-  nickName: player.userNickname,
+interface PlayerStats {
+  userNickname?: string;
+  champion: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  totalDamageDealt: number;
+  totalDamageTaken: number;
+  wardsPlaced: number;
+  boughtWards: number;
+  wardsKilled: number;
+  minionsKilled: number;
+}
+
+const formatPlayerData = (player: PlayerStats) => ({
+  nickName: player.userNickname ?? "Unknown",
   champion: player.champion,
   championImage: `/images/champions/portrait/${player.champion}.webp`,
   kda: {
@@ -23,16 +37,42 @@ const formatPlayerData = (player) => ({
   cs: player.minionsKilled,
 });
 
-export async function GET(request, context) {
+interface MostPlayedChampionAgg {
+  _id: string;
+  count: number;
+  winCount: number;
+  winRate: number;
+}
+
+interface RecentMatchDataAgg {
+  totalMatches: number;
+  totalWins: number;
+  totalLosses: number;
+  champion: string[];
+  position: string[];
+  winRate: number;
+  championImages: string[];
+}
+
+export async function GET(
+  request: Request,
+  context: { params: { id: string } }
+) {
   await connectDB();
 
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
 
     // 유저 정보 먼저 조회
-    const user = await User.findById(id)
+    const user = (await User.findById(id)
       .select("name nickName position eloRating")
-      .lean();
+      .lean()) as {
+      name: string;
+      nickName: string;
+      position: string;
+      eloRating: IElo;
+      mostPlayedChampion?: string | null;
+    } | null;
 
     if (!user) {
       return Response.json(
@@ -45,7 +85,7 @@ export async function GET(request, context) {
     const [mostPlayedChampionAgg, recentMatches, recentMatchesDataAgg] =
       await Promise.all([
         // mostPlayedChampionAgg
-        Match.aggregate([
+        Match.aggregate<MostPlayedChampionAgg>([
           { $match: { "players.userNickname": user.nickName } },
           { $unwind: "$players" },
           { $match: { "players.userNickname": user.nickName } },
@@ -74,14 +114,14 @@ export async function GET(request, context) {
         ]),
 
         // recentMatches
-        Match.find({
+        Match.find<IMatch>({
           "players.userNickname": user.nickName,
         })
           .sort({ createdAt: -1 })
           .limit(5),
 
         // recentMatchesDataAgg
-        Match.aggregate([
+        Match.aggregate<RecentMatchDataAgg>([
           { $match: { "players.userNickname": user.nickName } },
           { $sort: { createdAt: -1 } },
           { $limit: 5 },
@@ -155,6 +195,11 @@ export async function GET(request, context) {
       const me = match.players.find(
         (player) => player.userNickname === user.nickName
       );
+
+      if (!me) {
+        throw new Error("사용자를 찾을 수 없습니다.");
+      }
+
       const myTeam = me.team;
 
       return {
