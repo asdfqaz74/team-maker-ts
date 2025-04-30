@@ -13,9 +13,11 @@ export async function POST(request: Request) {
 
     const member = await findMemberWithPassword({ userId });
 
-    console.log("member", member);
+    // member에서 뽑아낸 비밀번호 변수 할당
+    const comparedPw = member.password;
 
-    if (!member.password) {
+    // 비밀번호가 설정되지 않은 경우
+    if (!comparedPw) {
       return Response.json(
         { error: "비밀번호가 설정되지 않았습니다." },
         { status: 401 }
@@ -23,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // 비밀번호 비교
-    const isMatch = await bcrypt.compare(password, member.password);
+    const isMatch = await bcrypt.compare(password, comparedPw);
 
     // 비밀번호가 일치하지 않으면 401 Unauthorized 응답
     if (!isMatch) {
@@ -33,6 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // 비밀번호가 일치하면 JWT 토큰 생성
     const token = jwt.sign(
       {
         userId: member.userId,
@@ -45,7 +48,7 @@ export async function POST(request: Request) {
       }
     );
 
-    // 로그인 성공 시, 사용자 정보를 반환합니다.
+    // 로그인 성공 시, 사용자 정보를 반환
     return Response.json(
       {
         message: "로그인 성공",
