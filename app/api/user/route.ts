@@ -32,13 +32,14 @@ export async function GET(request: Request) {
     };
 
     users.forEach((user) => {
-      user.position = positionMap[user.position] || user.position;
+      user.position =
+        positionMap[user.position as keyof typeof positionMap] || user.position;
     });
 
     // ELO Rating 중 가장 높은 값만 가져오기
     users.forEach((user) => {
       if (user.eloRating) {
-        const maxELO = Math.max(...Object.values(user.eloRating));
+        const maxELO = Math.max(...(Object.values(user.eloRating) as number[]));
         user.eloRating = maxELO;
       }
     });
@@ -77,7 +78,7 @@ export async function GET(request: Request) {
 
 // 유저 정보를 생성하는 API
 // 유저 정보 생성할 때는 name, nickName 이 필수값입니다.
-export async function POST(request) {
+export async function POST(request: Request) {
   await connectDB();
   const body = await request.json();
   const user = await User.create(body);
