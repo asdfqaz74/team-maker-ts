@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { groupListAtom, selectedGroupAtom } from "@/store/group";
-import { getToken } from "@/utils/getToken";
 import { API } from "@/constants";
+import { getToken } from "@/utils/client";
 
 export default function GroupList() {
   const [groups, setGroups] = useAtom(groupListAtom);

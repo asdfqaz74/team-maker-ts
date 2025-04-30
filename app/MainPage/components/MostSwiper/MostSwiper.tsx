@@ -5,10 +5,10 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useBreakpoint from "@/utils/useBreakpion";
 import { SwiperChampion } from "@/types/champion";
 import DesktopSwiperView from "./DesktopSwiperView";
 import MobileSwiperView from "./MobileSwiperView";
+import { useBreakpoint } from "@/hooks/useBreakpion";
 
 export default function MostSwiper({
   champions,

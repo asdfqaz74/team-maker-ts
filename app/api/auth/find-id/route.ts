@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/mongoose";
-import { findMember } from "@/utils/findMember";
+import { findMember } from "@/utils/server/findMember";
 
 type BodyType = {
   findIdName: string;

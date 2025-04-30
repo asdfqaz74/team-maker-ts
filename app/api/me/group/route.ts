@@ -1,17 +1,12 @@
-import { connectDB } from "@/lib/mongoose";
 import Group from "@/models/Group";
-import { findMember } from "@/utils/findMember";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { checkToken, findMember, verifyToken } from "@/utils";
 
 export async function POST(request) {
-  await connectDB();
+  const result = await checkToken(request.headers);
 
-  const token = getTokenFromHeader(request.headers);
+  if (!result.ok) return result.response;
 
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
-  }
+  const token = result.token;
 
   try {
     const decoded = verifyToken(token);
@@ -52,13 +47,11 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  await connectDB();
+  const result = await checkToken(request.headers);
 
-  const token = getTokenFromHeader(request.headers);
+  if (!result.ok) return result.response;
 
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
-  }
+  const token = result.token;
 
   try {
     const decoded = verifyToken(token);

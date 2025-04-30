@@ -2,18 +2,17 @@ import { connectDB } from "@/lib/mongoose";
 import { IGroup } from "@/models/Group";
 import User from "@/models/User";
 import { UserDocument } from "@/types/user";
-import { findMember } from "@/utils/findMember";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { checkToken } from "@/utils/server/checkToken";
+import { findMember } from "@/utils/server/findMember";
+import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
+import { verifyToken } from "@/utils/server/verifyToken";
 
 export async function GET(request: Request) {
-  await connectDB();
+  const result = await checkToken(request.headers);
 
-  const token = getTokenFromHeader(request.headers);
+  if (!result.ok) return result.response;
 
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
-  }
+  const token = result.token;
 
   try {
     const decoded = verifyToken(token);
@@ -48,13 +47,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  await connectDB();
+  const result = await checkToken(request.headers);
 
-  const token = getTokenFromHeader(request.headers);
+  if (!result.ok) return result.response;
 
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
-  }
+  const token = result.token;
 
   try {
     const decoded = verifyToken(token);
@@ -91,6 +88,55 @@ export async function POST(request: Request) {
     console.error("사용자 생성 중 오류: ", error);
     return Response.json(
       { error: "사용자 생성 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function Delete(request: Request) {
+  const result = await checkToken(request.headers);
+
+  if (!result.ok) return result.response;
+
+  const token = result.token;
+
+  try {
+    const decoded = verifyToken(token);
+    const userId = decoded.userId;
+
+    const member = await findMember({ userId });
+
+    const body = await request.json();
+    const { id } = body;
+
+    if (!id) {
+      return Response.json({ error: "ID는 필수입니다." }, { status: 400 });
+    }
+
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return Response.json(
+        { error: "사용자를 찾을 수 없습니다." },
+        { status: 404 }
+      );
+    }
+
+    return Response.json(
+      { message: "사용자가 삭제되었습니다." },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    if (error.message === "NOT_FOUND") {
+      return Response.json(
+        { error: "존재하지 않는 사용자입니다." },
+        { status: 401 }
+      );
+    }
+
+    console.error("사용자 삭제 중 오류: ", error);
+    return Response.json(
+      { error: "사용자 삭제 중 오류가 발생했습니다." },
       { status: 500 }
     );
   }

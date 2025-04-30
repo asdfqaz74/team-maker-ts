@@ -1,8 +1,8 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { findMember } from "@/utils/findMember";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { getTokenFromHeader } from "@/utils";
+import { findMember } from "@/utils/server/findMember";
+import { verifyToken } from "@/utils/server/verifyToken";
 
 export async function GET(request) {
   await connectDB();

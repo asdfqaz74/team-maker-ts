@@ -1,11 +1,11 @@
 import { connectDB } from "@/lib/mongoose";
 import Match, { IPlayerStats } from "@/models/Match";
 import User from "@/models/User";
-import { calculateElo } from "@/utils/calculateElo";
-import { findMember } from "@/utils/findMember";
-import { getTeamAvgElo } from "@/utils/getTeamAvgElo";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { calculateElo } from "@/utils/client/calculateElo";
+import { findMember } from "@/utils/server/findMember";
+import { getTeamAvgElo } from "@/utils/client/getTeamAvgElo";
+import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
+import { verifyToken } from "@/utils/server/verifyToken";
 import dayjs from "dayjs";
 
 interface CreateMatchBody {

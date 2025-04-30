@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
 import { sendResetEmail } from "@/lib/mailer/sendResetEmail";
 import jwt from "jsonwebtoken";
-import { findMember } from "@/utils/findMember";
+import { findMember } from "@/utils/server/findMember";
 import { JWT_EXPIRES_IN_FORGOT_PASSWORD, SECRET } from "@/constants";
 
 type BodyType = {

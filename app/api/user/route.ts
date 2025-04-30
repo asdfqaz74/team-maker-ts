@@ -1,8 +1,8 @@
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { findMember } from "@/utils/findMember";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { findMember } from "@/utils/server/findMember";
+import getTokenFromHeader from "@/utils/server/getTokenFromHeader";
+import { verifyToken } from "@/utils/server/verifyToken";
 
 // 유저 정보를 가져오는 API
 export async function GET(request) {

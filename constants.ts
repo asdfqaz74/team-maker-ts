@@ -1,6 +1,9 @@
+export const MONGODB_URI = process.env.MONGODB_URI!;
+
 export const SECRET = process.env.JWT_SECRET!;
 export const JWT_EXPIRES_IN = "7d";
 export const JWT_EXPIRES_IN_FORGOT_PASSWORD = "1h";
+export const DEFAULT_POINTS = 1000;
 
 export const API = {
   AUTH: {
@@ -22,6 +25,10 @@ export const API = {
     MATCH: {
       PLAYER: "/api/me/match/player",
       SUBMIT: "/api/me/match/submit",
+    },
+    PLAYER: {
+      LIST: "/api/me/player",
+      ID: (id: string) => `/api/me/player/${id}`,
     },
   },
 };

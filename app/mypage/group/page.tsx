@@ -6,9 +6,9 @@ import { useAtom } from "jotai";
 import { groupListAtom } from "@/store/group";
 import PlayerList from "./PlayerList";
 import GroupUserList from "./GroupUserList";
-import { getToken } from "@/utils/getToken";
 import { useToast } from "@/app/components/ToastContext";
 import { API } from "@/constants";
+import { getToken } from "@/utils/client";
 
 export default function GroupPage() {
   const [buttonClicked, setButtonClicked] = useState(false);

@@ -5,8 +5,8 @@ import {
   ExceptPasswordMember,
   ExceptPasswordMemberDocument,
 } from "@/types/member";
-import getTokenFromHeader from "@/utils/getTokenFromHeader";
-import { verifyToken } from "@/utils/verifyToken";
+import { getTokenFromHeader } from "@/utils";
+import { verifyToken } from "@/utils/server/verifyToken";
 import jwt from "jsonwebtoken";
 
 // 사용자 정보 조회

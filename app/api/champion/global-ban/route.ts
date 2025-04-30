@@ -1,7 +1,7 @@
 import GlobalBan from "@/models/GlobalBan";
 import { connectDB } from "@/lib/mongoose";
 import Champion from "@/models/Champion";
-import getToday from "@/utils/getToday";
+import getToday from "@/utils/client/getToday";
 import { GlobalBanChampion } from "@/types/champion";
 import { NextResponse } from "next/server";
 

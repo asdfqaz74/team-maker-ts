@@ -1,11 +1,12 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { selectedPlayerAtom, fetchPlayersAtom } from "@/store/player";
+import { selectedPlayerAtom } from "@/store/player";
 import { useState, useEffect } from "react";
-import { getToken } from "@/utils/getToken";
+import { getToken } from "@/utils/client/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/app/components/ToastContext";
+import { API, DEFAULT_POINTS } from "@/constants";
 
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
@@ -14,11 +15,11 @@ export default function PlayerDB() {
   const [nickName, setNickName] = useState(selectedPlayer?.nickName || "");
   const [position, setPosition] = useState(selectedPlayer?.position || "top");
   const [elo, setElo] = useState({
-    top: selectedPlayer?.eloRating?.top || 1000,
-    jug: selectedPlayer?.eloRating?.jug || 1000,
-    mid: selectedPlayer?.eloRating?.mid || 1000,
-    adc: selectedPlayer?.eloRating?.adc || 1000,
-    sup: selectedPlayer?.eloRating?.sup || 1000,
+    top: selectedPlayer?.eloRating.top || DEFAULT_POINTS,
+    jug: selectedPlayer?.eloRating.jug || DEFAULT_POINTS,
+    mid: selectedPlayer?.eloRating.mid || DEFAULT_POINTS,
+    adc: selectedPlayer?.eloRating.adc || DEFAULT_POINTS,
+    sup: selectedPlayer?.eloRating.sup || DEFAULT_POINTS,
   });
 
   const { showSnack } = useToast();
@@ -28,11 +29,11 @@ export default function PlayerDB() {
       setNickName(selectedPlayer.nickName || "");
       setPosition(selectedPlayer.position || "top");
       setElo({
-        top: selectedPlayer.eloRating?.top ?? 1000,
-        jug: selectedPlayer.eloRating?.jug ?? 1000,
-        mid: selectedPlayer.eloRating?.mid ?? 1000,
-        adc: selectedPlayer.eloRating?.adc ?? 1000,
-        sup: selectedPlayer.eloRating?.sup ?? 1000,
+        top: selectedPlayer.eloRating.top ?? DEFAULT_POINTS,
+        jug: selectedPlayer.eloRating.jug ?? DEFAULT_POINTS,
+        mid: selectedPlayer.eloRating.mid ?? DEFAULT_POINTS,
+        adc: selectedPlayer.eloRating.adc ?? DEFAULT_POINTS,
+        sup: selectedPlayer.eloRating.sup ?? DEFAULT_POINTS,
       });
     }
   }, [selectedPlayer]);
@@ -40,7 +41,7 @@ export default function PlayerDB() {
   const { mutate: editPlayer, isPending } = useMutation({
     mutationFn: async () => {
       const token = getToken();
-      const response = await fetch(`/api/me/player/${selectedPlayer._id}`, {
+      const response = await fetch(API.ME.PLAYER.ID(selectedPlayer._id), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -67,12 +68,35 @@ export default function PlayerDB() {
     },
   });
 
+  // 선수 수정 핸들러
   const handleEditPlayerDB = async () => {
     editPlayer();
   };
 
+  // 선수 삭제 핸들러
+  const handleDeletePlayerDB = async () => {
+    try {
+      const token = getToken();
+      await fetch(API.ME.PLAYER.ID(selectedPlayer._id), {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id: selectedPlayer._id }),
+      });
+
+      showSnack("선수가 삭제되었습니다.", "success");
+      queryClient.invalidateQueries({ queryKey: ["players"] });
+    } catch (error) {
+      console.error("선수 삭제 중 오류: ", error);
+      showSnack("선수 삭제에 실패했습니다.", "error");
+    }
+  };
+
   if (isPending) return <p>수정 중...</p>;
-  if (!selectedPlayer) return <p>선수를 선택해주세요.</p>;
+  if (!selectedPlayer)
+    return <p className="text-black">선수를 선택해주세요.</p>;
 
   return (
     <div className="text-black">
@@ -123,6 +147,9 @@ export default function PlayerDB() {
       </div>
       <button onClick={handleEditPlayerDB} className="cursor-pointer">
         수정하기
+      </button>
+      <button onClick={handleDeletePlayerDB} className="cursor-pointer">
+        삭제하기
       </button>
     </div>
   );

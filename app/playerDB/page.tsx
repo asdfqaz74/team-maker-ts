@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import PlayerInfo from "./components/PlayerInfo";
-import { getToken } from "@/utils/getToken";
+import { getToken } from "@/utils/client/getToken";
 import { useEffect, useState } from "react";
 
 export default function PlayerDB() {

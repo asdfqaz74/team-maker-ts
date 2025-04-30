@@ -8,7 +8,7 @@ interface BreakPoint {
   issm: boolean;
 }
 
-export default function useBreakpoint(): BreakPoint {
+export function useBreakpoint(): BreakPoint {
   const is2xl = useMediaQuery("(min-width: 1536px)");
   const isxl = useMediaQuery("(min-width: 1280px)");
   const islg = useMediaQuery("(min-width: 1024px)");

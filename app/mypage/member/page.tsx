@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import PlayerList from "./PlayerList";
-import { getToken } from "@/utils/getToken";
+import { getToken } from "@/utils/client/getToken";
 import PlayerDB from "./PlayerDB";
 import { useToast } from "@/app/components/ToastContext";
 import { useQueryClient } from "@tanstack/react-query";

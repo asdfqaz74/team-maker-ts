@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongoose";
-import { findMemberWithPassword } from "@/utils/findMember";
+import { findMemberWithPassword } from "@/utils/server/findMember";
 import jwt from "jsonwebtoken";
 import { JWT_EXPIRES_IN, SECRET } from "@/constants";
 

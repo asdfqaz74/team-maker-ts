@@ -1,19 +1,34 @@
-import mongoose from "mongoose";
-
-const MONGODB_URI = process.env.MONGODB_URI;
+import { MONGODB_URI } from "@/constants";
+import mongoose, { Mongoose } from "mongoose";
 
 if (!MONGODB_URI) {
   throw new Error("MONGODB_URI 환경 변수를 .env.local 파일에 정의해주세요.");
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = { conn: null, promise: null };
-  global.mongoose = cached;
+declare global {
+  var mongooseCache: {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
+  };
 }
 
-export async function connectDB() {
+const globalWithMongoose = globalThis as typeof globalThis & {
+  mongooseCache?: {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
+  };
+};
+
+if (!globalWithMongoose.mongooseCache) {
+  globalWithMongoose.mongooseCache = {
+    conn: null,
+    promise: null,
+  };
+}
+
+export async function connectDB(): Promise<Mongoose> {
+  const cached = globalWithMongoose.mongooseCache!;
+
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
@@ -23,11 +38,12 @@ export async function connectDB() {
         bufferCommands: false,
       })
       .then((mongoose) => {
-        console.log("MongoDB에 연결되었습니다.");
+        console.log("✅ MongoDB 연결 성공");
         return mongoose;
       })
       .catch((err) => {
-        console.error("MongoDB 연결 오류:", err);
+        console.error("❌ MongoDB 연결 오류:", err);
+        throw err;
       });
   }
 

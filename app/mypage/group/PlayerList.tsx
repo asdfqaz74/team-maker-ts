@@ -7,9 +7,9 @@ import {
   selectedGroupAtom,
 } from "@/store/group";
 import { useEffect } from "react";
-import { getToken } from "@/utils/getToken";
 import { useToast } from "@/app/components/ToastContext";
 import { API } from "@/constants";
+import { getToken } from "@/utils/client";
 
 export default function PlayerList() {
   const [players, setPlayers] = useAtom(groupPlayersAtom);
