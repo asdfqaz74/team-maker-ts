@@ -15,9 +15,12 @@ type LoginResponse =
     };
 
 export default function LoginPage() {
+  // 로그인 상태를 관리하기 위한 상태 변수
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  // 로그인 후 홈으로 리다이렉트하기 위한 useRouter 훅
   const router = useRouter();
 
   const setToken = useSetAtom(tokenAtom);
