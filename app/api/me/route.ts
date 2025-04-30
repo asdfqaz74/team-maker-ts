@@ -1,3 +1,4 @@
+import { JWT_EXPIRES_IN, SECRET } from "@/constants";
 import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
 import {
@@ -7,8 +8,6 @@ import {
 import getTokenFromHeader from "@/utils/getTokenFromHeader";
 import { verifyToken } from "@/utils/verifyToken";
 import jwt from "jsonwebtoken";
-
-const SECRET = process.env.JWT_SECRET!;
 
 // 사용자 정보 조회
 export async function GET(request: Request) {
@@ -91,7 +90,7 @@ export async function PATCH(request: Request) {
         name: member.name,
       },
       SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: JWT_EXPIRES_IN }
     );
 
     return Response.json(
