@@ -23,14 +23,12 @@ export async function GET(request: Request) {
 
     const users = await User.find<UserDocument>({ createdBy: member._id })
       .select("name nickName position group eloRating")
-      .populate("Group", "name");
+      .populate("group", "name");
 
     const formattedUsers = users.map((user) => ({
       ...user.toObject(),
       groupName: (user.group as IGroup).name || "그룹 없음",
     }));
-
-    console.log("users", formattedUsers);
 
     return Response.json(formattedUsers, { status: 200 });
   } catch (error: any) {

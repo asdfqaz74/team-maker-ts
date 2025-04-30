@@ -1,5 +1,5 @@
 import { Schema, Document, models, model } from "mongoose";
-import Member from "./Member";
+import "./Member";
 
 // 타입 정의
 export interface IGroup extends Document {

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import PlayerList from "./PlayerList";
-
 import { getToken } from "@/utils/getToken";
 import PlayerDB from "./PlayerDB";
 import { useToast } from "@/app/components/ToastContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MemberPage() {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -14,6 +14,8 @@ export default function MemberPage() {
   const [position, setPosition] = useState("top");
 
   const { showSnack } = useToast();
+
+  const queryClient = useQueryClient();
 
   const handleCreatePlayerButton = () => {
     setButtonClicked((c) => !c);
@@ -41,6 +43,7 @@ export default function MemberPage() {
         setNickname("");
         setPosition("top");
         setButtonClicked(false);
+        queryClient.invalidateQueries({ queryKey: ["players"] });
       })
       .catch((err) => {
         console.error(err);
