@@ -2,18 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSetAtom } from "jotai";
-import { tokenAtom } from "@/store/auth";
-import { API } from "@/constants";
-
-type LoginResponse =
-  | {
-      message: string;
-      token: string;
-    }
-  | {
-      error: string;
-    };
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   // 로그인 상태를 관리하기 위한 상태 변수
@@ -21,34 +10,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // 로그인 후 홈으로 리다이렉트하기 위한 useRouter 훅
   const router = useRouter();
 
-  const setToken = useSetAtom(tokenAtom);
-
   const handleLogin = async () => {
-    const response = await fetch(API.AUTH.LOGIN, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId, password }),
+    const result = await signIn("credentials", {
+      userId,
+      password,
+      redirect: false,
     });
 
-    const data: LoginResponse = await response.json();
-
-    if ("token" in data) {
-      setMessage("로그인 성공");
-      // JWT 토큰을 로컬 스토리지에 저장
-      sessionStorage.setItem("token", data.token);
-      // Jotai 상태 업데이트
-      setToken(data.token);
-
-      // 로그인 성공 시, 홈으로 리다이렉트
-      router.push("/");
+    if (result?.error) {
+      console.log("로그인 실패", result.error);
+      setMessage("아이디 또는 비밀번호가 잘못되었습니다.");
     } else {
-      // 로그인 실패 시 에러 메시지 표시
-      setMessage(data.error || "로그인 실패");
+      setMessage("로그인 성공");
+      router.push("/");
     }
   };
 

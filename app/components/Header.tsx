@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { tokenAtom, isLoggedInAtom, userAtom } from "@/store/auth";
+import { tokenAtom, userAtom } from "@/store/auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import {
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 import Burger from "@/public/images/components/Burger.svg";
 import Chart from "@/public/images/components/Chart.svg";
@@ -26,8 +27,9 @@ import { Box, Divider, Drawer } from "@mui/material";
 
 export default function Header() {
   const [, setToken] = useAtom(tokenAtom);
-  const [isLoggedIn] = useAtom(isLoggedInAtom);
   const router = useRouter();
+
+  const { data: session, status } = useSession();
 
   const [open, setOpen] = useState(false);
 
@@ -41,6 +43,9 @@ export default function Header() {
   const resetSelectedPlayer = useResetAtom(selectedPlayerAtom);
 
   const queryClient = new QueryClient();
+
+  // 로그인 상태 확인
+  const isLoggedIn = status === "authenticated";
 
   // 로그아웃 핸들러
   // 로그아웃 시 토큰 삭제 및 상태 초기화

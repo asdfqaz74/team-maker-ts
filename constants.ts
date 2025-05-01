@@ -4,6 +4,9 @@ export const SECRET = process.env.JWT_SECRET!;
 export const JWT_EXPIRES_IN = "7d";
 export const JWT_EXPIRES_IN_FORGOT_PASSWORD = "1h";
 export const DEFAULT_POINTS = 1000;
+export const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET!;
+
+export const MAX_AGE = 60 * 60 * 24;
 
 export const API = {
   AUTH: {

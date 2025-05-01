@@ -4,12 +4,17 @@ import { findMemberWithPassword } from "@/utils/server/findMember";
 import jwt from "jsonwebtoken";
 import { JWT_EXPIRES_IN, SECRET } from "@/constants";
 
+type LoginRequest = {
+  userId: string;
+  password: string;
+};
+
 export async function POST(request: Request) {
   await connectDB();
 
   try {
     const body = await request.json();
-    const { userId, password } = body;
+    const { userId, password }: LoginRequest = body;
 
     const member = await findMemberWithPassword({ userId });
 

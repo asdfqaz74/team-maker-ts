@@ -25,3 +25,13 @@ export async function findMemberWithPassword(query: FindMemberQuery) {
 
   return member;
 }
+
+export async function findMemberId(query: FindMemberQuery) {
+  const member = await Member.findOne<ExceptPasswordMemberDocument>({
+    userId: query.userId,
+  });
+
+  if (!member) throw new Error("NOT_FOUND");
+
+  return member;
+}
