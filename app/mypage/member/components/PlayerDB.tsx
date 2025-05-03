@@ -7,6 +7,9 @@ import { getToken } from "@/utils/client/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/app/components/ToastContext";
 import { API, DEFAULT_POINTS } from "@/constants";
+import { Divider } from "@mui/material";
+import UnSelected from "./UnSelected";
+import User from "@/public/images/components/User.svg";
 
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
@@ -95,12 +98,60 @@ export default function PlayerDB() {
   };
 
   if (isPending) return <p>수정 중...</p>;
-  if (!selectedPlayer)
-    return <p className="text-black">선수를 선택해주세요.</p>;
+  if (!selectedPlayer) return <UnSelected />;
 
   return (
-    <div className="text-black">
-      <span>{selectedPlayer?.name}</span>
+    <div className="text-black max-w-[43.75rem] bg-white rounded-xl p-4 h-5/6 flex flex-col">
+      <div>
+        <div className="flex justify-between items-end mb-4">
+          <div className="flex items-center gap-2">
+            <User />
+            <h2 className="text-2xl font-bold">내전 멤버 관리</h2>
+          </div>
+          <span>{selectedPlayer.name}</span>
+        </div>
+        <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
+      </div>
+      <div className="mb-4">
+        <h3 className="text-xl font-semibold mb-4">멤버 정보 관리</h3>
+        <div className="mb-2 flex gap-2 flex-col">
+          <div className="flex gap-14 items-center">
+            <span className="w-12">닉네임</span>
+            <input
+              type="text"
+              value={nickName}
+              onChange={(e) => setNickName(e.target.value)}
+              className="border px-2 py-1 w-40"
+              placeholder="강진성"
+            />
+          </div>
+          <div className="flex gap-14 items-center">
+            <span>포지션</span>
+            <select
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              className="border px-2 py-1 w-40"
+            >
+              <option value="top" className="text-black">
+                탑
+              </option>
+              <option value="jug" className="text-black">
+                정글
+              </option>
+              <option value="mid" className="text-black">
+                미드
+              </option>
+              <option value="adc" className="text-black">
+                원딜
+              </option>
+              <option value="sup" className="text-black">
+                서포터
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
       <label className="block font-semibold mb-2">ELO 관리</label>
       <div className="flex gap-4">
         {["top", "jug", "mid", "adc", "sup"].map((lane) => (
@@ -116,34 +167,6 @@ export default function PlayerDB() {
             />
           </div>
         ))}
-      </div>
-      <span>멤버 정보 관리</span>
-      <div className="mb-2 flex gap-2 items-center">
-        <span className="w-12">닉네임</span>
-        <input
-          type="text"
-          value={nickName}
-          onChange={(e) => setNickName(e.target.value)}
-          className="border px-2 py-1 w-40"
-        />
-        <span>포지션</span>
-        <select value={position} onChange={(e) => setPosition(e.target.value)}>
-          <option value="top" className="text-black">
-            탑
-          </option>
-          <option value="jug" className="text-black">
-            정글
-          </option>
-          <option value="mid" className="text-black">
-            미드
-          </option>
-          <option value="adc" className="text-black">
-            원딜
-          </option>
-          <option value="sup" className="text-black">
-            서포터
-          </option>
-        </select>
       </div>
       <button onClick={handleEditPlayerDB} className="cursor-pointer">
         수정하기

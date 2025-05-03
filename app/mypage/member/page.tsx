@@ -6,10 +6,12 @@ import PlayerAdd from "./components/PlayerAdd";
 
 export default function MemberPage() {
   return (
-    <>
+    <div className="flex flex-col h-full w-full">
       <PlayerAdd />
-      <PlayerList />
-      <PlayerDB />
-    </>
+      <div className="flex gap-5 w-full flex-grow overflow-auto">
+        <PlayerList />
+        <PlayerDB />
+      </div>
+    </div>
   );
 }

@@ -84,19 +84,14 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function Delete(request: Request) {
-  const result = await checkToken(request.headers);
+export async function Delete(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+  if (!userId) {
+    return Response.json({ error: "인증 토큰이 없습니다." }, { status: 401 });
+  }
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
-    const member = await findMember({ userId });
-
     const body = await request.json();
     const { id } = body;
 

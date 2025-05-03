@@ -52,7 +52,7 @@ export default function MyPageLayout({ children }: { children: ReactNode }) {
         <div className="relative w-full h-full">
           <Image src="/images/components/mypage-bg.webp" alt="bg" fill />
           <div className="w-full h-full bg-[#F2FAFF] opacity-10"></div>
-          <div className="w-full h-full text-black rounded-2xl px-8 py-6 absolute top-0 overflow-y-auto">
+          <div className="w-full h-full text-black rounded-2xl px-8 py-6 absolute top-0">
             {children}
           </div>
         </div>

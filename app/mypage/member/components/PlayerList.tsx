@@ -1,10 +1,11 @@
 "use client";
-import { useAtom, useSetAtom } from "jotai";
-import { selectedPlayerAtom } from "@/store/player";
-import { tokenAtom } from "@/store/auth";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPlayers } from "@/lib/api/fetchPlayers";
+import { useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { selectedPlayerAtom } from "@/store/player";
+import { fetchPlayers } from "@/lib/api/fetchPlayers";
+import { Divider } from "@mui/material";
+import { Player } from "@/types/user";
 
 const positionMap = {
   top: "탑",
@@ -29,14 +30,19 @@ export default function PlayerList() {
     enabled: !!session,
   });
 
+  console.log("players", players);
+
   if (isLoading) return <p>로딩 중...</p>;
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 
   return (
-    <div className="p-4 text-black">
-      <h2 className="text-2xl font-bold mb-4">내전 플레이어 목록</h2>
-      <ul className="space-y-3">
-        {players.map((player) => (
+    <div className="p-4 text-black max-w-[21.875rem] bg-white rounded-xl h-5/6 flex flex-col">
+      <div>
+        <h2 className="text-2xl font-bold mb-4">내전 플레이어 목록</h2>
+        <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
+      </div>
+      <ul className="space-y-3 overflow-y-auto flex-1">
+        {players.map((player: Player) => (
           <li
             key={player._id}
             className="border p-4 rounded shadow-sm flex justify-between bg-white"
