@@ -4,7 +4,78 @@ import { useState } from "react";
 import DetailResultTable from "./DetailResultTable";
 import { motion, AnimatePresence } from "framer-motion";
 
-function createData(championImage, nickName, kda, damage, wards, cs) {
+type PlayerRow = {
+  championImage: string;
+  nickName: string;
+  kda: {
+    kills: number;
+    deaths: number;
+    assists: number;
+  };
+  damage: {
+    dealt: number;
+    taken: number;
+  };
+  wards: {
+    placed: number;
+    bought: number;
+    killed: number;
+  };
+  cs: number;
+};
+
+type KDA = {
+  kills: number;
+  deaths: number;
+  assists: number;
+};
+
+type Damage = {
+  dealt: number;
+  taken: number;
+};
+
+type Wards = {
+  placed: number;
+  bought: number;
+  killed: number;
+};
+
+type Player = {
+  nickName: string;
+  champion: string;
+  championImage: string;
+  kda: KDA;
+  damage: Damage;
+  wards: Wards;
+  cs: number;
+};
+
+type Me = {
+  championImage: string;
+  champion: string;
+  kda: KDA;
+  win: boolean;
+  team: "Blue" | "Red";
+};
+
+type Match = {
+  matchId: string;
+  me: Me;
+  maxDamage: number;
+  maxTaken: number;
+  teamPlayerData: Player[];
+  enemyPlayerData: Player[];
+};
+
+function createData(
+  championImage: string,
+  nickName: string,
+  kda: PlayerRow["kda"],
+  damage: PlayerRow["damage"],
+  wards: PlayerRow["wards"],
+  cs: number
+): PlayerRow {
   return {
     championImage,
     nickName,
@@ -16,18 +87,17 @@ function createData(championImage, nickName, kda, damage, wards, cs) {
 }
 
 export default function MatchResultTable({ data = [] }) {
-  const [isClicked, setIsClicked] = useState({});
+  const [isClicked, setIsClicked] = useState<Record<string, boolean>>({});
 
-  const toggleMatch = (matchId) => () => {
+  const toggleMatch = (matchId: string) => () => {
     setIsClicked((prev) => ({
       ...prev,
       [matchId]: !prev[matchId],
     }));
   };
-
   return (
     <>
-      {data.map((match) => {
+      {data.map((match: Match) => {
         const me = match.me;
         const isWin = me.win;
         const maxDamage = match.maxDamage;
