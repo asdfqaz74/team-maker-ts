@@ -1,46 +1,22 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-import { useAtom } from "jotai";
-import { userAtom, tokenAtom } from "@/store/auth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMe } from "@/lib/api/fetchMe";
 
 import Category from "@/public/images/components/Category.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useToast } from "@/app/components/ToastContext";
-import SkeletonBox from "@/app/components/SkeletonBox";
 import { ExceptPasswordMember } from "@/types/member";
 import InfoLoading from "./components/InfoLoading";
 import InfoEmpty from "./components/InfoEmpty";
+import { signOut, useSession } from "next-auth/react";
 
 export default function MyInfoPage() {
-  const [, setUser] = useAtom(userAtom);
-  const router = useRouter();
-  const [token, setToken] = useAtom(tokenAtom);
-  const [storedToken, setStoredToken] = useState<string | null>(null);
-  const [isMouted, setIsMouted] = useState(false);
-
-  // 마운트가 됐는지
-  useEffect(() => {
-    setIsMouted(true);
-  }, []);
-
-  // 스낵바
-  const { showSnack } = useToast();
-
   // 수정하기 상태
   const [isEdit, setIsEdit] = useState(false);
-
-  // 아이디 인풋 상태
   const [userId, setUserId] = useState("");
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    setStoredToken(token);
-  }, [token]);
-
-  const tokenToUse = storedToken || token;
+  const { showSnack } = useToast();
+  const { data: session } = useSession();
 
   // 내 정보 가져오기
   const {
@@ -48,28 +24,11 @@ export default function MyInfoPage() {
     isLoading,
     isError,
     error,
-    refetch,
   } = useQuery<ExceptPasswordMember>({
     queryKey: ["me"],
-    queryFn: async () => fetchMe(tokenToUse),
-    enabled: !!tokenToUse,
+    queryFn: async () => fetchMe(),
+    enabled: !!session,
   });
-  // 유저 저장
-  useEffect(() => {
-    if (user) {
-      setUser(user);
-    }
-  }, [user, setUser]);
-
-  useEffect(() => {
-    if (isMouted && !tokenToUse) {
-      router.push("/auth/login");
-    }
-  }, [router, tokenToUse, isMouted]);
-
-  if (!isMouted || !tokenToUse) {
-    return null;
-  }
 
   // 에러 처리
   if (isError) {
@@ -88,28 +47,21 @@ export default function MyInfoPage() {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${storedToken}`,
         },
         body: JSON.stringify({
-          userId: userId,
+          changeId: userId,
         }),
+        credentials: "include",
       });
-
-      const data = await response.json();
 
       if (!response.ok) {
         showSnack("아이디 수정에 실패했습니다.", "error");
         return;
       }
 
-      if (data.token) {
-        sessionStorage.setItem("token", data.token);
-        setToken(data.token);
-      }
-
-      showSnack("아이디 수정이 완료되었습니다.", "success");
-
-      await refetch();
+      alert("아이디가 수정되었습니다. 다시 로그인 해주세요.");
+      signOut();
+      return;
     } catch (error: any) {
       console.error("Error:", error);
       showSnack(error, "error");

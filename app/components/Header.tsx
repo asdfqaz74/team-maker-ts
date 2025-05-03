@@ -14,7 +14,7 @@ import {
 } from "@/store/group";
 import { playersAtom, selectedPlayerAtom } from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import Burger from "@/public/images/components/Burger.svg";
 import Chart from "@/public/images/components/Chart.svg";
@@ -59,6 +59,7 @@ export default function Header() {
     resetSelectedPlayer();
     queryClient.removeQueries({ queryKey: ["me"] });
     queryClient.removeQueries({ queryKey: ["players"] });
+    signOut();
     router.push("/auth/login");
   };
 

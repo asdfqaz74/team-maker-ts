@@ -1,29 +1,24 @@
 import { JWT_EXPIRES_IN, SECRET } from "@/constants";
-import { connectDB } from "@/lib/mongoose";
 import Member from "@/models/Member";
 import {
   ExceptPasswordMember,
   ExceptPasswordMemberDocument,
 } from "@/types/member";
-import { getTokenFromHeader } from "@/utils/server";
-
-import { verifyToken } from "@/utils/server/verifyToken";
+import { checkToken } from "@/utils/server";
 import jwt from "jsonwebtoken";
+import { NextRequest } from "next/server";
 
 // 사용자 정보 조회
-export async function GET(request: Request) {
-  await connectDB();
+export async function GET(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  const token = getTokenFromHeader(request.headers);
-
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
+  if (!userId) {
+    return Response.json({ error: "로그인 후 사용해주세요." }, { status: 401 });
   }
 
   try {
-    const decoded = verifyToken(token);
     const member = await Member.findOne({
-      userId: decoded.userId,
+      userId: userId,
     })
       .select("-password -_id")
       .lean<ExceptPasswordMember>();
@@ -46,19 +41,16 @@ export async function GET(request: Request) {
 }
 
 // 아이디 수정
-export async function PATCH(request: Request) {
-  await connectDB();
+export async function PATCH(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  const token = getTokenFromHeader(request.headers);
-
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
+  if (!userId) {
+    return Response.json({ error: "로그인 후 사용해주세요." }, { status: 401 });
   }
 
   try {
-    const decoded = verifyToken(token);
     const member = await Member.findOne<ExceptPasswordMemberDocument>({
-      userId: decoded.userId,
+      userId: userId,
     }).select("-password");
 
     if (!member) {
@@ -68,10 +60,10 @@ export async function PATCH(request: Request) {
       );
     }
 
-    const { userId } = await request.json();
+    const { changeId } = await request.json();
 
     // 아이디 중복 체크
-    const existingUser = await Member.findOne({ userId });
+    const existingUser = await Member.findOne({ changeId });
 
     if (existingUser) {
       return Response.json(
@@ -80,7 +72,7 @@ export async function PATCH(request: Request) {
       );
     }
 
-    member.userId = userId;
+    member.userId = changeId;
     await member.save();
 
     // 토큰 재발급

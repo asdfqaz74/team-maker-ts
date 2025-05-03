@@ -1,4 +1,3 @@
-import { IElo } from "./../../../../models/User";
 import { connectDB } from "@/lib/mongoose";
 import Match, { IMatch } from "@/models/Match";
 import User, { IElo } from "@/models/User";
