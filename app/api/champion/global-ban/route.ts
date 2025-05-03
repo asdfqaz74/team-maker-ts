@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongoose";
 import Champion from "@/models/Champion";
 import { GlobalBanChampion } from "@/types/champion";
 import { NextResponse } from "next/server";
-import { getToday } from "@/utils/client";
+import { getToday } from "@/utils/server";
 
 interface TodayBan {
   date: string;
@@ -18,6 +18,7 @@ export async function GET() {
   await connectDB();
 
   const today = getToday();
+  console.log("today: ", today);
 
   try {
     let todayBan: TodayBan | null = (await GlobalBan.findOne({
