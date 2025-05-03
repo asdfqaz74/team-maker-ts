@@ -1,4 +1,5 @@
-import { fetchPlayerDetail } from "@/lib/api/fetchPlayerDetail";
+"use client";
+
 import {
   Dialog,
   Divider,
@@ -10,46 +11,20 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import RecentPositionGraph from "./RecentPositionGraph";
-import RecentWinRateGraph from "./RecentWinRateGraph";
-import RecentPlayedChampions from "./RecentPlayedChampions";
-import MatchResultTable from "./MatchResultTable";
 
 function createData(top, jug, mid, adc, sup) {
   return { top, jug, mid, adc, sup };
 }
 
-const placeholderImage = "/images/components/placeholder.webp";
-
-export default function PlayerDetail({ open, onClose, player }) {
-  // userDetail 정보 가져오기
-  const {
-    data: userDetail = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["userDetail", player?.name],
-    queryFn: () => fetchPlayerDetail(player?._id),
-    enabled: !!player?._id,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: 1000 * 60 * 5,
-    placeholderData: keepPreviousData,
-  });
-
-  const user = userDetail?.user;
-  const recentMatches = userDetail?.recentMatches;
-  const recentMatchesData = userDetail?.recentMatchesData;
-  const positionData = recentMatchesData?.[0]?.position;
-  const win = recentMatchesData?.[0]?.totalWins;
-  const lose = recentMatchesData?.[0]?.totalLosses;
-  const winRate = recentMatchesData?.[0]?.winRate;
-  const recentPlayedChampions = recentMatchesData?.[0]?.championImages;
-
-  // 표에 나타날 데이터
+export default function PlayerDetailSkeleton({
+  open,
+  onClose,
+  user,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const rows = [
     createData(
       user?.eloRating.top,
@@ -59,16 +34,10 @@ export default function PlayerDetail({ open, onClose, player }) {
       user?.eloRating.sup
     ),
   ];
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-  if (!userDetail) return <div>No data available</div>;
-
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      autoFocus
       slotProps={{
         paper: {
           sx: {
@@ -80,18 +49,24 @@ export default function PlayerDetail({ open, onClose, player }) {
       }}
     >
       <div className="flex flex-col">
+        {/* 모스트 챔피언 이미지 Placeholder */}
         <Image
-          src={user?.mostPlayedChampion || placeholderImage}
+          src={"/images/components/placeholder.webp"}
           alt="모스트챔피언"
           width={1000}
           height={480}
         />
+
         <div className="py-4 px-10 flex flex-col gap-10">
+          {/* 이름/닉네임 */}
           <div className="flex gap-4 items-end text-white">
-            <span className="text-4xl font-bold">{user?.name}</span>
-            <span className="">{user?.nickName}</span>
+            <span className="text-4xl font-bold">{user.name}</span>
+            <span className="">{user.nickName}</span>
           </div>
+
           <Divider sx={{ borderColor: "#fff" }} />
+
+          {/* Elo 점수 */}
           <span className="text-4xl text-white font-bold">Elo 점수</span>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="Elo Rating Table">
@@ -143,45 +118,32 @@ export default function PlayerDetail({ open, onClose, player }) {
               </TableBody>
             </Table>
           </TableContainer>
+
           <Divider sx={{ borderColor: "#fff" }} />
+
+          {/* 최근 게임 통계 */}
           <div className="flex flex-col gap-10">
-            {/* 최근 5게임 그래프 */}
-            {recentMatches?.length > 0 ? (
-              <>
-                <span className="text-4xl text-white font-bold">
-                  최근 5게임
+            <span className="text-4xl text-white font-bold">최근 5게임</span>
+            <div className="flex justify-between px-10">
+              <div className="flex flex-col items-center gap-10">
+                <span className="text-white font-semibold">포지션</span>
+                <div className="w-40 h-40 bg-gray-600" />
+              </div>
+              <div className="flex flex-col items-center gap-10">
+                <span className="text-white font-semibold">승률</span>
+                <div className="w-40 h-40 bg-gray-600" />
+              </div>
+              <div className="flex flex-col items-center gap-10">
+                <span className="text-white font-semibold">
+                  플레이한 챔피언
                 </span>
-                <div className="flex justify-between px-10">
-                  <div className="flex flex-col items-center gap-10">
-                    <span className="text-white font-semibold">포지션</span>
-                    <RecentPositionGraph data={positionData} />
-                  </div>
-                  <div className="flex flex-col items-center gap-10">
-                    <span className="text-white font-semibold">승률</span>
-                    <RecentWinRateGraph
-                      win={win}
-                      lose={lose}
-                      winRate={winRate}
-                    />
-                  </div>
-                  <RecentPlayedChampions data={recentPlayedChampions} />
-                </div>
-              </>
-            ) : (
-              <>
-                <span className="text-4xl text-white font-bold">
-                  최근 5게임
-                </span>
-                <span>최근 게임이 없습니다.</span>
-              </>
-            )}
+                <div className="w-40 h-40 bg-gray-600" />
+              </div>
+            </div>
           </div>
-          {/* 최근 매치 테이블 5경기 */}
-          {recentMatches?.length > 0 ? (
-            <MatchResultTable data={recentMatches} />
-          ) : (
-            <div className="mt-10 text-white">최근 매치 내역이 없습니다.</div>
-          )}
+
+          {/* 매치 테이블 Placeholder */}
+          <div className="mt-10 text-white">최근 매치 내역이 없습니다.</div>
         </div>
       </div>
     </Dialog>

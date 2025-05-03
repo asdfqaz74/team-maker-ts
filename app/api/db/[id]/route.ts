@@ -1,6 +1,8 @@
+import { IElo } from "./../../../../models/User";
 import { connectDB } from "@/lib/mongoose";
 import Match, { IMatch } from "@/models/Match";
 import User, { IElo } from "@/models/User";
+import { NextRequest } from "next/server";
 
 interface PlayerStats {
   userNickname?: string;
@@ -55,13 +57,14 @@ interface RecentMatchDataAgg {
 }
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   await connectDB();
 
   try {
-    const { id } = context.params;
+    const asyncParams = await context.params;
+    const { id } = asyncParams;
 
     // 유저 정보 먼저 조회
     const user = (await User.findById(id)
