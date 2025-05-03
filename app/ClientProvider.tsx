@@ -4,16 +4,17 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
 import Header from "./components/Header";
 import { SessionProvider } from "next-auth/react";
+import { ReactNode } from "react";
 
 const queryClient = new QueryClient();
 
-export default function ClientProvider({ children }) {
+export default function ClientProvider({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <JotaiProvider>
           <Header />
-          {children}
+          <div className="pt-[4.8125rem]">{children}</div>
         </JotaiProvider>
       </QueryClientProvider>
     </SessionProvider>

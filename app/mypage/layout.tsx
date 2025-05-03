@@ -6,8 +6,9 @@ import Gamepad from "@/public/images/components/Gamepad2.svg";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
 
-export default function MyPageLayout({ children }) {
+export default function MyPageLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   const menu = [
@@ -18,7 +19,7 @@ export default function MyPageLayout({ children }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex h-[calc(100vh-4.8125rem)] bg-white">
       <aside className="w-48 bg-[#030222] fixed h-screen">
         <h2 className="text-2xl font-bold pl-4 mb-10 text-[#0FA4FE]">
           MY PAGE
@@ -46,9 +47,9 @@ export default function MyPageLayout({ children }) {
       </aside>
 
       {/* 본문 */}
-      <main className="ml-48 w-full px-8 py-6 bg-white">
+      <div className="ml-48 flex-1 px-8 py-6 bg-white">
         <div className="bg-[#F2FAFF] rounded-2xl px-8 py-6">{children}</div>
-      </main>
+      </div>
     </div>
   );
 }

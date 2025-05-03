@@ -2,6 +2,7 @@ import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "./ClientProvider";
 import { ToastProvider } from "./components/ToastContext";
+import { ReactNode } from "react";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -41,7 +42,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko-KR">
       <head>
@@ -51,9 +52,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         ></script>
       </head>
-      <body
-        className={`${notoSans.variable} antialiased w-full pt-[4.8125rem]`}
-      >
+      <body className={`${notoSans.variable} antialiased w-full`}>
         <ClientProvider>
           <ToastProvider>{children}</ToastProvider>
         </ClientProvider>
