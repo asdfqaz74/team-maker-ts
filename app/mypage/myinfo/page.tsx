@@ -71,7 +71,7 @@ export default function MyInfoPage() {
   };
 
   return (
-    <>
+    <div className="max-w-[43.75rem] w-full h-full">
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-2xl flex items-center gap-4 mb-10">
           <Category />
@@ -129,6 +129,6 @@ export default function MyInfoPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

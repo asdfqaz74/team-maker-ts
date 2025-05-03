@@ -2,18 +2,16 @@ import { IGroup } from "@/models/Group";
 import User from "@/models/User";
 import { UserDocument } from "@/types/user";
 import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { NextRequest } from "next/server";
 
-export async function GET(request: Request) {
-  const result = await checkToken(request.headers);
+export async function GET(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+  if (!userId) {
+    return Response.json({ error: "인증 토큰이 없습니다." }, { status: 401 });
+  }
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
     const users = await User.find<UserDocument>({ createdBy: member._id })
@@ -42,17 +40,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  const result = await checkToken(request.headers);
+export async function POST(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+  if (!userId) {
+    return Response.json({ error: "인증 토큰이 없습니다." }, { status: 401 });
+  }
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
     const body = await request.json();

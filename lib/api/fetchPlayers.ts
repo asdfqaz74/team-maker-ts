@@ -1,8 +1,7 @@
-export const fetchPlayers = async (token) => {
+export const fetchPlayers = async () => {
   const response = await fetch("/api/me/player", {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
+    method: "GET",
+    credentials: "include",
   });
 
   const data = await response.json();

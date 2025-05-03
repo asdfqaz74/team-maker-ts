@@ -4,6 +4,7 @@ import { selectedPlayerAtom } from "@/store/player";
 import { tokenAtom } from "@/store/auth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayers } from "@/lib/api/fetchPlayers";
+import { useSession } from "next-auth/react";
 
 const positionMap = {
   top: "탑",
@@ -14,8 +15,8 @@ const positionMap = {
 };
 
 export default function PlayerList() {
-  const [token] = useAtom(tokenAtom);
   const setSelectedPlayer = useSetAtom(selectedPlayerAtom);
+  const { data: session } = useSession();
 
   const {
     data: players = [],
@@ -24,8 +25,8 @@ export default function PlayerList() {
     error,
   } = useQuery({
     queryKey: ["players"],
-    queryFn: async () => fetchPlayers(token),
-    enabled: !!token,
+    queryFn: async () => fetchPlayers(),
+    enabled: !!session,
   });
 
   if (isLoading) return <p>로딩 중...</p>;
@@ -38,7 +39,7 @@ export default function PlayerList() {
         {players.map((player) => (
           <li
             key={player._id}
-            className="border p-4 rounded shadow-sm flex justify-between"
+            className="border p-4 rounded shadow-sm flex justify-between bg-white"
           >
             <div>
               <p>
