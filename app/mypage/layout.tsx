@@ -7,6 +7,7 @@ import Gamepad from "@/public/images/components/Gamepad2.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import Image from "next/image";
 
 export default function MyPageLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -47,8 +48,14 @@ export default function MyPageLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* 본문 */}
-      <div className="ml-48 flex-1 px-8 py-6 bg-white">
-        <div className="bg-[#F2FAFF] rounded-2xl px-8 py-6">{children}</div>
+      <div className="ml-48 flex-1 px-8 py-6 bg-white h-full">
+        <div className="relative w-full h-full">
+          <Image src="/images/components/mypage-bg.webp" alt="bg" fill />
+          <div className="w-full h-full bg-[#F2FAFF] opacity-10"></div>
+          <div className="w-full h-full text-black rounded-2xl max-w-[43.75rem] px-8 py-6 absolute top-0">
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );

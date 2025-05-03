@@ -71,7 +71,7 @@ export default function MyInfoPage() {
   };
 
   return (
-    <div className=" w-full text-black">
+    <>
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-2xl flex items-center gap-4 mb-10">
           <Category />
@@ -102,7 +102,7 @@ export default function MyInfoPage() {
           </div>
         )}
       </div>
-      <div className="w-full bg-white rounded-2xl px-8 py-6 gap-4">
+      <div className="w-full bg-white rounded-2xl px-8 py-6 gap-4 h-3/4">
         <div className="flex justify-between gap-4 max-w-[30rem]">
           <div className="flex flex-col gap-10 font-bold">
             <h2>아이디</h2>
@@ -129,6 +129,6 @@ export default function MyInfoPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
