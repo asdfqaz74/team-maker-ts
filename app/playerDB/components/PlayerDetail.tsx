@@ -17,13 +17,44 @@ import RecentWinRateGraph from "./RecentWinRateGraph";
 import RecentPlayedChampions from "./RecentPlayedChampions";
 import MatchResultTable from "./MatchResultTable";
 
-function createData(top, jug, mid, adc, sup) {
+type EloRow = {
+  top: number;
+  jug: number;
+  mid: number;
+  adc: number;
+  sup: number;
+};
+
+type PlayerDetailProps = {
+  open: boolean;
+  onClose: () => void;
+  player: {
+    _id: string;
+    name: string;
+    nickName: string;
+    eloRating: number;
+    winRate: string;
+    position: string;
+  };
+};
+
+function createData(
+  top: number,
+  jug: number,
+  mid: number,
+  adc: number,
+  sup: number
+): EloRow {
   return { top, jug, mid, adc, sup };
 }
 
 const placeholderImage = "/images/components/placeholder.webp";
 
-export default function PlayerDetail({ open, onClose, player }) {
+export default function PlayerDetail({
+  open,
+  onClose,
+  player,
+}: PlayerDetailProps) {
   // userDetail 정보 가져오기
   const {
     data: userDetail = [],
@@ -172,7 +203,9 @@ export default function PlayerDetail({ open, onClose, player }) {
                 <span className="text-4xl text-white font-bold">
                   최근 5게임
                 </span>
-                <span>최근 게임이 없습니다.</span>
+                <span className="text-white text-center mt-10">
+                  최근 게임이 없습니다.
+                </span>
               </>
             )}
           </div>
@@ -180,7 +213,7 @@ export default function PlayerDetail({ open, onClose, player }) {
           {recentMatches?.length > 0 ? (
             <MatchResultTable data={recentMatches} />
           ) : (
-            <div className="mt-10 text-white">최근 매치 내역이 없습니다.</div>
+            <div></div>
           )}
         </div>
       </div>
