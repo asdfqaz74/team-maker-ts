@@ -33,7 +33,6 @@ export default function Header() {
 
   const [open, setOpen] = useState(false);
 
-  const resetAtoms = useResetAtom(tokenAtom);
   const resetUser = useResetAtom(userAtom);
   const resetGroupList = useResetAtom(groupListAtom);
   const resetGroupPlayers = useResetAtom(groupPlayersAtom);
@@ -51,7 +50,6 @@ export default function Header() {
   // 로그아웃 시 토큰 삭제 및 상태 초기화
   const handleLogout = () => {
     sessionStorage.removeItem("token");
-    resetAtoms();
     resetUser();
     resetGroupList();
     resetGroupPlayers();

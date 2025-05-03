@@ -5,23 +5,20 @@ import { useRouter } from "next/navigation";
 import PlayerInfo from "./components/PlayerInfo";
 import { getToken } from "@/utils/client/getToken";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function PlayerDB() {
   const router = useRouter();
-  const [tokenCheck, setTokenCheck] = useState(false);
+  const { data: session, status } = useSession();
 
-  // 토큰이 있는지 확인, 없으면 로그인 페이지로 이동
   useEffect(() => {
-    const token = getToken();
-
-    if (!token) {
+    if (status === "unauthenticated") {
       router.push("/auth/login");
-    } else {
-      setTokenCheck(true);
     }
-  }, [router]);
+  }, [status, router]);
 
-  if (!tokenCheck) return null;
+  if (status === "loading") return null;
+  if (status === "unauthenticated") return null;
 
   return (
     <div className="px-60 py-20">

@@ -2,7 +2,6 @@
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
-import Token from "./components/Token";
 import Header from "./components/Header";
 import { SessionProvider } from "next-auth/react";
 
@@ -13,7 +12,6 @@ export default function ClientProvider({ children }) {
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <JotaiProvider>
-          <Token />
           <Header />
           {children}
         </JotaiProvider>

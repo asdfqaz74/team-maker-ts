@@ -1,8 +1,9 @@
 import { findMemberId } from "@/utils/server";
-import NextAuth from "next-auth";
+import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { MAX_AGE, NEXTAUTH_SECRET } from "@/constants";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions = {
   providers: [
@@ -44,6 +45,20 @@ export const authOptions = {
     maxAge: MAX_AGE,
   },
   secret: NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }: { token: JWT; user?: User }) {
+      if (user) {
+        token.userId = (user as any).userId;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: Session; token: JWT }) {
+      if (session.user) {
+        session.user.userId = token.userId as string;
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

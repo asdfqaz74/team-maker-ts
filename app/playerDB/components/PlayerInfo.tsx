@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 function createData(name, nickName, position, eloRating, winRate, _id) {
   return { name, nickName, position, eloRating, winRate, _id };
@@ -19,6 +20,8 @@ function createData(name, nickName, position, eloRating, winRate, _id) {
 export default function PlayerInfo() {
   const [open, setOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+
+  const { data: session } = useSession();
 
   // 모달 열기
   const handleOpen = (id) => {

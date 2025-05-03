@@ -1,19 +1,20 @@
-import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { NextRequest } from "next/server";
+import { connectDB } from "@/lib/mongoose";
+import { checkToken, findMember } from "@/utils/server";
 
 // 유저 정보를 가져오는 API
-export async function GET(request: Request) {
-  const result = await checkToken(request.headers);
-  if (!result.ok) return result.response;
+export async function GET(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  const token = result.token;
+  if (!userId) {
+    return Response.json(
+      { message: "로그인 후 사용해주세요." },
+      { status: 401 }
+    );
+  }
 
   try {
-    // 토큰 검증
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     // 멤버 찾기
     const member = await findMember({ userId });
 

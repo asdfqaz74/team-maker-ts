@@ -1,19 +1,18 @@
+import { NEXTAUTH_SECRET } from "@/constants";
 import { connectDB } from "@/lib/mongoose";
-import { getTokenFromHeader } from "./getTokenFromHeader";
+import { getToken } from "next-auth/jwt";
+import { NextRequest } from "next/server";
 
-export async function checkToken(
-  headers: Headers
-): Promise<{ ok: true; token: string } | { ok: false; response: Response }> {
+export async function checkToken(request: NextRequest): Promise<string | null> {
   await connectDB();
 
-  const token = getTokenFromHeader(headers);
+  const token = await getToken({ req: request, secret: NEXTAUTH_SECRET });
 
-  if (!token) {
-    return {
-      ok: false,
-      response: Response.json({ error: "토큰이 없습니다." }, { status: 401 }),
-    };
+  if (!token || !token.userId) {
+    return null;
   }
 
-  return { ok: true, token };
+  const userId = token.userId as string;
+
+  return userId;
 }
