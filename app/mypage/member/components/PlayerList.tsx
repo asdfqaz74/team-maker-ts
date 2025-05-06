@@ -30,8 +30,6 @@ export default function PlayerList() {
     enabled: !!session,
   });
 
-  console.log("players", players);
-
   if (isLoading) return <p>로딩 중...</p>;
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 

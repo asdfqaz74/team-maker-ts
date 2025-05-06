@@ -6,10 +6,8 @@ import {
   checkedPlayersAtom,
   selectedGroupAtom,
 } from "@/store/group";
-import { useEffect } from "react";
 import { useToast } from "@/app/components/ToastContext";
-import { API } from "@/constants";
-import { getToken } from "@/utils/client";
+import { useSession } from "next-auth/react";
 
 export default function PlayerList() {
   const [players, setPlayers] = useAtom(groupPlayersAtom);
@@ -17,58 +15,11 @@ export default function PlayerList() {
   const [selectedGroup] = useAtom(selectedGroupAtom);
   const { showSnack } = useToast();
 
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      const token = sessionStorage.getItem("token");
+  const { data: session } = useSession();
 
-      if (!token) {
-        showSnack("로그인이 필요합니다.", "error");
-        return;
-      }
+  // 선수 목록 가져오기
 
-      const response = await fetch(API.ME.GROUP.PLAYER, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setPlayers(data);
-      }
-    };
-
-    fetchPlayers();
-  }, [setPlayers, showSnack]);
-
-  useEffect(() => {
-    const fetchCheckedPlayers = async () => {
-      if (!selectedGroup) return;
-
-      const token = getToken();
-
-      const response = await fetch(API.ME.GROUP.PLAYER_ID(selectedGroup), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        showSnack("선택된 그룹 선수 조회 실패", "error");
-        setCheckedPlayers([]);
-        return;
-      }
-
-      const data = await response.json();
-      const playerIds = data.map((player) => player._id);
-      setCheckedPlayers(playerIds);
-    };
-
-    fetchCheckedPlayers();
-  }, [selectedGroup, setCheckedPlayers, showSnack]);
-
+  // 선수 목록 토글
   const toggleChecked = async (playerId) => {
     if (!selectedGroup) {
       showSnack("그룹을 선택해주세요.", "error");
@@ -76,13 +27,11 @@ export default function PlayerList() {
     }
 
     const checked = !checkedPlayers.includes(playerId);
-    const token = getToken();
 
     const response = await fetch("/api/me/group/player", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         groupId: selectedGroup,

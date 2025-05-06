@@ -7,7 +7,7 @@ export const groupListAtom = atomWithReset([]);
 export const groupPlayersAtom = atomWithReset([]);
 
 // 해당 멤버가 선택한 그룹 저장
-export const selectedGroupAtom = atomWithReset(null);
+export const selectedGroupAtom = atomWithReset<string | null>(null);
 
 // 체크된 선수 목록 저장
 export const checkedPlayersAtom = atomWithReset([]);

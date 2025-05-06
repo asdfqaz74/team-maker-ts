@@ -1,9 +1,8 @@
 "use client";
 
-import { useAtom } from "jotai";
-import { tokenAtom, userAtom } from "@/store/auth";
+import { userAtom } from "@/store/auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useResetAtom } from "jotai/utils";
 import {
@@ -26,10 +25,9 @@ import Сalculator from "@/public/images/components/Сalculator.svg";
 import { Box, Divider, Drawer } from "@mui/material";
 
 export default function Header() {
-  const [, setToken] = useAtom(tokenAtom);
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const [open, setOpen] = useState(false);
 
@@ -49,7 +47,6 @@ export default function Header() {
   // 로그아웃 핸들러
   // 로그아웃 시 토큰 삭제 및 상태 초기화
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
     resetUser();
     resetGroupList();
     resetGroupPlayers();
@@ -62,13 +59,6 @@ export default function Header() {
     signOut();
     router.push("/auth/login");
   };
-
-  useEffect(() => {
-    const storedToken = sessionStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, [setToken]);
 
   const toggleDrawer = (isOpen) => (event) => {
     if (

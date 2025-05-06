@@ -1,23 +1,18 @@
 import User from "@/models/User";
 import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { groupId: string } }
 ) {
-  const result = await checkToken(request.headers);
-
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+  const userId = await checkToken(request);
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
-    const { groupId } = await params;
+    const asyncParams = await params;
+    const { groupId } = asyncParams;
 
     const users = await User.find({
       createdBy: member._id,

@@ -1,5 +1,6 @@
 import Group from "@/models/Group";
 import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function POST(request: Request) {
   const result = await checkToken(request.headers);
@@ -46,17 +47,11 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
-  const result = await checkToken(request.headers);
-
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+// 그룹 목록 조회
+export async function GET(request: NextRequest) {
+  const userId = await checkToken(request);
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
     const memberId = member._id;

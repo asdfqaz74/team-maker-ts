@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { useAtom } from "jotai";
 import { groupListAtom, selectedGroupAtom } from "@/store/group";
 import { API } from "@/constants";
-import { getToken } from "@/utils/client";
 
 export default function GroupList() {
   const [groups, setGroups] = useAtom(groupListAtom);
@@ -12,13 +11,10 @@ export default function GroupList() {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      const token = getToken();
-
       const response = await fetch(API.ME.GROUP.LIST, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -31,7 +27,7 @@ export default function GroupList() {
     fetchGroups();
   }, [setGroups]);
 
-  const handleSelect = (e) => {
+  const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedGroup(e.target.value);
   };
 
