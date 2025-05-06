@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SwiperChampion } from "@/types/champion";
 import DesktopSwiperView from "./DesktopSwiperView";
 import MobileSwiperView from "./MobileSwiperView";
-import { useBreakpoint } from "@/hooks/useBreakpion";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 export default function MostSwiper({
   champions,

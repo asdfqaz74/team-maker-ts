@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
 import { GlobalBanChampion } from "@/types/champion";
-import { useBreakpoint } from "@/hooks/useBreakpion";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 export default function GlobalBan() {
   const {

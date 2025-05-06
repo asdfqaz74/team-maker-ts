@@ -1,4 +1,4 @@
-export const fetchPlayerDetail = async (id) => {
+export const fetchPlayerDetail = async (id: string) => {
   const response = await fetch(`/api/db/${id}`);
 
   const data = await response.json();
