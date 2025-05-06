@@ -1,11 +1,11 @@
 "use client";
 
-import GroupList from "./components/GroupList";
 import PlayerList from "./components/PlayerList";
 import GroupUserList from "./components/GroupUserList";
 import CreateGroup from "./components/CreateGroup";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import GroupList from "./components/GroupList/GroupList";
 
 export default function GroupPage() {
   const { status } = useSession();

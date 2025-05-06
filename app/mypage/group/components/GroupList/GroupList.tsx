@@ -1,35 +1,35 @@
 "use client";
 
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { useAtom } from "jotai";
-import { groupListAtom, selectedGroupAtom } from "@/store/group";
-import { API } from "@/constants";
+import { selectedGroupAtom } from "@/store/group";
+import { useQuery } from "@tanstack/react-query";
+import { fetchGroupList } from "@/lib/api/fetchGroupList";
+import IsLoading from "./IsLoading";
+import IsError from "./IsError";
 
 export default function GroupList() {
-  const [groups, setGroups] = useAtom(groupListAtom);
   const [, setSelectedGroup] = useAtom(selectedGroupAtom);
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      const response = await fetch(API.ME.GROUP.LIST, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setGroups(data.groups);
-      }
-    };
-
-    fetchGroups();
-  }, [setGroups]);
+  const {
+    data: groupList = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["groupList"],
+    queryFn: fetchGroupList,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 1000 * 60 * 60,
+  });
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedGroup(e.target.value);
   };
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError error={error} />;
 
   return (
     <div className="flex flex-col gap-4 items-end">
@@ -38,7 +38,7 @@ export default function GroupList() {
         <option value="" className="text-black">
           그룹을 선택하세요
         </option>
-        {groups.map((group) => (
+        {groupList.map((group) => (
           <option key={group._id} value={group._id} className="text-black">
             {group.name}
           </option>

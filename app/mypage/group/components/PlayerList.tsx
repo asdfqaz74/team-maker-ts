@@ -1,23 +1,17 @@
 "use client";
 
 import { useAtom } from "jotai";
-import {
-  groupPlayersAtom,
-  checkedPlayersAtom,
-  selectedGroupAtom,
-} from "@/store/group";
+import { checkedPlayersAtom, selectedGroupAtom } from "@/store/group";
 import { useToast } from "@/app/components/ToastContext";
-import { useSession } from "next-auth/react";
+import { usePlayerList } from "@/hooks/usePlayersList";
 
 export default function PlayerList() {
-  const [players, setPlayers] = useAtom(groupPlayersAtom);
   const [checkedPlayers, setCheckedPlayers] = useAtom(checkedPlayersAtom);
   const [selectedGroup] = useAtom(selectedGroupAtom);
   const { showSnack } = useToast();
 
-  const { data: session } = useSession();
-
   // 선수 목록 가져오기
+  const { data: players = [], isLoading, isError, error } = usePlayerList();
 
   // 선수 목록 토글
   const toggleChecked = async (playerId) => {

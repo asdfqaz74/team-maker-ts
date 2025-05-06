@@ -55,7 +55,9 @@ export async function GET(request: NextRequest) {
     const member = await findMember({ userId });
 
     const memberId = member._id;
-    const groups = await Group.find({ createdBy: memberId });
+    const groups = await Group.find({ createdBy: memberId }).select(
+      "-__v -createdAt -createdBy -updatedAt"
+    );
 
     return Response.json({ groups }, { status: 200 });
   } catch (error: any) {

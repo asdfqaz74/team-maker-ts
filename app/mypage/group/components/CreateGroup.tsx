@@ -1,13 +1,13 @@
-import { useToast } from "@/app/components/ToastContext";
-import { groupListAtom } from "@/store/group";
-import { useAtom } from "jotai";
 import { useState } from "react";
+import { API } from "@/constants";
+import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/app/components/ToastContext";
 
 export default function CreateGroup() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [groupName, setGroupName] = useState("");
-  const [, setGroups] = useAtom(groupListAtom);
   const { showSnack } = useToast();
+  const queryClient = useQueryClient();
 
   const handleCreateGroupButton = async () => {
     setButtonClicked((c) => !c);
@@ -19,29 +19,24 @@ export default function CreateGroup() {
       return;
     }
 
-    const response = await fetch(API.ME.GROUP.LIST, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: groupName }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      showSnack("그룹 생성 완료", "success");
-      setGroupName("");
-      setButtonClicked(false);
-
+    try {
       const response = await fetch(API.ME.GROUP.LIST, {
-        headers: { authorization: `Bearer ${token}` },
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ name: groupName }),
       });
 
-      const newData = await response.json();
-      setGroups(newData.groups);
-    } else {
-      showSnack(data.error, "error");
+      if (response.ok) {
+        showSnack("그룹 생성 완료", "success");
+        setGroupName("");
+        setButtonClicked(false);
+        queryClient.invalidateQueries({ queryKey: ["groupList"] });
+      }
+    } catch (error: any) {
+      showSnack(error.message, "error");
     }
   };
 

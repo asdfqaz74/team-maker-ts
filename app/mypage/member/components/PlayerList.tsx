@@ -1,11 +1,11 @@
 "use client";
 import { useSetAtom } from "jotai";
-import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { selectedPlayerAtom } from "@/store/player";
 import { fetchPlayers } from "@/lib/api/fetchPlayers";
 import { Divider } from "@mui/material";
 import { Player } from "@/types/user";
+import { usePlayerList } from "@/hooks/usePlayersList";
 
 const positionMap = {
   top: "탑",
@@ -17,18 +17,8 @@ const positionMap = {
 
 export default function PlayerList() {
   const setSelectedPlayer = useSetAtom(selectedPlayerAtom);
-  const { data: session } = useSession();
 
-  const {
-    data: players = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["players"],
-    queryFn: async () => fetchPlayers(),
-    enabled: !!session,
-  });
+  const { data: players = [], isLoading, isError, error } = usePlayerList();
 
   if (isLoading) return <p>로딩 중...</p>;
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
