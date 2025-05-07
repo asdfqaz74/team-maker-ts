@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { ToastContextType } from "@/app/components/ToastContext";
+import { API } from "@/constants";
+import { Parsed } from "@/types/match";
+import { ChangeEvent, useState } from "react";
 
-export default function UploadFile({ onUploadSuccess, showSnack }) {
-  const [file, setFile] = useState(null);
+type UploadFileProps = {
+  onUploadSuccess: (data: Parsed) => void;
+  showSnack: ToastContextType["showSnack"];
+};
+
+export default function UploadFile({
+  onUploadSuccess,
+  showSnack,
+}: UploadFileProps) {
+  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
 
     if (selectedFile) {
@@ -15,10 +26,13 @@ export default function UploadFile({ onUploadSuccess, showSnack }) {
   };
 
   const handleUpload = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
     if (!file) {
       showSnack("파일을 선택해주세요.", "error");
+      return;
+    }
+
+    if (!file.name.endsWith(".rofl")) {
+      showSnack("잘못된 파일 형식입니다. .rofl 파일을 선택해주세요.", "error");
       return;
     }
 
@@ -28,7 +42,7 @@ export default function UploadFile({ onUploadSuccess, showSnack }) {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${baseUrl}/match/upload`, {
+      const response = await fetch(API.ME.MATCH.UPLOAD, {
         method: "POST",
         body: formData,
       });
@@ -36,7 +50,7 @@ export default function UploadFile({ onUploadSuccess, showSnack }) {
       const data = await response.json();
 
       if (response.ok) {
-        showSnack("파일 업로드 성공");
+        showSnack("파일 업로드 성공", "success");
 
         onUploadSuccess(data.match);
       } else {

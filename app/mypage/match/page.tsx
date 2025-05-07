@@ -4,10 +4,13 @@ import PlayerNicknameEditor from "./PlayerNicknameEditor";
 import UploadFile from "./UploadFile";
 import { useState } from "react";
 import { useToast } from "@/app/components/ToastContext";
+import { Parsed } from "@/types/match";
 
 export default function MatchPage() {
-  const [parsed, setParsed] = useState(null);
+  const [parsed, setParsed] = useState<Parsed | null>(null);
   const { showSnack } = useToast();
+
+  console.log("parsed", parsed);
 
   return (
     <div className="w-full text-black">
@@ -17,7 +20,7 @@ export default function MatchPage() {
         <PlayerNicknameEditor
           playersData={parsed?.players}
           maxDamage={parsed?.maxDamage}
-          onSubmit={() => {
+          onSubmit={(players) => {
             setParsed(null);
           }}
           showSnack={showSnack}

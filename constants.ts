@@ -5,6 +5,7 @@ export const JWT_EXPIRES_IN = "7d";
 export const JWT_EXPIRES_IN_FORGOT_PASSWORD = "1h";
 export const DEFAULT_POINTS = 1000;
 export const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET!;
+export const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
 export const MAX_AGE = 60 * 60 * 24;
 
@@ -28,6 +29,7 @@ export const API = {
     MATCH: {
       PLAYER: "/api/me/match/player",
       SUBMIT: "/api/me/match/submit",
+      UPLOAD: `${baseUrl}/match/upload`,
     },
     PLAYER: {
       LIST: "/api/me/player",

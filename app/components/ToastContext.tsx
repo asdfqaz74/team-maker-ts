@@ -8,7 +8,7 @@ interface ShowSnackType {
   type: "success" | "error" | "warning" | "info";
 }
 
-type ToastContextType = {
+export type ToastContextType = {
   showSnack: (message: string, type: ShowSnackType["type"]) => void;
 };
 

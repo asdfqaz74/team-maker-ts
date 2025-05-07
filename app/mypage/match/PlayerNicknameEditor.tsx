@@ -1,56 +1,59 @@
 "use client";
 
-import { getToken } from "@/utils/client/getToken";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ChampionPalette from "@/app/components/ChampionPalette";
 import { API } from "@/constants";
+import type { BansList, UserList } from "@/types/match";
+import type { IPlayerStats } from "@/models/Match";
+import { ToastContextType } from "@/app/components/ToastContext";
+
+type PlayerNicknameEditorProps = {
+  playersData: IPlayerStats[] | null;
+  maxDamage: number;
+  onSubmit: (players: IPlayerStats[]) => void;
+  showSnack: ToastContextType["showSnack"];
+};
 
 export default function PlayerNicknameEditor({
   playersData,
   maxDamage,
   onSubmit,
   showSnack,
-}) {
-  const [players, setPlayers] = useState(() => playersData ?? []);
-  const [userList, setUserList] = useState([]);
-
+}: PlayerNicknameEditorProps) {
+  const [players, setPlayers] = useState<IPlayerStats[]>(
+    () => playersData ?? []
+  );
+  const [userList, setUserList] = useState<UserList>([]);
   const [openModal, setOpenModal] = useState(false);
-  const [bans, setBans] = useState([]);
-
+  const [bans, setBans] = useState<BansList>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const token = getToken();
-    if (!token) {
-      showSnack("로그인이 필요합니다.", "error");
-      return;
-    }
+    const fetchPlayerList = async (): Promise<void> => {
+      try {
+        const response = await fetch(API.ME.MATCH.PLAYER);
+        const data: UserList = await response.json();
+        setUserList(data || []);
+      } catch (error) {
+        showSnack("플레이어 목록을 가져오는 중 오류가 발생했습니다.", "error");
+      }
+    };
 
-    fetch(API.ME.MATCH.PLAYER, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setUserList(data || []));
+    fetchPlayerList();
   }, [showSnack]);
 
-  const handleSelectChange = (index, nickName) => {
-    const updated = [...players];
-    updated[index].userNickname = nickName;
+  const handleSelectChange = (index: number, userNickname: string) => {
+    const updated = players.map((player, idx) =>
+      idx === index ? ({ ...player, userNickname } as IPlayerStats) : player
+    );
+
     setPlayers(updated);
   };
 
   const handleSubmit = async () => {
     if (players.some((player) => !player.userNickname)) {
       showSnack("모든 플레이어의 닉네임을 선택해주세요.", "error");
-      return;
-    }
-
-    const token = getToken();
-    if (!token) {
-      showSnack("로그인이 필요합니다.", "error");
       return;
     }
 
@@ -62,7 +65,6 @@ export default function PlayerNicknameEditor({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ players, maxDamage, banChampionsId }),
       });
@@ -70,7 +72,7 @@ export default function PlayerNicknameEditor({
       const data = await response.json();
 
       if (response.ok) {
-        showSnack("닉네임이 성공적으로 저장되었습니다.");
+        showSnack("닉네임이 성공적으로 저장되었습니다.", "success");
 
         setPlayers(data.players);
         onSubmit(data.players);

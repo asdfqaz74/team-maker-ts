@@ -5,11 +5,13 @@ import User from "@/models/User";
 import dayjs from "dayjs";
 import {
   calculateElo,
+  checkToken,
   findMember,
   getTeamAvgElo,
   getTokenFromHeader,
   verifyToken,
 } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 interface CreateMatchBody {
   players: IPlayerStats[];
@@ -17,24 +19,16 @@ interface CreateMatchBody {
   banChampionsId: string[];
 }
 
-export async function POST(request: Request) {
-  await connectDB();
+export async function POST(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  const token = getTokenFromHeader(request.headers);
-  if (!token) {
-    return Response.json({ error: "권한이 없습니다." }, { status: 401 });
+  if (!userId) {
+    return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
   }
 
   try {
-    const decoded = verifyToken(token);
-    const member = await findMember({ userId: decoded.userId });
+    const member = await findMember({ userId });
 
-    if (!member) {
-      return Response.json(
-        { error: "사용자를 찾을 수 없습니다." },
-        { status: 401 }
-      );
-    }
     const body: CreateMatchBody = await request.json();
 
     const { players, maxDamage, banChampionsId } = body;
