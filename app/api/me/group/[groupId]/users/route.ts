@@ -4,15 +4,22 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { groupId: string } }
+  { params }: { params: Promise<{ groupId: string }> }
 ) {
   const userId = await checkToken(request);
 
-  try {
-    const member = await findMember({ userId });
+  if (!userId) {
+    return Response.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
+  }
 
+  try {
     const asyncParams = await params;
     const { groupId } = asyncParams;
+
+    const member = await findMember({ userId });
 
     const users = await User.find({
       createdBy: member._id,
