@@ -1,20 +1,17 @@
 import User from "@/models/User";
-import { checkToken } from "@/utils/server";
 import { NextRequest } from "next/server";
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const result = await checkToken(request.headers);
-
-  if (!result.ok) return result.response;
-
-  const body = await request.json();
-  const { nickName, position, eloRating } = body;
-  const { id } = await params;
-
   try {
+    const body = await request.json();
+    const { nickName, position, eloRating } = body;
+
+    const asyncParams = await params;
+    const { id } = asyncParams;
+
     const updated = await User.findByIdAndUpdate(
       id,
       {
