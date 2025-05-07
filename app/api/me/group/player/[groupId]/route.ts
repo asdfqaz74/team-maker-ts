@@ -1,26 +1,25 @@
-import { connectDB } from "@/lib/mongoose";
 import User from "@/models/User";
-import { findMember, getTokenFromHeader, verifyToken } from "@/utils/server";
+import { checkToken, findMember } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { groupId: string } }
 ) {
-  await connectDB();
+  const userId = await checkToken(request);
 
-  const token = getTokenFromHeader(request.headers);
-
-  if (!token) {
-    return Response.json({ error: "토큰이 없습니다." }, { status: 401 });
+  if (!userId) {
+    return Response.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
   }
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
-    const { groupId } = await params;
+    const asyncParams = await params;
+    const { groupId } = asyncParams;
 
     const users = await User.find({
       createdBy: member._id,

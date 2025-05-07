@@ -10,4 +10,4 @@ export const groupPlayersAtom = atomWithReset([]);
 export const selectedGroupAtom = atomWithReset<string | null>(null);
 
 // 체크된 선수 목록 저장
-export const checkedPlayersAtom = atomWithReset([]);
+export const checkedPlayersAtom = atomWithReset<Record<string, string[]>>({});

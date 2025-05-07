@@ -2,17 +2,17 @@ import Group from "@/models/Group";
 import { checkToken, findMember, verifyToken } from "@/utils/server";
 import { NextRequest } from "next/server";
 
-export async function POST(request: Request) {
-  const result = await checkToken(request.headers);
+export async function POST(request: NextRequest) {
+  const userId = await checkToken(request);
 
-  if (!result.ok) return result.response;
-
-  const token = result.token;
+  if (!userId) {
+    return Response.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
+  }
 
   try {
-    const decoded = verifyToken(token);
-    const userId = decoded.userId;
-
     const member = await findMember({ userId });
 
     const body = await request.json();
@@ -50,6 +50,13 @@ export async function POST(request: Request) {
 // 그룹 목록 조회
 export async function GET(request: NextRequest) {
   const userId = await checkToken(request);
+
+  if (!userId) {
+    return Response.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
+  }
 
   try {
     const member = await findMember({ userId });

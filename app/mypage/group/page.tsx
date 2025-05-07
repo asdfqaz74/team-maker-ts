@@ -1,6 +1,6 @@
 "use client";
 
-import PlayerList from "./components/PlayerList";
+import PlayerList from "./components/PlayerList/PlayerList";
 import GroupUserList from "./components/GroupUserList";
 import CreateGroup from "./components/CreateGroup";
 import { useSession } from "next-auth/react";
