@@ -6,3 +6,5 @@ interface Group {
 export interface GroupList {
   groups: Group[];
 }
+
+export type GroupUserList = Group[];

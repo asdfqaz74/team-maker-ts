@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import { selectedGroupAtom } from "@/store/group";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGroupUsers } from "@/lib/api/fetchGroupUsers";
+import type { GroupUserList } from "@/types/group";
 
 export default function GroupUserList() {
   const [selectedGroup] = useAtom(selectedGroupAtom);
@@ -15,7 +16,7 @@ export default function GroupUserList() {
     isLoading,
     isError,
     error,
-  } = useQuery({
+  } = useQuery<GroupUserList>({
     queryKey: ["groupUsers", selectedGroup],
     queryFn: () => fetchGroupUsers(selectedGroup),
     enabled: !!selectedGroup,
