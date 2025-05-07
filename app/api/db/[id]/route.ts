@@ -1,7 +1,7 @@
+import { NextRequest } from "next/server";
+import User, { IElo } from "@/models/User";
 import { connectDB } from "@/lib/mongoose";
 import Match, { IMatch } from "@/models/Match";
-import User, { IElo } from "@/models/User";
-import { NextRequest } from "next/server";
 
 interface PlayerStats {
   userNickname?: string;
@@ -57,12 +57,12 @@ interface RecentMatchDataAgg {
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   await connectDB();
 
   try {
-    const asyncParams = await context.params;
+    const asyncParams = await params;
     const { id } = asyncParams;
 
     // 유저 정보 먼저 조회
