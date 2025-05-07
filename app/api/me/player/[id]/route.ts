@@ -1,5 +1,6 @@
 import User from "@/models/User";
 import { checkToken } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function PATCH(
   request: Request,
@@ -35,15 +36,12 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const result = await checkToken(request.headers);
-
-  if (!result.ok) return result.response;
-
   try {
-    const { id } = await params;
+    const asyncParams = await params;
+    const { id } = asyncParams;
 
     if (!id) {
       return Response.json({ error: "ID가 없습니다." }, { status: 400 });

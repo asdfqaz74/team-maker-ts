@@ -1,5 +1,5 @@
 import Group from "@/models/Group";
-import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { checkToken, findMember } from "@/utils/server";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
