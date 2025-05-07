@@ -1,8 +1,8 @@
-import { IGroup } from "@/models/Group";
 import User from "@/models/User";
-import { UserDocument } from "@/types/user";
-import { checkToken, findMember, verifyToken } from "@/utils/server";
+import { IGroup } from "@/models/Group";
 import { NextRequest } from "next/server";
+import { UserDocument } from "@/types/user";
+import { checkToken, findMember } from "@/utils/server";
 
 export async function GET(request: NextRequest) {
   const userId = await checkToken(request);
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function Delete(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   const userId = await checkToken(request);
 
   if (!userId) {
