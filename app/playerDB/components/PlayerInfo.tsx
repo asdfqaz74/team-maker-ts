@@ -11,20 +11,33 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 
-function createData(name, nickName, position, eloRating, winRate, _id) {
+interface Player {
+  _id: string;
+  name: string;
+  nickName: string;
+  position: "top" | "jug" | "mid" | "adc" | "sup";
+  eloRating: number;
+  winRate: number;
+}
+
+function createData(
+  name: string,
+  nickName: string,
+  position: Player["position"],
+  eloRating: number,
+  winRate: number,
+  _id: string
+): Player {
   return { name, nickName, position, eloRating, winRate, _id };
 }
 
 export default function PlayerInfo() {
   const [open, setOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-
-  const { data: session } = useSession();
+  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
 
   // 모달 열기
-  const handleOpen = (id) => {
+  const handleOpen = (id: string) => {
     setSelectedPlayer(id);
     setOpen(true);
   };
@@ -46,7 +59,7 @@ export default function PlayerInfo() {
   });
 
   // 표에 나타날 데이터
-  const rows = playerInfo.map((player) =>
+  const rows: Player[] = playerInfo.map((player: Player) =>
     createData(
       player.name,
       player.nickName,
@@ -86,7 +99,7 @@ export default function PlayerInfo() {
                   },
                   backgroundColor: "#1e1e1e",
                 }}
-                onClick={() => handleOpen(row)}
+                onClick={() => handleOpen(row._id)}
               >
                 <TableCell component="th" scope="row" sx={{ color: "#dcdcdc" }}>
                   {row?.name}

@@ -4,6 +4,8 @@ import { sendResetEmail } from "@/lib/mailer/sendResetEmail";
 import jwt from "jsonwebtoken";
 import { findMember } from "@/utils/server/findMember";
 import { JWT_EXPIRES_IN_FORGOT_PASSWORD, SECRET } from "@/constants";
+import { checkToken } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 type BodyType = {
   findPwName: string;
@@ -11,8 +13,12 @@ type BodyType = {
   findPwId: string;
 };
 
-export async function POST(request: Request) {
-  await connectDB();
+export async function POST(request: NextRequest) {
+  const userId = await checkToken(request);
+
+  if (!userId) {
+    return Response.json({ error: "로그인 후 이용해주세요." }, { status: 401 });
+  }
 
   try {
     const body: BodyType = await request.json();
@@ -24,7 +30,7 @@ export async function POST(request: Request) {
       userId: findPwId,
     });
 
-    const token = jwt.sign({ userId: member._id }, SECRET, {
+    const token = jwt.sign({ userId }, SECRET, {
       expiresIn: JWT_EXPIRES_IN_FORGOT_PASSWORD,
     });
 

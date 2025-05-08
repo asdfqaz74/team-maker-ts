@@ -1,8 +1,20 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
-export default function DamageGraph({ dealt, taken, maxDealt, maxTaken }) {
-  const ref = useRef();
+interface DamageGraphProps {
+  dealt: number;
+  taken: number;
+  maxDealt: number;
+  maxTaken: number;
+}
+
+export default function DamageGraph({
+  dealt,
+  taken,
+  maxDealt,
+  maxTaken,
+}: DamageGraphProps) {
+  const ref = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
     const svg = d3.select(ref.current);

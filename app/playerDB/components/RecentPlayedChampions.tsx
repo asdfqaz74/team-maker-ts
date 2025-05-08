@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function RecentPlayedChampions({ data }) {
+export default function RecentPlayedChampions({ data }: { data: string[] }) {
   return (
     <div className="flex flex-col items-center gap-4">
       <span className="text-white font-semibold">챔피언</span>

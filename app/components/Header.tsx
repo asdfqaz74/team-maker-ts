@@ -60,16 +60,19 @@ export default function Header() {
     router.push("/auth/login");
   };
 
-  const toggleDrawer = (isOpen) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleDrawer =
+    (isOpen: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent): void => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
 
-    setOpen(isOpen);
-  };
+      setOpen(isOpen);
+    };
 
   return (
     <div className="flex items-center py-4 px-10 md:px-40 justify-between md:justify-center 2xl:justify-between bg-[#030222] fixed w-screen top-0 left-0 z-50 whitespace-nowrap h-[4.8125rem]">

@@ -11,12 +11,16 @@ import { Divider } from "@mui/material";
 import UnSelected from "./UnSelected";
 import User from "@/public/images/components/User.svg";
 
+type Position = "top" | "jug" | "mid" | "adc" | "sup";
+
 export default function PlayerDB() {
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
   const queryClient = useQueryClient();
 
   const [nickName, setNickName] = useState(selectedPlayer?.nickName || "");
-  const [position, setPosition] = useState(selectedPlayer?.position || "top");
+  const [position, setPosition] = useState<Position>(
+    (selectedPlayer?.position || "top") as Position
+  );
   const [elo, setElo] = useState({
     top: selectedPlayer?.eloRating.top || DEFAULT_POINTS,
     jug: selectedPlayer?.eloRating.jug || DEFAULT_POINTS,
@@ -30,7 +34,7 @@ export default function PlayerDB() {
   useEffect(() => {
     if (selectedPlayer) {
       setNickName(selectedPlayer.nickName || "");
-      setPosition(selectedPlayer.position || "top");
+      setPosition((selectedPlayer.position || "top") as Position);
       setElo({
         top: selectedPlayer.eloRating.top ?? DEFAULT_POINTS,
         jug: selectedPlayer.eloRating.jug ?? DEFAULT_POINTS,
@@ -43,12 +47,15 @@ export default function PlayerDB() {
 
   const { mutate: editPlayer, isPending } = useMutation({
     mutationFn: async () => {
-      const token = getToken();
+      if (!selectedPlayer) {
+        showSnack("선수를 선택해주세요.", "error");
+        return;
+      }
+
       const response = await fetch(API.ME.PLAYER.ID(selectedPlayer._id), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           nickName,
@@ -78,13 +85,13 @@ export default function PlayerDB() {
 
   // 선수 삭제 핸들러
   const handleDeletePlayerDB = async () => {
+    if (!selectedPlayer) return;
+
     try {
-      const token = getToken();
       await fetch(API.ME.PLAYER.ID(selectedPlayer._id), {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ id: selectedPlayer._id }),
       });
@@ -96,6 +103,8 @@ export default function PlayerDB() {
       showSnack("선수 삭제에 실패했습니다.", "error");
     }
   };
+
+  const lanes: Position[] = ["top", "jug", "mid", "adc", "sup"];
 
   if (isPending) return <p>수정 중...</p>;
   if (!selectedPlayer) return <UnSelected />;
@@ -129,7 +138,7 @@ export default function PlayerDB() {
             <span>포지션</span>
             <select
               value={position}
-              onChange={(e) => setPosition(e.target.value)}
+              onChange={(e) => setPosition(e.target.value as Position)}
               className="border px-2 py-1 w-40"
             >
               <option value="top" className="text-black">
@@ -154,7 +163,7 @@ export default function PlayerDB() {
       <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
       <label className="block font-semibold mb-2">ELO 관리</label>
       <div className="flex gap-4">
-        {["top", "jug", "mid", "adc", "sup"].map((lane) => (
+        {lanes.map((lane) => (
           <div key={lane} className="mb-2 flex gap-2 items-center">
             <span className="w-12 capitalize">{lane}</span>
             <input

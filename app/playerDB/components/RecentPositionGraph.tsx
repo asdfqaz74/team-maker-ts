@@ -1,8 +1,21 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-export default function RecentPositionGraph({ data }) {
-  const ref = useRef();
+type Position = "top" | "jug" | "mid" | "adc" | "sup";
+
+interface RecentPositionGraphProps {
+  data: Position[];
+}
+
+interface PorcessedData {
+  position: Position;
+  count: number;
+}
+
+export default function RecentPositionGraph({
+  data,
+}: RecentPositionGraphProps) {
+  const ref = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
     const svg = d3.select(ref.current);
@@ -10,7 +23,7 @@ export default function RecentPositionGraph({ data }) {
     const height = 150;
     const margin = { top: 20, right: 0, bottom: 50, left: 0 };
 
-    const positionImage = {
+    const positionImage: Record<Position, string> = {
       top: "/images/components/top.webp",
       jug: "/images/components/jug.webp",
       mid: "/images/components/mid.webp",
@@ -18,7 +31,7 @@ export default function RecentPositionGraph({ data }) {
       sup: "/images/components/sup.webp",
     };
 
-    const positionCount = data.reduce(
+    const positionCount: Record<Position, number> = data.reduce(
       (acc, cur) => {
         if (cur) {
           acc[cur] = (acc[cur] || 0) + 1;
@@ -28,10 +41,12 @@ export default function RecentPositionGraph({ data }) {
       { top: 0, jug: 0, mid: 0, adc: 0, sup: 0 }
     );
 
-    const processedData = Object.entries(positionCount).map(([key, value]) => ({
-      position: key,
-      count: value,
-    }));
+    const processedData: PorcessedData[] = Object.entries(positionCount).map(
+      ([key, value]) => ({
+        position: key as Position,
+        count: value,
+      })
+    );
 
     svg.selectAll("*").remove();
 
@@ -64,7 +79,7 @@ export default function RecentPositionGraph({ data }) {
       .data(processedData)
       .enter()
       .append("rect")
-      .attr("x", (d) => xScale(d.position) + xScale.bandwidth() * 0.15)
+      .attr("x", (d) => xScale(d.position)! + xScale.bandwidth() * 0.15)
       .attr("y", height - margin.bottom)
       .attr("height", 0)
       .attr("width", xScale.bandwidth() * 0.7)
@@ -76,8 +91,8 @@ export default function RecentPositionGraph({ data }) {
       .attr("height", (d) => height - margin.bottom - yScale(d.count));
 
     svg
-      .selectAll("rect")
-      .on("mousemove", function (event, d) {
+      .selectAll<SVGRectElement, PorcessedData>("rect")
+      .on("mousemove", function (event: MouseEvent, d: PorcessedData) {
         tooltip
           .style("opacity", 1)
           .text(`${d.count}게임`)
@@ -95,7 +110,7 @@ export default function RecentPositionGraph({ data }) {
       .data(processedData)
       .enter()
       .append("image")
-      .attr("x", (d) => xScale(d.position) + xScale.bandwidth() / 4)
+      .attr("x", (d) => xScale(d.position)! + xScale.bandwidth() / 4)
       .attr("y", height - margin.bottom + 10)
       .attr("width", xScale.bandwidth() / 2)
       .attr("height", 30)

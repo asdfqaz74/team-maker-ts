@@ -1,17 +1,25 @@
+import { GlobalBanChampion } from "@/types/champion";
 import Image from "next/image";
+
+interface TodayBanChampionProps {
+  champions: GlobalBanChampion[];
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+}
 
 export default function TodayBanChampion({
   champions,
   isLoading,
   isError,
   error,
-}) {
+}: TodayBanChampionProps) {
   return (
     <div className="my-10">
       <p className="text-2xl font-semibold">Today Global Ban</p>
       <p>오늘의 글로벌 밴</p>
       {isLoading && <p>불러오는 중...</p>}
-      {isError && <p>{error.message}</p>}
+      {isError && <p>{error?.message || "불러오는 중 문제가 생겼습니다."}</p>}
       {!isLoading && !isError && (
         <ul className="flex justify-evenly gap-6 mt-30 mb-20">
           {champions.map((champion, idx) => (

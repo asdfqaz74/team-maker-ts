@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { API } from "@/constants";
 
+type FormValues = {
+  userId: string;
+  password: string;
+  recheckPassword: string;
+  name: string;
+  email: string;
+};
+
 export default function SignupPage() {
   const [message, setMessage] = useState("");
 
@@ -13,11 +21,11 @@ export default function SignupPage() {
     register,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
   const router = useRouter();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormValues) => {
     const response = await fetch(API.AUTH.SIGNUP, {
       method: "POST",
       headers: {

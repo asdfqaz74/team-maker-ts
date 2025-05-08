@@ -28,14 +28,7 @@ type EloRow = {
 type PlayerDetailProps = {
   open: boolean;
   onClose: () => void;
-  player: {
-    _id: string;
-    name: string;
-    nickName: string;
-    eloRating: number;
-    winRate: string;
-    position: string;
-  };
+  player: string | null;
 };
 
 function createData(
@@ -62,9 +55,9 @@ export default function PlayerDetail({
     isError,
     error,
   } = useQuery({
-    queryKey: ["userDetail", player?.name],
-    queryFn: () => fetchPlayerDetail(player?._id),
-    enabled: !!player?._id,
+    queryKey: ["userDetail", player],
+    queryFn: () => fetchPlayerDetail(player!),
+    enabled: !!player,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5,

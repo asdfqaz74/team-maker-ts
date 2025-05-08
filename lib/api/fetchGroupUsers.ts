@@ -1,6 +1,8 @@
 import { API } from "@/constants";
 
 export const fetchGroupUsers = async (selectedGroup: string | null) => {
+  if (!selectedGroup) throw new Error("그룹이 선택되지 않았습니다.");
+
   const response = await fetch(API.ME.GROUP.SELECTED_GROUP(selectedGroup));
   console.log("selected", selectedGroup);
 

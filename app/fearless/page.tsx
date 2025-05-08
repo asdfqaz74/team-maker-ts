@@ -1,12 +1,12 @@
 "use client";
 
-import TodayBanChampion from "./TodayBanChampion";
 import SetBan from "./SetBan";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
+import TodayBanChampion from "./TodayBanChampion";
 import { useToast } from "../components/ToastContext";
 import { SelectedBanChampion } from "@/types/champion";
+import { fetchGlobalBan } from "@/lib/api/fetchGlobalBan";
 
 export default function Page() {
   const [bans, setBans] = useState<{
@@ -27,7 +27,7 @@ export default function Page() {
   };
 
   const {
-    data: champions = [],
+    data: rawChampions = [],
     isLoading,
     isError,
     error,
@@ -35,6 +35,15 @@ export default function Page() {
     queryKey: ["globalBan"],
     queryFn: fetchGlobalBan,
   });
+
+  const champions: SelectedBanChampion[] = rawChampions.map((champ) => ({
+    id: champ.en_name,
+    name: champ.name,
+    image: `images/champions/portrait/${champ.en_name}.webp`,
+  }));
+
+  console.log("rawChamp", rawChampions);
+  console.log(champions);
 
   // 디스코드 복사용 포맷팅
   const formatList = (arr: SelectedBanChampion[]) =>
@@ -71,7 +80,7 @@ export default function Page() {
   return (
     <div className="flex flex-col px-40 py-20">
       <TodayBanChampion
-        champions={champions}
+        champions={rawChampions}
         isLoading={isLoading}
         isError={isError}
         error={error}

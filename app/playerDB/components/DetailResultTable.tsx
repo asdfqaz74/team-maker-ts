@@ -10,13 +10,41 @@ import {
 import Image from "next/image";
 import DamageGraph from "./DamageGraph";
 
+interface PlayerRow {
+  nickName: string;
+  championImage: string;
+  kda: {
+    kills: number;
+    deaths: number;
+    assists: number;
+  };
+  damage: {
+    dealt: number;
+    taken: number;
+  };
+  wards: {
+    bought: number;
+    placed: number;
+    killed: number;
+  };
+  cs: number;
+}
+
+interface DetailResultTableProps {
+  blueTeamRows: PlayerRow[];
+  redTeamRows: PlayerRow[];
+  isMyTeamWin: boolean;
+  maxDamage: number;
+  maxTaken: number;
+}
+
 export default function DetailResultTable({
   blueTeamRows,
   redTeamRows,
   isMyTeamWin,
   maxDamage,
   maxTaken,
-}) {
+}: DetailResultTableProps) {
   return (
     <div>
       <TableContainer component={Paper} sx={{ borderRadius: "0" }}>

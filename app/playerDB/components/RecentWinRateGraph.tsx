@@ -1,8 +1,23 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-export default function RecentWinRateGraph({ win, lose, winRate }) {
-  const ref = useRef();
+interface RecentWinRateGraphProps {
+  win: number;
+  lose: number;
+  winRate: number;
+}
+
+interface LabelValue {
+  label: string;
+  value: number;
+}
+
+export default function RecentWinRateGraph({
+  win,
+  lose,
+  winRate,
+}: RecentWinRateGraphProps) {
+  const ref = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
     const svg = d3.select(ref.current);
@@ -20,10 +35,13 @@ export default function RecentWinRateGraph({ win, lose, winRate }) {
       .domain(["Win", "Lose"])
       .range(["#5383E8", "#E84057"]);
 
-    const pie = d3.pie().value((d) => d.value);
+    const pie = d3.pie<LabelValue>().value((d) => d.value);
     const data_ready = pie(data);
 
-    const arc = d3.arc().innerRadius(30).outerRadius(radius);
+    const arc = d3
+      .arc<d3.PieArcDatum<LabelValue>>()
+      .innerRadius(30)
+      .outerRadius(radius);
 
     svg.selectAll("*").remove();
 
@@ -34,23 +52,26 @@ export default function RecentWinRateGraph({ win, lose, winRate }) {
       .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
     chartGroup
-      .selectAll("path")
+      .selectAll<SVGPathElement, d3.PieArcDatum<LabelValue>>("path")
       .data(data_ready)
       .enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => color(d.data.label))
+      .attr("fill", (d) => color(d.data.label) as string)
       .attr("stroke", "white")
       .style("stroke-width", "2px")
       .transition()
       .duration(2000)
       .ease(d3.easeCubicInOut)
-      .attrTween("d", function (d) {
-        const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
-        return function (t) {
-          return arc(interpolate(t));
-        };
-      });
+      .attrTween(
+        "d",
+        function (this: SVGPathElement, d: d3.PieArcDatum<LabelValue>) {
+          const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+          return function (t) {
+            return arc(interpolate(t)) || "";
+          };
+        }
+      );
 
     const text = chartGroup
       .append("text")
