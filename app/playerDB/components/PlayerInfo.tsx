@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
+import PlayerInfoSkeleton from "./PlayerInfoSkeleton";
 
 interface Player {
   _id: string;
@@ -70,7 +71,7 @@ export default function PlayerInfo() {
     )
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PlayerInfoSkeleton />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!playerInfo) return <div>No data available</div>;
 
