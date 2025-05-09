@@ -112,7 +112,7 @@ export default function Header() {
             <li>
               <Divider sx={{ borderColor: "#fff" }} />
             </li>
-            <Link href={"/teamMaker"}>
+            <Link href={"/team-maker"}>
               <li className="flex gap-3 items-center">
                 <Gamepad />
                 <span>팀 메이커</span>
@@ -168,7 +168,9 @@ export default function Header() {
         <li className="px-5">
           <Link href="/">홈</Link>
         </li>
-        <li className="px-5">팀 메이커</li>
+        <li className="px-5">
+          <Link href="/team-maker">팀 메이커</Link>
+        </li>
         <li className="px-5">
           <Link href={"/playerDB"}>플레이어 정보</Link>
         </li>
