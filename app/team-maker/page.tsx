@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import StepOne from "./components/StepOne";
 
 export default function Page() {
   const { status } = useSession();
@@ -11,5 +12,9 @@ export default function Page() {
     router.push("/auth/login");
   }
 
-  return <div>Team Maker</div>;
+  return (
+    <div className="px-60 py-20">
+      <StepOne />
+    </div>
+  );
 }
