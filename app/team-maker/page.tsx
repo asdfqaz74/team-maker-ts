@@ -2,9 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import StepOne from "./components/StepOne";
-import StepTwo from "./components/StepTwo";
+import PickPlayers from "./components/PickPlayers";
+import PickTeamMode from "./components/PickTeamMode";
 import { useState } from "react";
+import PickLeader from "./components/PickLeader/PickLeader";
 
 export default function Page() {
   const [step, setStep] = useState(1);
@@ -18,8 +19,11 @@ export default function Page() {
 
   return (
     <div className="px-60 py-20">
-      {step === 1 && <StepOne onNext={() => setStep(2)} />}
-      {step === 2 && <StepTwo onPrev={() => setStep(1)} />}
+      {step === 1 && <PickPlayers onNext={() => setStep(2)} />}
+      {step === 2 && (
+        <PickLeader onNext={() => setStep(3)} onPrev={() => setStep(1)} />
+      )}
+      {step === 3 && <PickTeamMode onPrev={() => setStep(2)} />}
     </div>
   );
 }

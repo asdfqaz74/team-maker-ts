@@ -38,3 +38,33 @@ body {
   color: var(--foreground);
   font-family: Noto-Sans, Alumni, BlackOps, sans-serif;
 }
+
+.spin-wrapper {
+  position: relative;
+  height: 2.5rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spin-text {
+  animation-name: slideDown;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1; /* 한 번만 재생 */
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}

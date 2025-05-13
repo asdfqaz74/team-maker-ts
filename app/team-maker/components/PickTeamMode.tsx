@@ -1,7 +1,7 @@
 export default function StepTwo({ onPrev }: { onPrev: () => void }) {
   return (
     <div>
-      <span>2. 팀 선정 방식 고르기</span>
+      <span>3. 팀 선정 방식 고르기</span>
       <div className="flex justify-between px-20 mt-20">
         <button className="bg-[#B0BCFF] font-bold text-black px-2 py-1 rounded cursor-pointer">
           데리고 오기
