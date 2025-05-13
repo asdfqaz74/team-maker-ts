@@ -3,7 +3,17 @@ import { useState } from "react";
 import confetti from "canvas-confetti";
 import { useAtom } from "jotai";
 import { TeamResponse } from "@/types/team";
-import { teamLeaders, unselectedPlayers } from "@/store/player";
+import {
+  takeBlueTeamAtom,
+  takeCurrentPickAtom,
+  takeHistoryAtom,
+  takePickStepAtom,
+  takeRedTeamAtom,
+  takeRemainingPickCountAtom,
+  teamLeaders,
+  unselectedPlayers,
+} from "@/store/player";
+import { useResetAtom } from "jotai/utils";
 
 export default function PickRandom({
   candidate,
@@ -18,6 +28,22 @@ export default function PickRandom({
   const [spinningOne, setSpinningOne] = useState("");
   const [spinningTwo, setSpinningTwo] = useState("");
   const [, SetUnSelectedPlayers] = useAtom(unselectedPlayers);
+
+  const resetBlueTeam = useResetAtom(takeBlueTeamAtom);
+  const resetRedTeam = useResetAtom(takeRedTeamAtom);
+  const resetHistory = useResetAtom(takeHistoryAtom);
+  const resetCurrentTeam = useResetAtom(takeCurrentPickAtom);
+  const resetRemainingCount = useResetAtom(takeRemainingPickCountAtom);
+  const resetPickStep = useResetAtom(takePickStepAtom);
+
+  const resetAll = () => {
+    resetBlueTeam();
+    resetRedTeam();
+    resetHistory();
+    resetCurrentTeam();
+    resetRemainingCount();
+    resetPickStep();
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -68,6 +94,8 @@ export default function PickRandom({
             player._id !== blueLeader._id && player._id !== redLeader._id
         );
         SetUnSelectedPlayers(others);
+
+        resetAll();
 
         setResult([blueLeader.name, redLeader.name]);
         confetti({ particleCount: 120, spread: 100, origin: { y: 0.6 } });

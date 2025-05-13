@@ -25,10 +25,14 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
   const [pickStep, setPickStep] = useAtom(takePickStepAtom);
 
   useEffect(() => {
-    setBlueTeam([leaders.blue]);
-    setRedTeam([leaders.red]);
-    setHistory([]);
-  }, [leaders, setBlueTeam, setRedTeam, setHistory]);
+    const initial = blueTeam.length === 0 && redTeam.length === 0;
+
+    if (initial) {
+      setBlueTeam([leaders.blue]);
+      setRedTeam([leaders.red]);
+      setHistory([]);
+    }
+  }, [leaders, setBlueTeam, setRedTeam, setHistory, blueTeam, redTeam]);
 
   const saveHistory = () => {
     setHistory((prev) => [
