@@ -20,49 +20,48 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
 
   const startSpinning = () => {
     const totalSteps = 20;
-    let currentStep = 0;
-
     const delays1 = Array.from({ length: totalSteps }, (_, i) => 100 + i * 30);
     const delays2 = Array.from({ length: totalSteps }, (_, i) => 100 + i * 35);
 
+    const shuffledOnce = [...candidate].sort(() => Math.random() - 0.5);
+    const [finalName1, finalName2] = shuffledOnce.slice(0, 2);
+
     const runSpin = (
       setName: (name: string) => void,
-      delays: number[],
-      index: number,
-      onComplete: (lastName: string) => void
+      name: string,
+      delays: number[]
     ) => {
-      if (index >= delays.length) return;
-      const name = candidate[Math.floor(Math.random() * candidate.length)];
-      setName(name);
-      setTimeout(
-        () => runSpin(setName, delays, index + 1, onComplete),
-        delays[index]
-      );
+      const spinStep = (index: number) => {
+        if (index >= delays.length) {
+          setName(name); // 마지막에 고정
+          return;
+        }
 
-      if (index === delays.length - 1) {
-        onComplete(name); // 마지막에 멈춘 이름 저장
-      }
+        const randomName =
+          candidate[Math.floor(Math.random() * candidate.length)];
+        setName(randomName);
+
+        setTimeout(() => spinStep(index + 1), delays[index]);
+      };
+
+      spinStep(0);
     };
 
-    let final1 = "";
-    let final2 = "";
+    runSpin(setSpinningName, finalName1, delays1);
+    runSpin(setSecondSpinningName, finalName2, delays2);
 
-    runSpin(setSpinningName, delays1, 0, (name) => {
-      final1 = name;
-      if (final2) setResult([final1, final2]);
-    });
-
-    runSpin(setSecondSpinningName, delays2, 0, (name) => {
-      final2 = name;
-      if (final1) {
-        setResult([final1, final2]);
+    // 결과 설정 및 컨페티
+    setTimeout(
+      () => {
+        setResult([finalName1, finalName2]);
         confetti({
           particleCount: 120,
           spread: 100,
           origin: { y: 0.6 },
         });
-      }
-    });
+      },
+      delays2.reduce((a, b) => a + b, 0)
+    ); // 가장 느린 쪽 기준 타이밍
   };
 
   return (
