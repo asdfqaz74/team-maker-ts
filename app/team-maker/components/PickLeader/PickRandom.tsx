@@ -71,7 +71,17 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
   return (
     <>
       <div>
-        <button onClick={handleOpen}>돌려</button>
+        <button
+          onClick={handleOpen}
+          className={`bg-[#B0BCFF] text-black px-2 py-1 rounded ${
+            candidate.length < 2
+              ? "cursor-not-allowed bg-gray-500"
+              : "cursor-pointer"
+          }`}
+          disabled={candidate.length < 2}
+        >
+          돌려
+        </button>
       </div>
       <Dialog
         open={open}
