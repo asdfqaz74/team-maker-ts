@@ -14,3 +14,8 @@ export interface TeamResponse {
   group: GroupName[];
   eloRating: IElo;
 }
+
+export interface TeamLeaders {
+  blue: TeamResponse;
+  red: TeamResponse;
+}

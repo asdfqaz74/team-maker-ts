@@ -2,14 +2,22 @@ import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import confetti from "canvas-confetti";
 import { useAtom } from "jotai";
-import { leaderA, leaderB, teamColor } from "@/store/player";
+import { TeamResponse } from "@/types/team";
+import { teamLeaders, unselectedPlayers } from "@/store/player";
 
-export default function PickRandom({ candidate }: { candidate: string[] }) {
+export default function PickRandom({
+  candidate,
+  fullList,
+}: {
+  candidate: TeamResponse[];
+  fullList: TeamResponse[];
+}) {
   const [open, setOpen] = useState(false);
-  const [spinningName, setSpinningName] = useAtom(leaderA);
-  const [secondSpinningName, setSecondSpinningName] = useAtom(leaderB);
   const [result, setResult] = useState<string[]>([]);
-  const [isBlue, setIsBlue] = useAtom(teamColor);
+  const [leaders, setLeaders] = useAtom(teamLeaders);
+  const [spinningOne, setSpinningOne] = useState("");
+  const [spinningTwo, setSpinningTwo] = useState("");
+  const [, SetUnSelectedPlayers] = useAtom(unselectedPlayers);
 
   const handleOpen = () => {
     setOpen(true);
@@ -26,46 +34,46 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
     const delays1 = Array.from({ length: totalSteps }, (_, i) => 100 + i * 30);
     const delays2 = Array.from({ length: totalSteps }, (_, i) => 100 + i * 35);
 
-    const shuffledOnce = [...candidate].sort(() => Math.random() - 0.5);
-    const [finalName1, finalName2] = shuffledOnce.slice(0, 2);
+    const shuffled = [...candidate].sort(() => Math.random() - 0.5);
+    const [final1, final2] = shuffled.slice(0, 2);
 
     const runSpin = (
       setName: (name: string) => void,
-      name: string,
+      finalPlayer: TeamResponse,
       delays: number[]
     ) => {
-      const spinStep = (index: number) => {
-        if (index >= delays.length) {
-          setName(name); // 마지막에 고정
-          return;
-        }
-
+      const spinStep = (i: number) => {
+        if (i >= delays.length) return setName(finalPlayer.name);
         const randomName =
-          candidate[Math.floor(Math.random() * candidate.length)];
+          candidate[Math.floor(Math.random() * candidate.length)].name;
         setName(randomName);
-
-        setTimeout(() => spinStep(index + 1), delays[index]);
+        setTimeout(() => spinStep(i + 1), delays[i]);
       };
-
       spinStep(0);
     };
 
-    runSpin(setSpinningName, finalName1, delays1);
-    runSpin(setSecondSpinningName, finalName2, delays2);
+    runSpin(setSpinningOne, final1, delays1);
+    runSpin(setSpinningTwo, final2, delays2);
 
-    // 결과 설정 및 컨페티
+    const isFirstBlue = Math.random() > 0.5;
+    const blueLeader = isFirstBlue ? final1 : final2;
+    const redLeader = isFirstBlue ? final2 : final1;
+
     setTimeout(
       () => {
-        setResult([finalName1, finalName2]);
-        setIsBlue(Math.round(Math.random()));
-        confetti({
-          particleCount: 120,
-          spread: 100,
-          origin: { y: 0.6 },
-        });
+        setLeaders({ blue: blueLeader, red: redLeader });
+
+        const others = fullList.filter(
+          (player) =>
+            player._id !== blueLeader._id && player._id !== redLeader._id
+        );
+        SetUnSelectedPlayers(others);
+
+        setResult([blueLeader.name, redLeader.name]);
+        confetti({ particleCount: 120, spread: 100, origin: { y: 0.6 } });
       },
       delays2.reduce((a, b) => a + b, 0)
-    ); // 가장 느린 쪽 기준 타이밍
+    );
   };
 
   return (
@@ -105,19 +113,19 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
                 <div className="spin-wrapper">
                   <div
                     className="spin-text"
-                    key={spinningName}
+                    key={spinningOne}
                     style={{ animationDuration: `300ms` }}
                   >
-                    {spinningName}
+                    {spinningOne}
                   </div>
                 </div>
                 <div className="spin-wrapper">
                   <div
                     className="spin-text"
-                    key={secondSpinningName}
+                    key={spinningTwo}
                     style={{ animationDuration: `300ms` }}
                   >
-                    {secondSpinningName}
+                    {spinningTwo}
                   </div>
                 </div>
               </div>
@@ -126,21 +134,11 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
           ) : (
             <>
               <div className="text-xl font-semibold mt-4">✨ 뽑힌 사람 ✨</div>
-              <div className="text-2xl font-bold mt-2">
-                <span
-                  className={`${isBlue ? "text-blue-500" : "text-red-500"}`}
-                >
-                  {isBlue === 1 ? "블루 " : "레드 "}
-                </span>
-                {result[0]}
+              <div className="text-2xl font-bold mt-2 text-blue-500">
+                <span>블루: {leaders.blue.name}</span>
               </div>
-              <div className="text-2xl font-bold">
-                <span
-                  className={`${isBlue ? "text-red-500" : "text-blue-500"}`}
-                >
-                  {isBlue === 1 ? "레드 " : "블루 "}
-                </span>
-                {result[1]}
+              <div className="text-2xl font-bold text-red-500">
+                <span>레드: {leaders.red.name}</span>
               </div>
             </>
           )}

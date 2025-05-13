@@ -35,8 +35,6 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
     return <div>선수 목록을 불러오는데 실패했습니다.</div>;
   }
 
-  console.log("checkedPlayers", checkedPlayers);
-
   return (
     <div>
       <span>1. 참여할 선수를 고르세요</span>

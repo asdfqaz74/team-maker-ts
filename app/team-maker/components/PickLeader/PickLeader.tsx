@@ -1,6 +1,7 @@
-import { avaliablePlayers, leaderA, leaderPlayers } from "@/store/player";
+import { avaliablePlayers, leaderPlayers, teamLeaders } from "@/store/player";
 import { useAtom } from "jotai";
 import PickRandom from "./PickRandom";
+import { TeamResponse } from "@/types/team";
 
 export default function PickLeader({
   onNext,
@@ -11,9 +12,9 @@ export default function PickLeader({
 }) {
   const [checkedPlayers] = useAtom(avaliablePlayers);
   const [selectedPlayers, setSelectedPlayers] = useAtom(leaderPlayers);
-  const [isLeaderExist] = useAtom(leaderA);
+  const [isLeadersExist] = useAtom(teamLeaders);
 
-  const handleToggle = (player: string) => {
+  const handleToggle = (player: TeamResponse) => {
     setSelectedPlayers((prev) => {
       if (prev.includes(player)) {
         return prev.filter((id) => id !== player);
@@ -23,7 +24,6 @@ export default function PickLeader({
     });
   };
 
-  console.log("selectedPlayers", selectedPlayers);
   return (
     <div>
       <span>2. 팀 리더를 선택하세요.</span>
@@ -32,14 +32,14 @@ export default function PickLeader({
           <li key={player._id} className="">
             <input
               type="checkbox"
-              checked={selectedPlayers.includes(player.name)}
-              onChange={() => handleToggle(player.name)}
+              checked={selectedPlayers.includes(player)}
+              onChange={() => handleToggle(player)}
             />
             {player.name}
           </li>
         ))}
       </ul>
-      <PickRandom candidate={selectedPlayers} />
+      <PickRandom candidate={selectedPlayers} fullList={checkedPlayers} />
       <div className="flex gap-20 justify-center mt-20">
         <button
           onClick={onPrev}
@@ -49,9 +49,9 @@ export default function PickLeader({
         </button>
         <button
           onClick={onNext}
-          disabled={!isLeaderExist}
+          disabled={!isLeadersExist}
           className={`${
-            isLeaderExist
+            isLeadersExist
               ? "bg-[#B0BCFF] cursor-pointer"
               : "bg-gray-600 cursor-not-allowed"
           } text-black px-2 py-1 rounded`}
