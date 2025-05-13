@@ -25,8 +25,6 @@ export default function GroupUserList() {
     staleTime: 1000 * 60 * 60,
   });
 
-  console.log("그룹 유저", groupUsers);
-
   return (
     <div className="">
       <h3 className=" text-lg">선택한 그룹의 유저</h3>

@@ -20,8 +20,6 @@ export default function PlayerList() {
     ? checkedPlayersMap[selectedGroup] ?? []
     : [];
 
-  // 선수 목록 가져오기
-
   // 선수 목록 토글
   const toggleChecked = async (playerId: string) => {
     if (!selectedGroup) {
