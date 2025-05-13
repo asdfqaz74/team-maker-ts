@@ -11,7 +11,11 @@ import {
   groupPlayersAtom,
   selectedGroupAtom,
 } from "@/store/group";
-import { playersAtom, selectedPlayerAtom } from "@/store/player";
+import {
+  avaliablePlayers,
+  playersAtom,
+  selectedPlayerAtom,
+} from "@/store/player";
 import { QueryClient } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
 
@@ -38,6 +42,7 @@ export default function Header() {
   const resetCheckedPlayers = useResetAtom(checkedPlayersAtom);
   const resetPlayers = useResetAtom(playersAtom);
   const resetSelectedPlayer = useResetAtom(selectedPlayerAtom);
+  const resetGroup = useResetAtom(avaliablePlayers);
 
   const queryClient = new QueryClient();
 
@@ -54,6 +59,8 @@ export default function Header() {
     resetCheckedPlayers();
     resetPlayers();
     resetSelectedPlayer();
+    resetGroup();
+    queryClient.removeQueries({ queryKey: ["participatingPlayers"] });
     queryClient.removeQueries({ queryKey: ["me"] });
     queryClient.removeQueries({ queryKey: ["players"] });
     signOut();

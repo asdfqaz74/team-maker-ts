@@ -1,13 +1,23 @@
 import { useAtom } from "jotai";
-import { checkedPlayersAtom } from "@/store/player";
-import { usePlayerList } from "@/hooks/usePlayersList";
+import { TeamResponse } from "@/types/team";
+import { useQuery } from "@tanstack/react-query";
+import { avaliablePlayers } from "@/store/player";
+import { fetchParticipatingPlayers } from "@/lib/api/fetchParticipatingPlayers";
 
 export default function StepOne({ onNext }: { onNext: () => void }) {
-  const { data: players = [] } = usePlayerList();
-  const [checkedPlayers, setCheckedPlayers] = useAtom(checkedPlayersAtom);
+  const {
+    data: players = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<TeamResponse[]>({
+    queryKey: ["participatingPlayers"],
+    queryFn: fetchParticipatingPlayers,
+  });
+  const [checkedPlayers, setCheckedPlayers] = useAtom(avaliablePlayers);
 
   // 선수 목록 토글
-  const toggleChecked = (playerId: string) => {
+  const toggleChecked = (playerId: TeamResponse) => {
     setCheckedPlayers((prev) => {
       if (prev.includes(playerId)) {
         return prev.filter((id) => id !== playerId);
@@ -17,7 +27,14 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
     });
   };
 
-  console.log("players", players);
+  const selectedPlayersLength = checkedPlayers.length;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) {
+    console.error(error);
+    return <div>선수 목록을 불러오는데 실패했습니다.</div>;
+  }
+
   console.log("checkedPlayers", checkedPlayers);
 
   return (
@@ -28,8 +45,8 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
           <li key={player._id} className="">
             <input
               type="checkbox"
-              checked={checkedPlayers.includes(player.name)}
-              onChange={() => toggleChecked(player.name)}
+              checked={checkedPlayers.includes(player)}
+              onChange={() => toggleChecked(player)}
             />
             {player.name}
           </li>
@@ -37,7 +54,11 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
       </ul>
       <div className="flex justify-center mt-20">
         <button
-          className="bg-[#c0c9fc] text-black px-2 py-1 rounded cursor-pointer"
+          className={` text-black px-2 py-1 rounded ${
+            selectedPlayersLength === 10
+              ? "bg-[#B0BCFF] cursor-pointer"
+              : "bg-gray-500 cursor-not-allowed"
+          }`}
           onClick={onNext}
         >
           다음

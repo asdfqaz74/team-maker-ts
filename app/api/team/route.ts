@@ -22,6 +22,20 @@ export async function GET(request: NextRequest) {
       .populate("group", "name")
       .lean();
 
+    // 사용자의 승률을 계산하고 totalGames, wins, losses 필드를 제거
+    users.forEach((user) => {
+      if (user.totalGames === 0) {
+        user.winRate = "게임이 없습니다.";
+        return;
+      }
+      const winRate = (user.wins / user.totalGames) * 100;
+      user.winRate = +winRate.toFixed(0);
+
+      delete user.totalGames;
+      delete user.wins;
+      delete user.losses;
+    });
+
     return Response.json({ users }, { status: 200 });
   } catch (error: any) {
     if (error.message === "NOT_FOUND") {

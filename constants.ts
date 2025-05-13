@@ -36,4 +36,7 @@ export const API = {
       ID: (id: string) => `/api/me/player/${id}`,
     },
   },
+  TEAM: {
+    PLAYER: "/api/team",
+  },
 };
