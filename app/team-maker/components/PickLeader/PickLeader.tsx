@@ -1,5 +1,4 @@
-import { avaliablePlayers, leaderPlayers } from "@/store/player";
-import { TeamResponse } from "@/types/team";
+import { avaliablePlayers, leaderA, leaderPlayers } from "@/store/player";
 import { useAtom } from "jotai";
 import PickRandom from "./PickRandom";
 
@@ -12,6 +11,7 @@ export default function PickLeader({
 }) {
   const [checkedPlayers] = useAtom(avaliablePlayers);
   const [selectedPlayers, setSelectedPlayers] = useAtom(leaderPlayers);
+  const [isLeaderExist] = useAtom(leaderA);
 
   const handleToggle = (player: string) => {
     setSelectedPlayers((prev) => {
@@ -49,7 +49,12 @@ export default function PickLeader({
         </button>
         <button
           onClick={onNext}
-          className="bg-[#B0BCFF] text-black px-2 py-1 rounded cursor-pointer"
+          disabled={!isLeaderExist}
+          className={`${
+            isLeaderExist
+              ? "bg-[#B0BCFF] cursor-pointer"
+              : "bg-gray-600 cursor-not-allowed"
+          } text-black px-2 py-1 rounded`}
         >
           다음
         </button>

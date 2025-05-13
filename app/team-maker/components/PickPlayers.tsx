@@ -60,6 +60,7 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
               : "bg-gray-500 cursor-not-allowed"
           }`}
           onClick={onNext}
+          disabled={selectedPlayersLength !== 10}
         >
           다음
         </button>

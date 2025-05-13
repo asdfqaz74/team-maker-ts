@@ -1,12 +1,15 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import confetti from "canvas-confetti";
+import { useAtom } from "jotai";
+import { leaderA, leaderB, teamColor } from "@/store/player";
 
 export default function PickRandom({ candidate }: { candidate: string[] }) {
   const [open, setOpen] = useState(false);
-  const [spinningName, setSpinningName] = useState("");
-  const [secondSpinningName, setSecondSpinningName] = useState("");
+  const [spinningName, setSpinningName] = useAtom(leaderA);
+  const [secondSpinningName, setSecondSpinningName] = useAtom(leaderB);
   const [result, setResult] = useState<string[]>([]);
+  const [isBlue, setIsBlue] = useAtom(teamColor);
 
   const handleOpen = () => {
     setOpen(true);
@@ -54,6 +57,7 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
     setTimeout(
       () => {
         setResult([finalName1, finalName2]);
+        setIsBlue(Math.round(Math.random()));
         confetti({
           particleCount: 120,
           spread: 100,
@@ -112,8 +116,22 @@ export default function PickRandom({ candidate }: { candidate: string[] }) {
           ) : (
             <>
               <div className="text-xl font-semibold mt-4">✨ 뽑힌 사람 ✨</div>
-              <div className="text-2xl font-bold mt-2">{result[0]}</div>
-              <div className="text-2xl font-bold">{result[1]}</div>
+              <div className="text-2xl font-bold mt-2">
+                <span
+                  className={`${isBlue ? "text-blue-500" : "text-red-500"}`}
+                >
+                  {isBlue === 1 ? "블루 " : "레드 "}
+                </span>
+                {result[0]}
+              </div>
+              <div className="text-2xl font-bold">
+                <span
+                  className={`${isBlue ? "text-red-500" : "text-blue-500"}`}
+                >
+                  {isBlue === 1 ? "레드 " : "블루 "}
+                </span>
+                {result[1]}
+              </div>
             </>
           )}
         </DialogContent>
