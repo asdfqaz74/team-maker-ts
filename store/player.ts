@@ -49,3 +49,8 @@ export const takeRedTeamAtom = atomWithReset<TeamResponse[]>([]);
 export const takeCurrentPickAtom = atomWithReset<"blue" | "red">("blue");
 export const takeRemainingPickCountAtom = atomWithReset<number>(1);
 export const takePickStepAtom = atomWithReset<number>(1);
+
+// team-maker/components/TeamMode/TakePlayer.tsx 에서 사용
+// 확정된 레드팀, 블루팀 선수들 저장하는 atom
+export const confirmedBlueTeamAtom = atomWithReset<TeamResponse[]>([]);
+export const confirmedRedTeamAtom = atomWithReset<TeamResponse[]>([]);

@@ -1,4 +1,10 @@
-export default function EloPlayer({ onPrev }: { onPrev: () => void }) {
+export default function EloPlayer({
+  onPrev,
+  onNext,
+}: {
+  onPrev: () => void;
+  onNext: () => void;
+}) {
   return (
     <div className="flex flex-col gap-20">
       <span>Elo 배정</span>

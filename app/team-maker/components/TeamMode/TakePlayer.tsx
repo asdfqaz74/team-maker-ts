@@ -1,4 +1,6 @@
 import {
+  confirmedBlueTeamAtom,
+  confirmedRedTeamAtom,
   takeBlueTeamAtom,
   takeCurrentPickAtom,
   takeHistoryAtom,
@@ -12,7 +14,13 @@ import { TeamResponse } from "@/types/team";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
+export default function TakePlayer({
+  onPrev,
+  onNext,
+}: {
+  onPrev: () => void;
+  onNext: () => void;
+}) {
   const [leaders] = useAtom(teamLeaders);
   const [players, setPlayers] = useAtom(unselectedPlayers);
   const [blueTeam, setBlueTeam] = useAtom(takeBlueTeamAtom);
@@ -23,6 +31,8 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
     takeRemainingPickCountAtom
   );
   const [pickStep, setPickStep] = useAtom(takePickStepAtom);
+  const [, setConfirmedBlueTeam] = useAtom(confirmedBlueTeamAtom);
+  const [, setConfirmedRedTeam] = useAtom(confirmedRedTeamAtom);
 
   useEffect(() => {
     const initial = blueTeam.length === 0 && redTeam.length === 0;
@@ -115,7 +125,12 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
         <div className="flex gap-2">
           <button
             onClick={handleUndo}
-            className="bg-gray-300 px-3 py-1 rounded"
+            className={`${
+              history.length !== 0
+                ? "bg-purple-500 cursor-pointer"
+                : "bg-gray-300 cursor-not-allowed"
+            } bg-gray-300 px-3 py-1 rounded`}
+            disabled={history.length === 0}
           >
             되돌리기
           </button>
@@ -123,7 +138,7 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
             onClick={assignRemaining}
             className={`px-3 py-1 rounded ${
               players.length === 2
-                ? "bg-green-400"
+                ? "bg-green-400 cursor-pointer"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
             disabled={players.length !== 2}
@@ -154,7 +169,9 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
             <button
               key={p._id}
               onClick={() => handlePick(p)}
-              className="block w-full bg-primary text-white rounded my-1 py-1"
+              className={`block w-full text-white rounded my-1 py-1 hover:scale-110 hover:text-cyan-700 ${
+                players.length === 2 ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
               {p.name}
             </button>
@@ -172,8 +189,16 @@ export default function TakePlayer({ onPrev }: { onPrev: () => void }) {
         <button
           disabled={isNextDisabled}
           className={`px-4 py-2 rounded ${
-            isNextDisabled ? "bg-gray-400" : "bg-blue-500 text-white"
+            isNextDisabled
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 text-white cursor-pointer"
           }`}
+          onClick={() => {
+            if (isNextDisabled) return;
+            setConfirmedBlueTeam(blueTeam);
+            setConfirmedRedTeam(redTeam);
+            onNext();
+          }}
         >
           다음
         </button>

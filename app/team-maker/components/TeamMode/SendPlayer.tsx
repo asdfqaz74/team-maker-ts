@@ -1,4 +1,10 @@
-export default function SendPlayer({ onPrev }: { onPrev: () => void }) {
+export default function SendPlayer({
+  onPrev,
+  onNext,
+}: {
+  onPrev: () => void;
+  onNext: () => void;
+}) {
   return (
     <div>
       <span>보내 버리기</span>
