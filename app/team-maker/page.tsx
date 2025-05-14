@@ -4,12 +4,28 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PickPlayers from "./components/PickPlayers";
 import PickTeamMode from "./components/PickTeamMode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PickLeader from "./components/PickLeader/PickLeader";
 import TakePlayer from "./components/TeamMode/TakePlayer";
 import SendPlayer from "./components/TeamMode/SendPlayer";
 import EloPlayer from "./components/TeamMode/EloPlayer";
 import Result from "./components/Result/Result";
+import { useResetAtom } from "jotai/utils";
+import {
+  avaliablePlayers,
+  confirmedBlueTeamAtom,
+  confirmedRedTeamAtom,
+  leaderPlayers,
+  sendBlueTeamAtom,
+  sendConfirmedBlueTeamAtom,
+  sendConfirmedRedTeamAtom,
+  sendPlayers,
+  sendRedTeamAtom,
+  takeBlueTeamAtom,
+  takePlayers,
+  takeRedTeamAtom,
+  teamLeaders,
+} from "@/store/player";
 
 type Mode = "take" | "send" | "elo";
 
@@ -17,6 +33,41 @@ export default function Page() {
   const [step, setStep] = useState(1);
   const [lastStep, setLastStep] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode | null>(null);
+
+  // 전역변수 초기화
+  const resetTakePlayers = useResetAtom(takePlayers);
+  const resetSendPlayers = useResetAtom(sendPlayers);
+  const resetLeaders = useResetAtom(teamLeaders);
+  const resetLeaderPlayers = useResetAtom(leaderPlayers);
+  const resetConfirmedBlueTeam = useResetAtom(confirmedBlueTeamAtom);
+  const resetConfirmedRedTeam = useResetAtom(confirmedRedTeamAtom);
+  const resetSendConfirmedBlueTeam = useResetAtom(sendConfirmedBlueTeamAtom);
+  const resetSendConfirmedRedTeam = useResetAtom(sendConfirmedRedTeamAtom);
+  const resetTakeBlue = useResetAtom(takeBlueTeamAtom);
+  const resetTakeRed = useResetAtom(takeRedTeamAtom);
+  const resetSendBlue = useResetAtom(sendBlueTeamAtom);
+  const resetSendRed = useResetAtom(sendRedTeamAtom);
+  const resetAvailablePlayers = useResetAtom(avaliablePlayers);
+
+  const resetAtoms = () => {
+    resetTakePlayers();
+    resetSendPlayers();
+    resetLeaders();
+    resetConfirmedBlueTeam();
+    resetConfirmedRedTeam();
+    resetSendConfirmedBlueTeam();
+    resetSendConfirmedRedTeam();
+    resetTakeBlue();
+    resetTakeRed();
+    resetSendBlue();
+    resetSendRed();
+    resetAvailablePlayers();
+    resetLeaderPlayers();
+  };
+
+  useEffect(() => {
+    resetAtoms();
+  }, []);
 
   const { status } = useSession();
   const router = useRouter();
