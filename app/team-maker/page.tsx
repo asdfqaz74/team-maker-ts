@@ -1,7 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import PickPlayers from "./components/PickPlayers";
 import PickTeamMode from "./components/PickTeamMode";
 import { useEffect, useState } from "react";
@@ -26,6 +24,8 @@ import {
   takeRedTeamAtom,
   teamLeaders,
 } from "@/store/player";
+import { useSession } from "next-auth/react";
+import Spinner from "@/public/images/components/spinner.svg";
 
 type Mode = "take" | "send" | "elo";
 
@@ -33,6 +33,7 @@ export default function Page() {
   const [step, setStep] = useState(1);
   const [lastStep, setLastStep] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode | null>(null);
+  const { status } = useSession();
 
   // 전역변수 초기화
   const resetTakePlayers = useResetAtom(takePlayers);
@@ -69,11 +70,15 @@ export default function Page() {
     resetAtoms();
   }, []);
 
-  const { status } = useSession();
-  const router = useRouter();
-
-  if (status === "unauthenticated") {
-    router.push("/auth/login");
+  if (status === "loading") {
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 z-50">
+        <Spinner />
+        <p className="mt-4 text-white text-lg">
+          로그인 정보를 확인 중입니다...
+        </p>
+      </div>
+    );
   }
 
   return (

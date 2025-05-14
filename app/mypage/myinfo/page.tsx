@@ -9,6 +9,7 @@ import { ExceptPasswordMember } from "@/types/member";
 import InfoLoading from "./components/InfoLoading";
 import InfoEmpty from "./components/InfoEmpty";
 import { signOut, useSession } from "next-auth/react";
+import Spinner from "@/public/images/components/spinner.svg";
 
 export default function MyInfoPage() {
   // 수정하기 상태
@@ -16,7 +17,7 @@ export default function MyInfoPage() {
   const [userId, setUserId] = useState("");
 
   const { showSnack } = useToast();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   // 내 정보 가져오기
   const {
@@ -30,6 +31,16 @@ export default function MyInfoPage() {
     enabled: !!session,
   });
 
+  if (status === "loading") {
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 z-50">
+        <Spinner />
+        <p className="mt-4 text-white text-lg">
+          로그인 정보를 확인 중입니다...
+        </p>
+      </div>
+    );
+  }
   // 에러 처리
   if (isError) {
     return <div>{error.message}</div>;

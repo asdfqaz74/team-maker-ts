@@ -7,5 +7,5 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/mypage/:path*", "/playerDB"],
+  matcher: ["/mypage/:path*", "/playerDB", "/team-maker/:path*"],
 };
