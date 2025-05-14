@@ -5,10 +5,10 @@ import {
   sendCurrentPickAtom,
   sendHistoryAtom,
   sendPickStepAtom,
+  sendPlayers,
   sendRedTeamAtom,
   sendRemainingPickCountAtom,
   teamLeaders,
-  unselectedPlayers,
 } from "@/store/player";
 import { TeamResponse } from "@/types/team";
 import { useAtom } from "jotai";
@@ -22,7 +22,7 @@ export default function SendPlayer({
   onNext: () => void;
 }) {
   const [leaders] = useAtom(teamLeaders);
-  const [players, setPlayers] = useAtom(unselectedPlayers);
+  const [players, setPlayers] = useAtom(sendPlayers);
   const [blueTeam, setBlueTeam] = useAtom(sendBlueTeamAtom);
   const [redTeam, setRedTeam] = useAtom(sendRedTeamAtom);
   const [history, setHistory] = useAtom(sendHistoryAtom);

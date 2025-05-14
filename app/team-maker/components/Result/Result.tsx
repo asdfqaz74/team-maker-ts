@@ -1,22 +1,41 @@
-import { confirmedBlueTeamAtom, confirmedRedTeamAtom } from "@/store/player";
+import {
+  confirmedBlueTeamAtom,
+  confirmedRedTeamAtom,
+  sendConfirmedBlueTeamAtom,
+  sendConfirmedRedTeamAtom,
+} from "@/store/player";
 import { useAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import TakeOddsWinning from "./TakeOddsWinning";
 
-export default function Result({ onPrev }: { onPrev: () => void }) {
-  const [blueTeam] = useAtom(confirmedBlueTeamAtom);
-  const [redTeam] = useAtom(confirmedRedTeamAtom);
+export default function Result({
+  onPrev,
+  mode,
+}: {
+  onPrev: () => void;
+  mode: "take" | "send" | "elo" | null;
+}) {
+  const [takeBlue] = useAtom(confirmedBlueTeamAtom);
+  const [takeRed] = useAtom(confirmedRedTeamAtom);
+  const [sendBlue] = useAtom(sendConfirmedBlueTeamAtom);
+  const [sendRed] = useAtom(sendConfirmedRedTeamAtom);
 
-  const resetBlueTeam = useResetAtom(confirmedBlueTeamAtom);
-  const resetRedTeam = useResetAtom(confirmedRedTeamAtom);
+  const resetTakeBlue = useResetAtom(confirmedBlueTeamAtom);
+  const resetTakeRed = useResetAtom(confirmedRedTeamAtom);
+  const resetSendBlue = useResetAtom(sendConfirmedBlueTeamAtom);
+  const resetSendRed = useResetAtom(sendConfirmedRedTeamAtom);
+
+  const isSend = mode === "send";
+  const blueTeam = isSend ? sendBlue : takeBlue;
+  const redTeam = isSend ? sendRed : takeRed;
 
   const resetAll = () => {
-    resetBlueTeam();
-    resetRedTeam();
+    resetTakeBlue();
+    resetTakeRed();
+    resetSendBlue();
+    resetSendRed();
   };
 
-  console.log("blueTeam", blueTeam);
-  console.log("redTeam", redTeam);
   return (
     <div>
       <span>결과페이지</span>

@@ -24,7 +24,8 @@ export const teamLeaders = atomWithReset<TeamLeaders>({
 
 // team-maker/components/PickRandom.tsx 에서 사용
 // 뽑히지 않은 선수들의 정보를 저장하는 atom
-export const unselectedPlayers = atomWithReset<TeamResponse[]>([]);
+export const sendPlayers = atomWithReset<TeamResponse[]>([]);
+export const takePlayers = atomWithReset<TeamResponse[]>([]);
 
 // team-maker/components/TeamMode/TakePlayer.tsx 에서 사용
 // 팀원 뽑는 히스토리 저장하는 atom

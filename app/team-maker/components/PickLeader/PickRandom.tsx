@@ -4,14 +4,15 @@ import confetti from "canvas-confetti";
 import { useAtom } from "jotai";
 import { TeamResponse } from "@/types/team";
 import {
+  sendPlayers,
   takeBlueTeamAtom,
   takeCurrentPickAtom,
   takeHistoryAtom,
   takePickStepAtom,
+  takePlayers,
   takeRedTeamAtom,
   takeRemainingPickCountAtom,
   teamLeaders,
-  unselectedPlayers,
 } from "@/store/player";
 import { useResetAtom } from "jotai/utils";
 
@@ -27,7 +28,8 @@ export default function PickRandom({
   const [leaders, setLeaders] = useAtom(teamLeaders);
   const [spinningOne, setSpinningOne] = useState("");
   const [spinningTwo, setSpinningTwo] = useState("");
-  const [, SetUnSelectedPlayers] = useAtom(unselectedPlayers);
+  const [, setTakePlayers] = useAtom(takePlayers);
+  const [, setSendPlayers] = useAtom(sendPlayers);
 
   const resetBlueTeam = useResetAtom(takeBlueTeamAtom);
   const resetRedTeam = useResetAtom(takeRedTeamAtom);
@@ -93,7 +95,8 @@ export default function PickRandom({
           (player) =>
             player._id !== blueLeader._id && player._id !== redLeader._id
         );
-        SetUnSelectedPlayers(others);
+        setTakePlayers(others);
+        setSendPlayers(others);
 
         resetAll();
 

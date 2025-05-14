@@ -11,9 +11,12 @@ import SendPlayer from "./components/TeamMode/SendPlayer";
 import EloPlayer from "./components/TeamMode/EloPlayer";
 import Result from "./components/Result/Result";
 
+type Mode = "take" | "send" | "elo";
+
 export default function Page() {
   const [step, setStep] = useState(1);
   const [lastStep, setLastStep] = useState<number | null>(null);
+  const [mode, setMode] = useState<Mode | null>(null);
 
   const { status } = useSession();
   const router = useRouter();
@@ -37,14 +40,17 @@ export default function Page() {
           toTake={() => {
             setStep(4);
             setLastStep(4);
+            setMode("take");
           }}
           toSend={() => {
             setStep(5);
             setLastStep(5);
+            setMode("send");
           }}
           toElo={() => {
             setStep(6);
             setLastStep(6);
+            setMode("elo");
           }}
         />
       )}
@@ -61,6 +67,7 @@ export default function Page() {
       {/* 마무리 */}
       {step === 7 && (
         <Result
+          mode={mode}
           onPrev={() => {
             if (lastStep) setStep(lastStep);
             else setStep(3);
