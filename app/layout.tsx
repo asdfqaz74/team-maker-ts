@@ -3,6 +3,8 @@ import "./globals.css";
 import ClientProvider from "./ClientProvider";
 import { ToastProvider } from "./components/ToastContext";
 import { ReactNode } from "react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -42,7 +44,13 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="ko-KR">
       <head>
@@ -53,7 +61,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         ></script>
       </head>
       <body className={`${notoSans.variable} antialiased w-full`}>
-        <ClientProvider>
+        <ClientProvider session={session}>
           <ToastProvider>{children}</ToastProvider>
         </ClientProvider>
       </body>

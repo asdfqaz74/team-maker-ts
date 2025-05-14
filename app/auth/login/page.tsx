@@ -20,11 +20,9 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      console.log("로그인 실패", result.error);
       setMessage("아이디 또는 비밀번호가 잘못되었습니다.");
     } else {
-      setMessage("로그인 성공");
-      router.push("/");
+      window.location.href = "/";
     }
   };
 

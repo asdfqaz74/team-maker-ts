@@ -33,7 +33,7 @@ function createData(
   return { name, nickName, position, eloRating, winRate, _id };
 }
 
-export default function PlayerInfo() {
+export default function PlayerInfo({ status }: { status: string }) {
   const [open, setOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
 
@@ -54,6 +54,7 @@ export default function PlayerInfo() {
   } = useQuery({
     queryKey: ["playerInfo"],
     queryFn: fetchUserData,
+    enabled: status === "authenticated",
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5,

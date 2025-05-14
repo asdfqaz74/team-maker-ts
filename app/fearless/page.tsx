@@ -42,9 +42,6 @@ export default function Page() {
     image: `images/champions/portrait/${champ.en_name}.webp`,
   }));
 
-  console.log("rawChamp", rawChampions);
-  console.log(champions);
-
   // 디스코드 복사용 포맷팅
   const formatList = (arr: SelectedBanChampion[]) =>
     arr.map((champion) => champion.name).join(" ");

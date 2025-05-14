@@ -3,18 +3,9 @@
 import { useSession } from "next-auth/react";
 import PlayerInfo from "./components/PlayerInfo";
 import Spinner from "@/public/images/components/spinner.svg";
-import { useEffect } from "react";
 
 export default function PlayerDB() {
   const { status } = useSession();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("세션 상태: ", status);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   if (status === "loading") {
     return (
@@ -29,7 +20,7 @@ export default function PlayerDB() {
 
   return (
     <div className="px-60 py-20">
-      <PlayerInfo />
+      <PlayerInfo status={status} />
     </div>
   );
 }

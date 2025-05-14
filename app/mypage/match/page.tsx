@@ -10,8 +10,6 @@ export default function MatchPage() {
   const [parsed, setParsed] = useState<Parsed | null>(null);
   const { showSnack } = useToast();
 
-  console.log("parsed", parsed);
-
   return (
     <div className="w-full text-black">
       <h1>매칭 관리</h1>

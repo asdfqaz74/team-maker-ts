@@ -18,7 +18,6 @@ export async function GET() {
   await connectDB();
 
   const today = getToday();
-  console.log("today: ", today);
 
   try {
     let todayBan: TodayBan | null = (await GlobalBan.findOne({

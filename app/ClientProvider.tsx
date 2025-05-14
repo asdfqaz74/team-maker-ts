@@ -8,9 +8,15 @@ import { ReactNode } from "react";
 
 const queryClient = new QueryClient();
 
-export default function ClientProvider({ children }: { children: ReactNode }) {
+export default function ClientProvider({
+  children,
+  session,
+}: {
+  children: ReactNode;
+  session: any;
+}) {
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <QueryClientProvider client={queryClient}>
         <JotaiProvider>
           <Header />
