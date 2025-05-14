@@ -18,6 +18,7 @@ export async function GET() {
           },
         },
       },
+      { $match: { count: { $gte: 3 } } },
       { $addFields: { winRate: { $divide: ["$winCount", "$count"] } } },
       { $sort: { winRate: -1, count: -1 } },
       { $limit: 3 },
