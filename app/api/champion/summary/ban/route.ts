@@ -16,7 +16,7 @@ export async function GET() {
         },
       },
       { $sort: { count: -1 } },
-      { $limit: 3 },
+      { $limit: 5 },
       {
         $lookup: {
           from: "champions",

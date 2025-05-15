@@ -18,10 +18,10 @@ export async function GET() {
           },
         },
       },
-      { $match: { count: { $gte: 3 } } },
+      { $match: { count: { $gte: 5 } } },
       { $addFields: { winRate: { $divide: ["$winCount", "$count"] } } },
       { $sort: { winRate: -1, count: -1 } },
-      { $limit: 3 },
+      { $limit: 5 },
       {
         $lookup: {
           from: "champions",

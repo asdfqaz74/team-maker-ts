@@ -24,7 +24,7 @@ export async function GET() {
         },
       },
       { $sort: { winRate: 1, count: -1 } },
-      { $limit: 3 },
+      { $limit: 5 },
       {
         $lookup: {
           from: "champions",
