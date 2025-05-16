@@ -120,7 +120,7 @@ function DesktopSwiperView({
         onClick={handlePrevClick}
       >
         <Image
-          src="/images/MainPage/Left Circle.webp"
+          src="/images/MainPage/Leftcircle.webp"
           alt="ArrowLeft"
           width={50}
           height={50}
@@ -133,7 +133,7 @@ function DesktopSwiperView({
         onClick={handleNextClick}
       >
         <Image
-          src="/images/MainPage/Left Circle.webp"
+          src="/images/MainPage/Leftcircle.webp"
           alt="ArrowRight"
           width={50}
           height={50}
