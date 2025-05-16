@@ -32,6 +32,15 @@ type PlayerDetailProps = {
   player: string | null;
 };
 
+type TopChampionsType = {
+  champion: string;
+  championImage: string;
+  count: number;
+  lossCount: number;
+  winCount: number;
+  winRate: number;
+};
+
 function createData(
   top: number,
   jug: number,
@@ -65,9 +74,12 @@ export default function PlayerDetail({
     placeholderData: keepPreviousData,
   });
 
+  console.log("userDetail", userDetail);
+
   const user = userDetail?.user;
   const recentMatches = userDetail?.recentMatches;
   const recentMatchesData = userDetail?.recentMatchesData;
+  const topChampions: TopChampionsType[] = userDetail?.topChampions;
   const positionData = recentMatchesData?.[0]?.position;
   const win = recentMatchesData?.[0]?.totalWins;
   const lose = recentMatchesData?.[0]?.totalLosses;
@@ -168,6 +180,41 @@ export default function PlayerDetail({
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Divider sx={{ borderColor: "#fff" }} />
+          {/* 모스트 챔피언 */}
+          <span className="text-4xl text-white font-bold">모스트 챔피언 5</span>
+          {topChampions?.length > 0 ? (
+            <div className="flex justify-between px-10">
+              {topChampions?.map((champion, index) => (
+                <div key={index} className="flex flex-col items-center gap-2">
+                  <Image
+                    src={champion.championImage}
+                    alt={champion.champion}
+                    width={100}
+                    height={100}
+                  />
+                  <span className="text-white font-semibold">
+                    {champion.champion}
+                  </span>
+                  <div className="flex gap-2 font-semibold text-white">
+                    <span>{champion.count}</span>
+                    <span>/</span>
+                    <span className="text-blue-500">{champion.winCount}</span>
+                    <span>/</span>
+                    <span className="text-red-500">{champion.lossCount}</span>
+                  </div>
+                  <span className="text-white font-semibold">
+                    승률: {champion.winRate}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <span className="text-white text-center mt-10">
+              모스트 챔피언이 없습니다.
+            </span>
+          )}
           <Divider sx={{ borderColor: "#fff" }} />
           <div className="flex flex-col gap-10">
             {/* 최근 5게임 그래프 */}

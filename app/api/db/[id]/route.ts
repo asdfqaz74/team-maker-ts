@@ -102,17 +102,25 @@ export async function GET(
           },
           {
             $addFields: {
+              lossCount: { $subtract: ["$count", "$winCount"] },
               winRate: {
                 $cond: [
                   { $eq: ["$count", 0] },
                   0,
-                  { $divide: ["$winCount", "$count"] },
+                  {
+                    $round: [
+                      {
+                        $multiply: [{ $divide: ["$winCount", "$count"] }, 100],
+                      },
+                      0,
+                    ],
+                  },
                 ],
               },
             },
           },
           { $sort: { count: -1, winRate: -1 } },
-          { $limit: 1 },
+          { $limit: 5 },
         ]),
 
         // recentMatches
@@ -180,6 +188,16 @@ export async function GET(
         ]),
       ]);
 
+    // 모스트 챔피언 5
+    const topChampions = mostPlayedChampionAgg.map((champion) => ({
+      champion: champion._id,
+      count: champion.count,
+      winCount: champion.winCount,
+      lossCount: champion.count - champion.winCount,
+      winRate: champion.winRate,
+      championImage: `/images/champions/portrait/${champion._id}.webp`,
+    }));
+
     const mostPlayedChampionImage = mostPlayedChampionAgg[0]
       ? `/images/champions/centered/${mostPlayedChampionAgg[0]._id}.webp`
       : null;
@@ -233,6 +251,7 @@ export async function GET(
         user,
         recentMatches: matchesFormatted,
         recentMatchesData: recentMatchesDataAgg,
+        topChampions,
       },
       { status: 200 }
     );
