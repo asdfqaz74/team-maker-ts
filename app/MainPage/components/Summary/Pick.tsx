@@ -1,5 +1,6 @@
 import { BanChampion, PickChampion, WorstChampion } from "@/types/champion";
 import Image from "next/image";
+import PickLoading from "./PickLoading";
 
 const titleColor = {
   BEST: "#0FA4FE",
@@ -26,6 +27,7 @@ export default function Pick<T extends keyof DataByTitle>({
 }: PickProps<T>) {
   const color = titleColor[title];
 
+  if (isLoading) return <PickLoading title={title} />;
   return (
     <div className="border border-[#0FA4FE] p-10 rounded-2xl min-w-[17.5rem] max-w-[25rem] mx-auto lg:mx-0">
       <div className="font-[BlackOps] text-3xl flex gap-4 items-center justify-center whitespace-nowrap">

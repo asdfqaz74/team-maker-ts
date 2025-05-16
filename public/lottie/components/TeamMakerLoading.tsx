@@ -12,7 +12,7 @@ export default function TeamMakerLoading() {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center">
       <Lottie
         options={defaultOptions}
         height={400}
@@ -21,6 +21,6 @@ export default function TeamMakerLoading() {
         speed={1.5}
       />
       <span>선수들을 불러오는 중입니다.</span>
-    </>
+    </div>
   );
 }
