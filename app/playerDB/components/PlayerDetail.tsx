@@ -16,6 +16,7 @@ import RecentPositionGraph from "./RecentPositionGraph";
 import RecentWinRateGraph from "./RecentWinRateGraph";
 import RecentPlayedChampions from "./RecentPlayedChampions";
 import MatchResultTable from "./MatchResultTable";
+import PlayerDetailSkeleton from "./PlayerDetailSkeleton";
 
 type EloRow = {
   top: number;
@@ -84,7 +85,7 @@ export default function PlayerDetail({
     ),
   ];
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PlayerDetailSkeleton open={open} onClose={onClose} />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!userDetail) return <div>No data available</div>;
 
