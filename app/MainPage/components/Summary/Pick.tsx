@@ -30,7 +30,7 @@ export default function Pick<T extends keyof DataByTitle>({
     <div className="border border-[#0FA4FE] p-10 rounded-2xl min-w-[17.5rem] max-w-[25rem] mx-auto lg:mx-0">
       <div className="font-[BlackOps] text-3xl flex gap-4 items-center justify-center whitespace-nowrap">
         <p style={{ color }}>{title}</p>
-        <p>PICK 3</p>
+        <p>PICK 5</p>
       </div>
       <div className="flex flex-col gap-4 mt-10">
         {data &&
