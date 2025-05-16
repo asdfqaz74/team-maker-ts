@@ -1,7 +1,7 @@
 import Lottie from "react-lottie";
 import animationData from "../json/team-maker.json";
 
-export default function TeamMakerLoading() {
+export default function TeamMakerLoading({ text }: { text: string }) {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -20,7 +20,7 @@ export default function TeamMakerLoading() {
         isClickToPauseDisabled
         speed={1.5}
       />
-      <span>선수들을 불러오는 중입니다.</span>
+      <span>{text}</span>
     </div>
   );
 }

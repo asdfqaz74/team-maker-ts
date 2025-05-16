@@ -11,7 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
-import PlayerInfoSkeleton from "./PlayerInfoSkeleton";
+import LoadingSpinner from "@/public/lottie/components/LoadingSpinner";
 
 interface Player {
   _id: string;
@@ -72,7 +72,8 @@ export default function PlayerInfo({ status }: { status: string }) {
     )
   );
 
-  if (isLoading) return <PlayerInfoSkeleton />;
+  if (isLoading)
+    return <LoadingSpinner text="선수들의 정보를 불러오는 중..." />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!playerInfo) return <div>No data available</div>;
 

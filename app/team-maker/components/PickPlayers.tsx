@@ -3,7 +3,7 @@ import { TeamResponse } from "@/types/team";
 import { useQuery } from "@tanstack/react-query";
 import { avaliablePlayers } from "@/store/player";
 import { fetchParticipatingPlayers } from "@/lib/api/fetchParticipatingPlayers";
-import TeamMakerLoading from "@/public/lottie/components/TeamMakerLoading";
+import TeamMakerLoading from "@/public/lottie/components/LoadingSpinner";
 
 export default function StepOne({ onNext }: { onNext: () => void }) {
   const {
@@ -30,7 +30,7 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
 
   const selectedPlayersLength = checkedPlayers.length;
 
-  if (isLoading) return <TeamMakerLoading />;
+  if (isLoading) return <TeamMakerLoading text="선수들을 불러오는 중..." />;
   if (isError) {
     console.error(error);
     return <div>선수 목록을 불러오는데 실패했습니다.</div>;
