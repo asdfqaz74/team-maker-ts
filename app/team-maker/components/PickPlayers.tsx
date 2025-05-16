@@ -30,7 +30,7 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
 
   const selectedPlayersLength = checkedPlayers.length;
 
-  if (isLoading) return <TeamMakerLoading text="선수들을 불러오는 중..." />;
+  if (isLoading) return <TeamMakerLoading text="" />;
   if (isError) {
     console.error(error);
     return <div>선수 목록을 불러오는데 실패했습니다.</div>;
