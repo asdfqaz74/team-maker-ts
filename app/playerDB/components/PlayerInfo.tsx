@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
 import LoadingSpinner from "@/public/lottie/components/LoadingSpinner";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 interface Player {
   _id: string;
@@ -36,6 +37,8 @@ function createData(
 export default function PlayerInfo({ status }: { status: string }) {
   const [open, setOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
+
+  const { ismd } = useBreakpoint();
 
   // 모달 열기
   const handleOpen = (id: string) => {
@@ -77,15 +80,45 @@ export default function PlayerInfo({ status }: { status: string }) {
   if (!playerInfo) return <div>No data available</div>;
 
   return (
-    <div className="">
+    <div className="lg:max-w-[59.375rem] lg:min-w-[43.75rem] max-w-[21.875rem] sm:max-w-[50rem] mx-auto">
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>이름</TableCell>
-              <TableCell>닉네임</TableCell>
-              <TableCell>포지션</TableCell>
-              <TableCell>최고 Elo</TableCell>
+              <TableCell
+                sx={{
+                  width: { xs: 100, md: 200 },
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                이름
+              </TableCell>
+              <TableCell
+                sx={{
+                  width: { xs: 100, sm: 150, md: 200 },
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                닉네임
+              </TableCell>
+              <TableCell
+                sx={{
+                  display: { xs: "none", md: "table-cell" },
+                }}
+              >
+                포지션
+              </TableCell>
+              <TableCell
+                sx={{
+                  display: { xs: "none", sm: "table-cell" },
+                }}
+              >
+                최고 Elo
+              </TableCell>
               <TableCell>승률</TableCell>
             </TableRow>
           </TableHead>
@@ -103,15 +136,59 @@ export default function PlayerInfo({ status }: { status: string }) {
                 }}
                 onClick={() => handleOpen(row._id)}
               >
-                <TableCell component="th" scope="row" sx={{ color: "#dcdcdc" }}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{
+                    color: "#dcdcdc",
+                    width: { xs: 100, md: 200 },
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {row?.name}
                 </TableCell>
-                <TableCell sx={{ color: "#dcdcdc" }}>{row?.nickName}</TableCell>
-                <TableCell sx={{ color: "#dcdcdc" }}>{row?.position}</TableCell>
-                <TableCell sx={{ color: "#dcdcdc" }}>
+                <TableCell
+                  sx={{
+                    color: "#dcdcdc",
+                    width: { xs: 100, sm: 150, md: 200 },
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {row?.nickName}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#dcdcdc",
+                    display: { xs: "none", md: "table-cell" },
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {row?.position}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#dcdcdc",
+                    display: { xs: "none", sm: "table-cell" },
+                  }}
+                >
                   {row?.eloRating}
                 </TableCell>
-                <TableCell sx={{ color: "#dcdcdc" }}>{row?.winRate}</TableCell>
+                <TableCell
+                  sx={{
+                    color: "#dcdcdc",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {row?.winRate}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

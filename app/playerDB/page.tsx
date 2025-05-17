@@ -19,7 +19,7 @@ export default function PlayerDB() {
   }
 
   return (
-    <div className="px-60 py-20">
+    <div className="px-10 py-20 lg:px-40">
       <PlayerInfo status={status} />
     </div>
   );
