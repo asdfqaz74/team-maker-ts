@@ -72,8 +72,7 @@ export default function PlayerInfo({ status }: { status: string }) {
     )
   );
 
-  if (isLoading)
-    return <LoadingSpinner text="선수들의 정보를 불러오는 중..." />;
+  if (isLoading) return <LoadingSpinner text="" />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!playerInfo) return <div>No data available</div>;
 

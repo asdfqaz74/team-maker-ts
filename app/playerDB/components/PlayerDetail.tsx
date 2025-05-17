@@ -74,8 +74,6 @@ export default function PlayerDetail({
     placeholderData: keepPreviousData,
   });
 
-  console.log("userDetail", userDetail);
-
   const user = userDetail?.user;
   const recentMatches = userDetail?.recentMatches;
   const recentMatchesData = userDetail?.recentMatchesData;
