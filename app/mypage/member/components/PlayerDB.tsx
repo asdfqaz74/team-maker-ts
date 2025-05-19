@@ -125,7 +125,7 @@ export default function PlayerDB() {
         <h3 className="text-xl font-semibold mb-4">멤버 정보 관리</h3>
         <div className="mb-2 flex gap-2 flex-col">
           <div className="flex gap-14 items-center">
-            <span className="w-12">닉네임</span>
+            <span>닉네임</span>
             <input
               type="text"
               value={nickName}
@@ -162,9 +162,9 @@ export default function PlayerDB() {
       </div>
       <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
       <label className="block font-semibold mb-2">ELO 관리</label>
-      <div className="flex gap-4">
+      <div className="flex gap-4 mb-2">
         {lanes.map((lane) => (
-          <div key={lane} className="mb-2 flex gap-2 items-center">
+          <div key={lane} className="flex gap-2 items-center">
             <span className="w-12 capitalize">{lane}</span>
             <input
               type="number"

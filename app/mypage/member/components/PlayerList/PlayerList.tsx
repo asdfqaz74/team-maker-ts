@@ -6,6 +6,7 @@ import { fetchPlayers } from "@/lib/api/fetchPlayers";
 import { Divider } from "@mui/material";
 import { Player } from "@/types/user";
 import { usePlayerList } from "@/hooks/usePlayersList";
+import PlayerListLoading from "./PlayerListLoading";
 
 const positionMap = {
   top: "탑",
@@ -20,7 +21,7 @@ export default function PlayerList() {
 
   const { data: players = [], isLoading, isError, error } = usePlayerList();
 
-  if (isLoading) return <p>로딩 중...</p>;
+  if (isLoading) return <PlayerListLoading />;
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 
   return (

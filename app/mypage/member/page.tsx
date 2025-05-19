@@ -1,6 +1,6 @@
 "use client";
 
-import PlayerList from "./components/PlayerList";
+import PlayerList from "./components/PlayerList/PlayerList";
 import PlayerDB from "./components/PlayerDB";
 import PlayerAdd from "./components/PlayerAdd";
 
