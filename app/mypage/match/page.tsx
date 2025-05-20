@@ -1,10 +1,11 @@
 "use client";
 
-import PlayerNicknameEditor from "./PlayerNicknameEditor";
-import UploadFile from "./UploadFile";
 import { useState } from "react";
-import { useToast } from "@/app/components/ToastContext";
+import UploadFile from "./UploadFile";
 import { Parsed } from "@/types/match";
+import { useToast } from "@/app/components/ToastContext";
+import PlayerNicknameEditor from "./PlayerNicknameEditor";
+import Category from "@/public/images/components/Category.svg";
 
 export default function MatchPage() {
   const [parsed, setParsed] = useState<Parsed | null>(null);
@@ -12,8 +13,10 @@ export default function MatchPage() {
 
   return (
     <div className="w-full text-black">
-      <h1>매칭 관리</h1>
-      <p>매칭 관리 페이지입니다.</p>
+      <h1 className="font-bold text-2xl flex items-center gap-4 mb-10">
+        <Category />
+        <span>매칭 관리</span>
+      </h1>
       {parsed ? (
         <PlayerNicknameEditor
           playersData={parsed?.players}

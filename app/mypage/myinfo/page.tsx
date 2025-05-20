@@ -1,15 +1,14 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
-import { fetchMe } from "@/lib/api/fetchMe";
-
-import Category from "@/public/images/components/Category.svg";
 import { useState } from "react";
-import { useToast } from "@/app/components/ToastContext";
-import { ExceptPasswordMember } from "@/types/member";
-import InfoLoading from "./components/InfoLoading";
+import { fetchMe } from "@/lib/api/fetchMe";
 import InfoEmpty from "./components/InfoEmpty";
+import { useQuery } from "@tanstack/react-query";
+import InfoLoading from "./components/InfoLoading";
 import { signOut, useSession } from "next-auth/react";
+import { ExceptPasswordMember } from "@/types/member";
+import { useToast } from "@/app/components/ToastContext";
 import Spinner from "@/public/images/components/spinner.svg";
+import Category from "@/public/images/components/Category.svg";
 
 export default function MyInfoPage() {
   // 수정하기 상태

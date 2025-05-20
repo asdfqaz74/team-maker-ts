@@ -1,7 +1,9 @@
-import { ToastContextType } from "@/app/components/ToastContext";
+import gsap from "gsap";
 import { API } from "@/constants";
+import SplitText from "gsap/SplitText";
 import { Parsed } from "@/types/match";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ToastContextType } from "@/app/components/ToastContext";
 
 type UploadFileProps = {
   onUploadSuccess: (data: Parsed) => void;
@@ -15,6 +17,34 @@ export default function UploadFile({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isUploading || !textRef.current) return;
+
+    let split: SplitText;
+    let tl: gsap.core.Timeline;
+
+    document.fonts.ready.then(() => {
+      split = new SplitText(textRef.current!, { type: "chars" });
+      gsap.set(textRef.current, { opacity: 1 });
+
+      tl = gsap.timeline({ repeat: 30 });
+      tl.from(split.chars, {
+        duration: 1,
+        y: 30,
+        rotation: 90,
+        opacity: 0,
+        ease: "elastic",
+        stagger: 0.03,
+      });
+    });
+
+    return () => {
+      if (tl) tl.kill();
+      if (split) split.revert();
+    };
+  }, [isUploading]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -64,7 +94,7 @@ export default function UploadFile({
   };
 
   return (
-    <div className="p-4 border rounded flex justify-between items-center">
+    <div className="p-4 border rounded flex justify-between items-center w-2/3">
       <div className="flex gap-4">
         <label
           htmlFor="fileInput"
@@ -86,13 +116,23 @@ export default function UploadFile({
         )}
       </div>
       <button
-        className={`mt-2 px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 ${
-          isUploading ? "cursor-not-allowed bg-gray-500" : ""
+        className={`mt-2 px-4 py-2 text-white rounded ${
+          isUploading
+            ? "cursor-not-allowed bg-gray-500"
+            : "cursor-pointer bg-blue-600 hover:bg-blue-700"
         }`}
         onClick={() => handleUpload()}
         disabled={isUploading}
       >
-        업로드
+        {isUploading ? (
+          <div className="text-center">
+            <div id="split" ref={textRef} className="opacity-0">
+              업로드 중...
+            </div>
+          </div>
+        ) : (
+          "업로드"
+        )}
       </button>
     </div>
   );
