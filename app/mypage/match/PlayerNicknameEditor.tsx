@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import ChampionPalette from "@/app/components/ChampionPalette";
 import { API } from "@/constants";
-import type { BansList, UserList } from "@/types/match";
+import { useEffect, useState } from "react";
 import type { IPlayerStats } from "@/models/Match";
+import type { BansList, UserList } from "@/types/match";
+import ChampionPalette from "@/app/components/ChampionPalette";
+import Category from "@/public/images/components/Category.svg";
 import { ToastContextType } from "@/app/components/ToastContext";
+import UploadingText from "@/app/components/UploadingText";
 
 type PlayerNicknameEditorProps = {
   playersData: IPlayerStats[] | null;
@@ -28,8 +30,6 @@ export default function PlayerNicknameEditor({
   const [openModal, setOpenModal] = useState(false);
   const [bans, setBans] = useState<BansList>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  console.log("playersData", playersData);
 
   useEffect(() => {
     const fetchPlayerList = async (): Promise<void> => {
@@ -104,10 +104,7 @@ export default function PlayerNicknameEditor({
         </h3>
 
         {team.map((p, i) => (
-          <div
-            key={i}
-            className="p-4 border rounded shadow bg-white text-black"
-          >
+          <div key={i} className="p-4 border rounded shadow text-black">
             <div className="flex justify-between items-center">
               <div className="flex items-center justify-between w-80 mr-10">
                 <div>
@@ -160,10 +157,13 @@ export default function PlayerNicknameEditor({
         {renderTeam(redTeam, "Red")}
       </div>
 
-      <div className="flex justify-between items-center">
-        <p>밴한 챔피언</p>
+      <div className="flex gap-10 items-center my-10">
+        <div className="flex gap-4 items-center">
+          <Category />
+          <p className="text-2xl font-bold">밴한 챔피언</p>
+        </div>
         <button
-          className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-800 cursor-pointer"
+          className="px-2 py-1 bg-[#FF5B32] rounded-2xl text-sm text-white cursor-pointer hover:bg-[#d9483a] transition-colors duration-200"
           onClick={() => setOpenModal(true)}
         >
           설정하기
@@ -186,21 +186,26 @@ export default function PlayerNicknameEditor({
                 width={60}
                 height={60}
               />
-              <p className="text-sm text-center text-white truncate w-[4rem]">
+              <p className="text-sm text-center text-black truncate w-[4rem]">
                 {champ.name}
               </p>
             </li>
           ))}
       </ul>
 
-      <button
-        className={`mt-4 text-white px-6 py-2 rounded cursor-pointer ${
-          isSubmitting ? "bg-gray-600" : "hover:bg-blue-700 bg-blue-600"
-        }`}
-        onClick={handleSubmit}
-      >
-        {isSubmitting ? "제출 중..." : "제출하기"}
-      </button>
+      <div className="flex justify-end mr-10">
+        <button
+          className={`mt-4 text-white px-4 py-2 rounded ${
+            isSubmitting
+              ? "cursor-not-allowed bg-gray-500"
+              : "cursor-pointer bg-blue-600 hover:bg-blue-700"
+          }`}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? <UploadingText text="제출 중..." /> : "제출하기"}
+        </button>
+      </div>
     </div>
   );
 }
