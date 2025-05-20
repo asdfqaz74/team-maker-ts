@@ -29,6 +29,8 @@ export default function PlayerNicknameEditor({
   const [bans, setBans] = useState<BansList>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  console.log("playersData", playersData);
+
   useEffect(() => {
     const fetchPlayerList = async (): Promise<void> => {
       try {
@@ -87,13 +89,27 @@ export default function PlayerNicknameEditor({
     }
   };
 
-  return (
-    <div className="space-y-4">
-      {players &&
-        players.map((p, i) => (
-          <div key={i} className="p-4 border rounded shadow">
+  const blueTeam = players.filter((player) => player.team === "Blue");
+  const redTeam = players.filter((player) => player.team === "Red");
+
+  const renderTeam = (team: IPlayerStats[], teamColor: "Blue" | "Red") => {
+    return (
+      <div className="space-y-4">
+        <h3
+          className={`text-xl font-bold ${
+            teamColor === "Blue" ? "text-blue-400" : "text-red-400"
+          }`}
+        >
+          {teamColor === "Blue" ? "블루팀" : "레드팀"}
+        </h3>
+
+        {team.map((p, i) => (
+          <div
+            key={i}
+            className="p-4 border rounded shadow bg-white text-black"
+          >
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-10">
+              <div className="flex items-center justify-between w-80">
                 <div>
                   <p>
                     <strong>챔피언:</strong> {p.champion}
@@ -110,12 +126,14 @@ export default function PlayerNicknameEditor({
                   alt={p.champion}
                   width={100}
                   height={100}
-                ></Image>
+                />
               </div>
               <select
                 className="border p-2"
                 value={p.userNickname}
-                onChange={(e) => handleSelectChange(i, e.target.value)}
+                onChange={(e) =>
+                  handleSelectChange(players.indexOf(p), e.target.value)
+                }
               >
                 <option value="">닉네임 선택</option>
                 {userList.map((user) => (
@@ -131,6 +149,14 @@ export default function PlayerNicknameEditor({
             </div>
           </div>
         ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {renderTeam(blueTeam, "Blue")}
+      {renderTeam(redTeam, "Red")}
 
       <div className="flex justify-between items-center">
         <p>밴한 챔피언</p>

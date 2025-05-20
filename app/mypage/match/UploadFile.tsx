@@ -1,8 +1,7 @@
-import gsap from "gsap";
 import { API } from "@/constants";
-import SplitText from "gsap/SplitText";
 import { Parsed } from "@/types/match";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
+import UploadingText from "@/app/components/UploadingText";
 import { ToastContextType } from "@/app/components/ToastContext";
 
 type UploadFileProps = {
@@ -17,34 +16,6 @@ export default function UploadFile({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const textRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isUploading || !textRef.current) return;
-
-    let split: SplitText;
-    let tl: gsap.core.Timeline;
-
-    document.fonts.ready.then(() => {
-      split = new SplitText(textRef.current!, { type: "chars" });
-      gsap.set(textRef.current, { opacity: 1 });
-
-      tl = gsap.timeline({ repeat: 30 });
-      tl.from(split.chars, {
-        duration: 1,
-        y: 30,
-        rotation: 90,
-        opacity: 0,
-        ease: "elastic",
-        stagger: 0.03,
-      });
-    });
-
-    return () => {
-      if (tl) tl.kill();
-      if (split) split.revert();
-    };
-  }, [isUploading]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -124,15 +95,7 @@ export default function UploadFile({
         onClick={() => handleUpload()}
         disabled={isUploading}
       >
-        {isUploading ? (
-          <div className="text-center">
-            <div id="split" ref={textRef} className="opacity-0">
-              업로드 중...
-            </div>
-          </div>
-        ) : (
-          "업로드"
-        )}
+        {isUploading ? <UploadingText /> : "업로드"}
       </button>
     </div>
   );

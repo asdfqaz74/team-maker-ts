@@ -12,7 +12,7 @@ export default function MatchPage() {
   const { showSnack } = useToast();
 
   return (
-    <div className="w-full text-black">
+    <div className="flex flex-col h-full w-full text-black overflow-auto">
       <h1 className="font-bold text-2xl flex items-center gap-4 mb-10">
         <Category />
         <span>매칭 관리</span>
