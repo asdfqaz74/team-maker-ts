@@ -3,7 +3,6 @@
 import { useAtom } from "jotai";
 import { selectedPlayerAtom } from "@/store/player";
 import { useState, useEffect } from "react";
-import { getToken } from "@/utils/client/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/app/components/ToastContext";
 import { API, DEFAULT_POINTS } from "@/constants";
@@ -162,10 +161,10 @@ export default function PlayerDB() {
       </div>
       <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
       <label className="block font-semibold mb-2">ELO 관리</label>
-      <div className="flex gap-4 mb-2">
+      <div className="grid grid-cols-2 gap-4 mb-2">
         {lanes.map((lane) => (
-          <div key={lane} className="flex gap-2 items-center">
-            <span className="w-12 capitalize">{lane}</span>
+          <div key={lane} className="flex gap-4 items-center">
+            <span className="capitalize">{lane}</span>
             <input
               type="number"
               value={elo[lane]}
@@ -177,12 +176,20 @@ export default function PlayerDB() {
           </div>
         ))}
       </div>
-      <button onClick={handleEditPlayerDB} className="cursor-pointer">
-        수정하기
-      </button>
-      <button onClick={handleDeletePlayerDB} className="cursor-pointer">
-        삭제하기
-      </button>
+      <div className="flex justify-center gap-4 mt-10">
+        <button
+          onClick={handleDeletePlayerDB}
+          className="cursor-pointer bg-red-400 px-4 py-2 rounded"
+        >
+          삭제하기
+        </button>
+        <button
+          onClick={handleEditPlayerDB}
+          className="cursor-pointer bg-sky-400 px-4 py-2 rounded"
+        >
+          수정하기
+        </button>
+      </div>
     </div>
   );
 }
