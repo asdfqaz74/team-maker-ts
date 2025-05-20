@@ -109,7 +109,7 @@ export default function PlayerNicknameEditor({
             className="p-4 border rounded shadow bg-white text-black"
           >
             <div className="flex justify-between items-center">
-              <div className="flex items-center justify-between w-80">
+              <div className="flex items-center justify-between w-80 mr-10">
                 <div>
                   <p>
                     <strong>챔피언:</strong> {p.champion}
@@ -155,8 +155,10 @@ export default function PlayerNicknameEditor({
 
   return (
     <div className="space-y-4">
-      {renderTeam(blueTeam, "Blue")}
-      {renderTeam(redTeam, "Red")}
+      <div className="flex justify-evenly items-center">
+        {renderTeam(blueTeam, "Blue")}
+        {renderTeam(redTeam, "Red")}
+      </div>
 
       <div className="flex justify-between items-center">
         <p>밴한 챔피언</p>
