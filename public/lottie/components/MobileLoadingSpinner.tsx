@@ -1,7 +1,7 @@
 import Lottie from "react-lottie";
 import animationData from "../json/mobile.json";
 
-export default function TeamMakerLoading({ text }: { text?: string }) {
+export default function MobileLoadingSpinner({ text }: { text?: string }) {
   const defaultOptions = {
     loop: true,
     autoplay: true,

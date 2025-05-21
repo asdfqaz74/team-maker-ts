@@ -13,6 +13,7 @@ import PlayerDetail from "./PlayerDetail";
 import { useState } from "react";
 import LoadingSpinner from "@/public/lottie/components/LoadingSpinner";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
+import MobileLoadingSpinner from "@/public/lottie/components/MobileLoadingSpinner";
 
 interface Player {
   _id: string;
@@ -75,7 +76,8 @@ export default function PlayerInfo({ status }: { status: string }) {
     )
   );
 
-  if (isLoading) return <LoadingSpinner text="" />;
+  if (isLoading)
+    return ismd ? <LoadingSpinner text="" /> : <MobileLoadingSpinner />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!playerInfo) return <div>No data available</div>;
 
