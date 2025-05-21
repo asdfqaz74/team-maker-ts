@@ -2,12 +2,15 @@ import { useToast } from "@/app/components/ToastContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import Category from "@/public/images/components/Category.svg";
+import { Dialog } from "@mui/material";
+import UploadingText from "@/app/components/UploadingText";
 
 export default function PlayerAdd() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("top");
+  const [isCreating, setIsCreating] = useState(false);
 
   const { showSnack } = useToast();
 
@@ -18,6 +21,9 @@ export default function PlayerAdd() {
   };
 
   const handleCreatePlayer = async () => {
+    if (isCreating) return;
+
+    setIsCreating(true);
     await fetch("/api/me/player", {
       method: "POST",
       headers: {
@@ -41,6 +47,9 @@ export default function PlayerAdd() {
       .catch((err) => {
         console.error(err);
         showSnack("에러가 발생했습니다.", "error");
+      })
+      .finally(() => {
+        setIsCreating(false);
       });
   };
 
@@ -59,43 +68,66 @@ export default function PlayerAdd() {
         </button>
       </div>
       {buttonClicked && (
-        <div className="flex flex-col text-black">
-          <span>선수 추가하기</span>
-          <div className="flex gap-4">
-            <span>이름</span>
-            <input
-              type="text"
-              placeholder="강진성"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-4">
-            <span>닉네임</span>
-            <input
-              type="text"
-              placeholder="강진성#강진성"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-4">
-            <span>메인</span>
-            <select
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
+        <Dialog
+          open={buttonClicked}
+          onClose={handleCreatePlayerButton}
+          autoFocus
+          slotProps={{ paper: { sx: { paddingX: "1rem", paddingY: "2rem" } } }}
+        >
+          <div className="flex flex-col text-black">
+            <span className="text-2xl font-bold text-center mb-5">
+              선수 추가하기
+            </span>
+            <div className="flex flex-col gap-4 mb-5">
+              <div className="flex gap-4">
+                <span className="w-14">이름</span>
+                <input
+                  type="text"
+                  placeholder="강진성"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-4">
+                <span className="w-14">닉네임</span>
+                <input
+                  type="text"
+                  placeholder="강진성#강진성"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-4">
+                <span className="w-14">메인</span>
+                <select
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                >
+                  <option value="top">탑</option>
+                  <option value="jug">정글</option>
+                  <option value="mid">미드</option>
+                  <option value="adc">원딜</option>
+                  <option value="sup">서포터</option>
+                </select>
+              </div>
+            </div>
+            <button
+              className={`px-4 py-2 text-white rounded ${
+                isCreating
+                  ? "cursor-not-allowed bg-gray-500"
+                  : "cursor-pointer bg-blue-500 hover:bg-blue-700"
+              }`}
+              disabled={isCreating}
+              onClick={handleCreatePlayer}
             >
-              <option value="top">탑</option>
-              <option value="jug">정글</option>
-              <option value="mid">미드</option>
-              <option value="adc">원딜</option>
-              <option value="sup">서포터</option>
-            </select>
+              {isCreating ? (
+                <UploadingText text="선수 추가 중..." />
+              ) : (
+                "선수 추가"
+              )}
+            </button>
           </div>
-          <button className="cursor-pointer" onClick={handleCreatePlayer}>
-            추가
-          </button>
-        </div>
+        </Dialog>
       )}
     </>
   );

@@ -37,18 +37,20 @@ export default function PlayerList() {
             className="border p-4 rounded shadow-sm flex justify-between bg-white"
           >
             <div>
-              <p>
-                <strong>이름:</strong> {player.name}
+              <p className="whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="font-bold w-14 inline-block">이름</span>{" "}
+                {player.name}
               </p>
-              <p>
-                <strong>닉네임:</strong> {player.nickName}
+              <p className="whitespace-nowrap overflow-hidden text-ellipsis w-40">
+                <span className="font-bold w-14 inline-block">닉네임</span>{" "}
+                {player.nickName}
               </p>
-              <p>
-                <strong>포지션:</strong>{" "}
+              <p className="whitespace-nowrap overflow-hidden text-ellipsis w-40">
+                <span className="font-bold w-14 inline-block">포지션</span>{" "}
                 {positionMap[player.position] || "알 수 없음"}
               </p>
-              <p>
-                <strong>그룹:</strong>{" "}
+              <p className="whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="font-bold w-14 inline-block">그룹</span>{" "}
                 {player.group && player.group.length > 0
                   ? player.group
                       .map((g) =>
@@ -58,12 +60,14 @@ export default function PlayerList() {
                   : "없음"}
               </p>
             </div>
-            <button
-              className="text-sm text-blue-500 underline cursor-pointer"
-              onClick={() => setSelectedPlayer(player)}
-            >
-              수정하기
-            </button>
+            <div className="flex items-start">
+              <button
+                className="text-sm bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-2xl cursor-pointer"
+                onClick={() => setSelectedPlayer(player)}
+              >
+                수정하기
+              </button>
+            </div>
           </li>
         ))}
       </ul>
