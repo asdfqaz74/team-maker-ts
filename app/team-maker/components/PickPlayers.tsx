@@ -3,7 +3,9 @@ import { TeamResponse } from "@/types/team";
 import { useQuery } from "@tanstack/react-query";
 import { avaliablePlayers } from "@/store/player";
 import { fetchParticipatingPlayers } from "@/lib/api/fetchParticipatingPlayers";
-import TeamMakerLoading from "@/public/lottie/components/LoadingSpinner";
+import LoadingSpinner from "@/public/lottie/components/LoadingSpinner";
+import MobileLoadingSpinner from "@/public/lottie/components/MobileLoadingSpinner";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 export default function StepOne({ onNext }: { onNext: () => void }) {
   const {
@@ -16,6 +18,8 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
     queryFn: fetchParticipatingPlayers,
   });
   const [checkedPlayers, setCheckedPlayers] = useAtom(avaliablePlayers);
+
+  const { ismd } = useBreakpoint();
 
   // 선수 목록 토글
   const toggleChecked = (playerId: TeamResponse) => {
@@ -30,7 +34,8 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
 
   const selectedPlayersLength = checkedPlayers.length;
 
-  if (isLoading) return <TeamMakerLoading text="" />;
+  if (isLoading)
+    return ismd ? <LoadingSpinner text="" /> : <MobileLoadingSpinner />;
   if (isError) {
     console.error(error);
     return <div>선수 목록을 불러오는데 실패했습니다.</div>;
