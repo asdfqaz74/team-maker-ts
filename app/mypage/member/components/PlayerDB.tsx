@@ -9,10 +9,13 @@ import { API, DEFAULT_POINTS } from "@/constants";
 import { Divider } from "@mui/material";
 import UnSelected from "./UnSelected";
 import User from "@/public/images/components/User.svg";
+import UploadingText from "@/app/components/UploadingText";
 
 type Position = "top" | "jug" | "mid" | "adc" | "sup";
 
 export default function PlayerDB() {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedPlayer] = useAtom(selectedPlayerAtom);
   const queryClient = useQueryClient();
 
@@ -44,8 +47,11 @@ export default function PlayerDB() {
     }
   }, [selectedPlayer]);
 
-  const { mutate: editPlayer, isPending } = useMutation({
+  const { mutate: editPlayer } = useMutation({
     mutationFn: async () => {
+      if (isEditing) return;
+      setIsEditing(true);
+
       if (!selectedPlayer) {
         showSnack("선수를 선택해주세요.", "error");
         return;
@@ -69,6 +75,7 @@ export default function PlayerDB() {
       return data;
     },
     onSuccess: () => {
+      setIsEditing(false);
       showSnack("선수 정보가 수정되었습니다.", "success");
       queryClient.invalidateQueries({ queryKey: ["players"] });
     },
@@ -85,6 +92,8 @@ export default function PlayerDB() {
   // 선수 삭제 핸들러
   const handleDeletePlayerDB = async () => {
     if (!selectedPlayer) return;
+    if (isDeleting) return;
+    setIsDeleting(true);
 
     try {
       await fetch(API.ME.PLAYER.ID(selectedPlayer._id), {
@@ -100,12 +109,13 @@ export default function PlayerDB() {
     } catch (error) {
       console.error("선수 삭제 중 오류: ", error);
       showSnack("선수 삭제에 실패했습니다.", "error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const lanes: Position[] = ["top", "jug", "mid", "adc", "sup"];
 
-  if (isPending) return <p>수정 중...</p>;
   if (!selectedPlayer) return <UnSelected />;
 
   return (
@@ -179,15 +189,25 @@ export default function PlayerDB() {
       <div className="flex justify-center gap-4 mt-10">
         <button
           onClick={handleDeletePlayerDB}
-          className="cursor-pointer bg-red-400 px-4 py-2 rounded"
+          disabled={isDeleting}
+          className={`${
+            isDeleting
+              ? "cursor-not-allowed bg-gray-500"
+              : "cursor-pointer bg-red-400 hover:bg-red-600"
+          } text-white font-semibold px-4 py-2 rounded`}
         >
-          삭제하기
+          {isDeleting ? <UploadingText text="삭제 중..." /> : "삭제하기"}
         </button>
         <button
           onClick={handleEditPlayerDB}
-          className="cursor-pointer bg-sky-400 px-4 py-2 rounded"
+          disabled={isEditing}
+          className={`${
+            isEditing
+              ? "cursor-not-allowed bg-gray-500"
+              : "cursor-pointer bg-sky-400 hover:bg-sky-600"
+          } text-white font-semibold px-4 py-2 rounded`}
         >
-          수정하기
+          {isEditing ? <UploadingText text="수정 중..." /> : "수정하기"}
         </button>
       </div>
     </div>

@@ -25,7 +25,7 @@ export default function PlayerList() {
   if (isError) return <p className="text-red-500">오류: {error.message}</p>;
 
   return (
-    <div className="p-4 text-black max-w-[21.875rem] bg-white rounded-xl h-5/6 flex flex-col">
+    <div className="p-4 text-black max-w-[25rem] bg-white rounded-xl h-5/6 flex flex-col">
       <div>
         <h2 className="text-2xl font-bold mb-4">내전 플레이어 목록</h2>
         <Divider sx={{ borderColor: "#888888", marginBottom: 3 }} />
