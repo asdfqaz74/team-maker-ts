@@ -45,8 +45,11 @@ export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
       return;
     }
 
-    const aWidth = (teamA / total) * width;
-    const bWidth = (teamB / total) * width;
+    const teamAPercent = (teamA / total) * 100;
+    const teamBPercent = (teamB / total) * 100;
+
+    const aWidth = (teamAPercent / 100) * width;
+    const bWidth = width - aWidth;
 
     // 블루팀 막대
     svg
@@ -89,7 +92,7 @@ export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
       .duration(3000)
       .ease(d3.easeCubicInOut)
       .tween("text", function () {
-        const i = d3.interpolateNumber(0, teamA);
+        const i = d3.interpolateNumber(0, teamAPercent);
         return function (t) {
           this.textContent = `${Math.round(i(t))}%`;
         };
@@ -110,7 +113,7 @@ export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
       .duration(3000)
       .ease(d3.easeCubicInOut)
       .tween("text", function () {
-        const i = d3.interpolateNumber(0, teamB);
+        const i = d3.interpolateNumber(0, teamBPercent);
         return function (t) {
           this.textContent = `${Math.round(i(t))}%`;
         };
