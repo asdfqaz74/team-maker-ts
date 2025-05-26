@@ -43,7 +43,10 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
 
   return (
     <div>
-      <span>1. 참여할 선수를 고르세요</span>
+      <div className="flex flex-col">
+        <span>1. 참여할 선수를 고르세요</span>
+        <span className="inline-block">{selectedPlayersLength}/10</span>
+      </div>
       <ul>
         {players.map((player) => (
           <li key={player._id} className="">
@@ -51,6 +54,9 @@ export default function StepOne({ onNext }: { onNext: () => void }) {
               type="checkbox"
               checked={checkedPlayers.includes(player)}
               onChange={() => toggleChecked(player)}
+              disabled={
+                selectedPlayersLength >= 10 && !checkedPlayers.includes(player)
+              }
             />
             {player.name}
           </li>
