@@ -139,12 +139,12 @@ export default function MatchResultTable({ data = [] }) {
         return (
           <div className="w-full" key={match.matchId}>
             <div
-              className={`relative w-full h-[9.375rem] rounded-tl-2xl ${
+              className={`relative w-full h-[9.375rem] ${
                 isWin ? "bg-[#2E3D59]" : "bg-[#59343B]"
               }`}
             >
               <div
-                className={`absolute w-[1.875rem] h-full rounded-tl-xl ${
+                className={`absolute w-[1.875rem] h-full ${
                   isWin ? "bg-[#5C8EF2]" : "bg-[#F24464]"
                 }`}
               ></div>
