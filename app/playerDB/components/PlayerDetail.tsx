@@ -226,7 +226,7 @@ export default function PlayerDetail({
                     <span className="text-white font-semibold">포지션</span>
                     <RecentPositionGraph data={positionData} />
                   </div>
-                  <div className="flex flex-col items-center gap-10">
+                  <div className="flex flex-col items-center gap-5">
                     <span className="text-white font-semibold">승률</span>
                     <RecentWinRateGraph
                       win={win}

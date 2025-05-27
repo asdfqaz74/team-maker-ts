@@ -21,9 +21,10 @@ export default function RecentWinRateGraph({
 
   useEffect(() => {
     const svg = d3.select(ref.current);
-    const width = 150;
-    const height = 150;
-    const radius = Math.min(width, height) / 2;
+    const width = 200;
+    const height = 200;
+    const margin = 10;
+    const radius = Math.min(width, height) / 2 - margin;
 
     const data = [
       { label: "Win", value: win },

@@ -19,8 +19,8 @@ export default function RecentPositionGraph({
 
   useEffect(() => {
     const svg = d3.select(ref.current);
-    const width = 150;
-    const height = 150;
+    const width = 170;
+    const height = 170;
     const margin = { top: 20, right: 0, bottom: 50, left: 0 };
 
     const positionImage: Record<Position, string> = {
@@ -117,5 +117,5 @@ export default function RecentPositionGraph({
       .attr("href", (d) => positionImage[d.position]);
   }, [data]);
 
-  return <svg ref={ref} width={150} height={150}></svg>;
+  return <svg ref={ref} width={170}></svg>;
 }
