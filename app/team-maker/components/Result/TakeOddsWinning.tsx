@@ -7,6 +7,10 @@ interface winRate {
   redTeam: TeamResponse[];
 }
 
+interface PathWithCurrent extends SVGPathElement {
+  _current: d3.PieArcDatum<{ label: string; value: number }>;
+}
+
 export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
   const ref = useRef<SVGSVGElement | null>(null);
 
@@ -26,12 +30,13 @@ export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove();
 
-    const teamA = +winRate.teamAwinRate;
-    const teamB = +winRate.teamBwinRate;
+    const teamA = winRate.teamAwinRate;
+    const teamB = winRate.teamBwinRate;
     const total = teamA + teamB;
 
-    const width = 400;
-    const height = 30;
+    const width = 200;
+    const height = 200;
+    const radius = Math.min(width, height) / 2;
 
     if (!total || isNaN(total)) {
       svg
@@ -40,91 +45,108 @@ export default function TakeOddsWinning({ blueTeam, redTeam }: winRate) {
         .attr("y", height / 2)
         .attr("text-anchor", "middle")
         .attr("fill", "white")
-        .attr("font-size", "20px")
-        .text("승률 정보가 없습니다.");
+        .attr("font-size", "16px")
+        .text("승률 정보 없음");
       return;
     }
 
-    const teamAPercent = (teamA / total) * 100;
-    const teamBPercent = (teamB / total) * 100;
+    const data = [
+      { label: "Blue", value: teamA },
+      { label: "Red", value: teamB },
+    ];
 
-    const aWidth = (teamAPercent / 100) * width;
-    const bWidth = width - aWidth;
+    const color = d3
+      .scaleOrdinal()
+      .domain(["Blue", "Red"])
+      .range(["#5383E8", "#E84057"]);
 
-    // 블루팀 막대
-    svg
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 0)
+    const pie = d3
+      .pie<{ label: string; value: number }>()
+      .value((d) => d.value);
+    const data_ready = pie(data);
+
+    const arc = d3
+      .arc<d3.PieArcDatum<{ label: string; value: number }>>()
+      .innerRadius(60)
+      .outerRadius(radius);
+
+    const chartGroup = svg
+      .attr("width", width)
       .attr("height", height)
-      .attr("fill", "#3065ac")
-      .transition()
-      .duration(3000)
-      .ease(d3.easeCubicInOut)
-      .attr("width", aWidth);
+      .append("g")
+      .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    // 레드팀 막대
-    svg
-      .append("rect")
-      .attr("x", width)
-      .attr("y", 0)
-      .attr("width", 0)
-      .attr("height", height)
-      .attr("fill", "#f44336")
-      .transition()
-      .duration(3000)
-      .ease(d3.easeCubicInOut)
-      .attr("x", aWidth)
-      .attr("width", bWidth);
-
-    // 블루 승률 텍스트
-    svg
-      .append("text")
-      .attr("x", width / 4)
-      .attr("y", height - 10)
-      .attr("text-anchor", "middle")
-      .attr("fill", "white")
-      .attr("font-size", "12px")
-      .attr("font-weight", "bold")
-      .text("0")
-      .transition()
-      .duration(3000)
-      .ease(d3.easeCubicInOut)
-      .tween("text", function () {
-        const i = d3.interpolateNumber(0, teamAPercent);
-        return function (t) {
-          this.textContent = `${Math.round(i(t))}%`;
+    chartGroup
+      .selectAll("path")
+      .data(data_ready)
+      .enter()
+      .append("path")
+      .attr("fill", (d) => color(d.data.label) as string)
+      .attr("d", arc)
+      .each(function (d) {
+        (this as PathWithCurrent)._current = {
+          ...d,
+          startAngle: 0,
+          endAngle: 0,
         };
       })
-      .attr("x", aWidth / 2);
+      .transition()
+      .duration(1500)
+      .attrTween("d", function (d) {
+        const path = this as PathWithCurrent;
+        const interpolate = d3.interpolate(path._current, d);
+        path._current = interpolate(1);
+        return function (t) {
+          return arc(interpolate(t)) || "";
+        };
+      });
 
-    // 레드 승률 텍스트
-    svg
+    chartGroup
+      .selectAll("text.percent")
+      .data(data_ready)
+      .enter()
       .append("text")
-      .attr("x", (3 * width) / 4)
-      .attr("y", height - 10)
+      .attr("class", "percent")
+      .attr("transform", function (d) {
+        const [x, y] = arc.centroid(d);
+        return `translate(${x}, ${y})`;
+      })
       .attr("text-anchor", "middle")
       .attr("fill", "white")
-      .attr("font-size", "12px")
-      .attr("font-weight", "bold")
-      .text("0")
-      .transition()
-      .duration(3000)
-      .ease(d3.easeCubicInOut)
-      .tween("text", function () {
-        const i = d3.interpolateNumber(0, teamBPercent);
-        return function (t) {
-          this.textContent = `${Math.round(i(t))}%`;
-        };
-      })
-      .attr("x", aWidth + bWidth / 2);
+      .style("font-size", "12px")
+      .style("font-weight", "bold")
+      .text((d) => {
+        const percent = ((d.data.value / total) * 100).toFixed(0);
+        return `${percent}%`;
+      });
+
+    // 중앙 텍스트: 어느 팀이 우세한지
+    const leadingText =
+      teamA > teamB ? "블루" : teamB > teamA ? "레드" : "동률";
+    const subText = teamA === teamB ? "무승부" : "우세";
+
+    chartGroup
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("y", -5)
+      .attr("fill", "white")
+      .style("font-size", "1.2rem")
+      .style("font-weight", "bold")
+      .text(leadingText);
+
+    chartGroup
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("y", 20)
+      .attr("fill", "white")
+      .style("font-size", "0.9rem")
+      .text(subText);
   }, [winRate]);
 
   return (
     <div className="flex flex-col items-center mb-6">
       <span className="text-lg font-bold mb-2">승률</span>
-      <svg ref={ref} width={400} height={30}></svg>
+      <svg ref={ref}></svg>
     </div>
   );
 }

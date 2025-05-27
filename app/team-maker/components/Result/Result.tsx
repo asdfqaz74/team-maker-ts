@@ -40,24 +40,24 @@ export default function Result({
     <div>
       <span>결과페이지</span>
       <div className="flex justify-center mt-20">
-        <div className="flex flex-col gap-5">
-          <div>
-            <span>블루팀</span>
-            <div className="flex gap-5">
+        <div className="flex gap-5">
+          <div className="bg-sky-200 bg-opacity-50 text-black flex flex-col w-[12.5rem] text-center py-5">
+            <span className="font-black">블루팀</span>
+            <div className="flex gap-5 flex-col mt-3">
               {blueTeam.map((player) => (
                 <span key={player._id}>{player.name}</span>
               ))}
             </div>
           </div>
-          <div>
-            <span>레드팀</span>
-            <div className="flex gap-5">
+          <TakeOddsWinning blueTeam={blueTeam} redTeam={redTeam} />
+          <div className="bg-red-200 bg-opacity-50 text-black flex flex-col w-[12.5rem] text-center py-5">
+            <span className="font-black">레드팀</span>
+            <div className="flex gap-5 flex-col mt-3">
               {redTeam.map((player) => (
                 <span key={player._id}>{player.name}</span>
               ))}
             </div>
           </div>
-          <TakeOddsWinning blueTeam={blueTeam} redTeam={redTeam} />
         </div>
       </div>
       <div>
