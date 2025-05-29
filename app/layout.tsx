@@ -33,7 +33,7 @@ export const metadata = {
     siteName: "팀메이커",
     images: [
       {
-        url: "https://team-maker.me/",
+        url: "https://team-maker.me/images/meta.png",
         width: 1200,
         height: 630,
         alt: "팀메이커 메인 이미지",
