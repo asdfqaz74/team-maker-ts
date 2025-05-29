@@ -17,6 +17,7 @@ import RecentWinRateGraph from "./RecentWinRateGraph";
 import RecentPlayedChampions from "./RecentPlayedChampions";
 import MatchResultTable from "./MatchResultTable";
 import PlayerDetailSkeleton from "./PlayerDetailSkeleton";
+import { useEffect, useState } from "react";
 
 type EloRow = {
   top: number;
@@ -51,6 +52,46 @@ function createData(
   return { top, jug, mid, adc, sup };
 }
 
+interface MatchFormatted {
+  matchId: string;
+  me: {
+    champion: string;
+    win: boolean;
+    team: "Blue" | "Red";
+    kda: {
+      kills: number;
+      deaths: number;
+      assists: number;
+    };
+    championImage: string;
+  };
+  teamPlayerData: PlayerFormatted[];
+  enemyPlayerData: PlayerFormatted[];
+  maxDamage: number;
+  maxTaken: number;
+}
+
+interface PlayerFormatted {
+  nickName: string;
+  champion: string;
+  championImage: string;
+  kda: {
+    kills: number;
+    deaths: number;
+    assists: number;
+  };
+  damage: {
+    dealt: number;
+    taken: number;
+  };
+  wards: {
+    placed: number;
+    bought: number;
+    killed: number;
+  };
+  cs: number;
+}
+
 const placeholderImage = "/images/components/placeholder.webp";
 
 export default function PlayerDetail({
@@ -58,21 +99,34 @@ export default function PlayerDetail({
   onClose,
   player,
 }: PlayerDetailProps) {
+  const [matches, setMatches] = useState<MatchFormatted[]>([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
   // userDetail 정보 가져오기
   const {
     data: userDetail = [],
     isLoading,
     isError,
+    isSuccess,
     error,
   } = useQuery({
     queryKey: ["userDetail", player],
-    queryFn: () => fetchPlayerDetail(player!),
+    queryFn: () => fetchPlayerDetail(player!, 0, 5),
     enabled: !!player,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (isSuccess && userDetail) {
+      setMatches(userDetail.recentMatches || []);
+      setSkip(5);
+      setHasMore(true);
+    }
+  }, [isSuccess, userDetail]);
 
   const user = userDetail?.user;
   const recentMatches = userDetail?.recentMatches;
@@ -98,6 +152,16 @@ export default function PlayerDetail({
   if (isLoading) return <PlayerDetailSkeleton open={open} onClose={onClose} />;
   if (isError) return <div>Error: {error.message}</div>;
   if (!userDetail) return <div>No data available</div>;
+
+  const handleLoadMore = async () => {
+    const moreData = await fetchPlayerDetail(player!, skip, 5);
+    setMatches((prev) => [...prev, ...moreData.recentMatches]);
+    setSkip((prev) => prev + 5);
+
+    if (moreData.recentMatches.length === 0) {
+      setHasMore(false);
+    }
+  };
 
   return (
     <Dialog
@@ -250,9 +314,18 @@ export default function PlayerDetail({
           </div>
           {/* 최근 매치 테이블 5경기 */}
           {recentMatches?.length > 0 ? (
-            <MatchResultTable data={recentMatches} />
+            <MatchResultTable data={matches} />
           ) : (
             <div></div>
+          )}
+          {/* 더보기 버튼 */}
+          {hasMore && (
+            <button
+              onClick={handleLoadMore}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors cursor-pointer"
+            >
+              더보기
+            </button>
           )}
         </div>
       </div>

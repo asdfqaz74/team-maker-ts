@@ -1,5 +1,5 @@
-export const fetchPlayerDetail = async (id: string) => {
-  const response = await fetch(`/api/db/${id}`);
+export const fetchPlayerDetail = async (id: string, skip = 0, limit = 0) => {
+  const response = await fetch(`/api/db/${id}?skip=${skip}&limit=${limit}`);
 
   const data = await response.json();
   if (!response.ok)

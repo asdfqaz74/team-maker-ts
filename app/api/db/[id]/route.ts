@@ -65,6 +65,11 @@ export async function GET(
     const asyncParams = await params;
     const { id } = asyncParams;
 
+    // match 데이터를 더 가져오기 위해 URL에서 쿼리 파라미터를 추출
+    const { searchParams } = new URL(request.url);
+    const skip = parseInt(searchParams.get("skip") || "0");
+    const limit = parseInt(searchParams.get("limit") || "5");
+
     // 유저 정보 먼저 조회
     const user = (await User.findById(id)
       .select("name nickName position eloRating")
@@ -128,7 +133,8 @@ export async function GET(
           "players.userNickname": user.nickName,
         })
           .sort({ createdAt: -1 })
-          .limit(5),
+          .skip(skip)
+          .limit(limit),
 
         // recentMatchesDataAgg
         Match.aggregate<RecentMatchDataAgg>([

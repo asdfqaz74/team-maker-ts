@@ -68,6 +68,10 @@ type Match = {
   enemyPlayerData: Player[];
 };
 
+type MatchResultTableProps = {
+  data: Match[];
+};
+
 function createData(
   championImage: string,
   nickName: string,
@@ -86,7 +90,7 @@ function createData(
   };
 }
 
-export default function MatchResultTable({ data = [] }) {
+export default function MatchResultTable({ data = [] }: MatchResultTableProps) {
   const [isClicked, setIsClicked] = useState<Record<string, boolean>>({});
 
   const toggleMatch = (matchId: string) => () => {
