@@ -1,6 +1,39 @@
-import { useToast } from "@/app/components/ToastContext";
 import { API } from "@/constants";
-import { useState } from "react";
+import { useReducer } from "react";
+import { useToast } from "@/app/components/ToastContext";
+
+type State = {
+  name: string;
+  email: string;
+  userId: string;
+};
+
+type Action =
+  | { type: "SET_NAME"; payload: string }
+  | { type: "SET_EMAIL"; payload: string }
+  | { type: "SET_USER_ID"; payload: string }
+  | { type: "RESET_USER_ID" };
+
+const initialState: State = {
+  name: "",
+  email: "",
+  userId: "",
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "SET_NAME":
+      return { ...state, name: action.payload };
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
+    case "SET_USER_ID":
+      return { ...state, userId: action.payload };
+    case "RESET_USER_ID":
+      return { ...state, userId: "" };
+    default:
+      return state;
+  }
+}
 
 type FindIdResponse =
   | {
@@ -12,9 +45,7 @@ type FindIdResponse =
     };
 
 export default function FindId() {
-  const [findIdName, setFindIdName] = useState("");
-  const [findIdEmail, setFindIdEmail] = useState("");
-  const [userId, setUserId] = useState("");
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const { showSnack } = useToast();
 
@@ -24,14 +55,18 @@ export default function FindId() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ findIdName, findIdEmail }),
+      body: JSON.stringify({
+        findIdName: state.name,
+        findIdEmail: state.email,
+      }),
     });
     const data: FindIdResponse = await response.json();
 
     if ("userId" in data) {
+      dispatch({ type: "SET_USER_ID", payload: data.userId });
       showSnack("아이디 찾기 성공", "success");
-      setUserId(data.userId);
     } else {
+      dispatch({ type: "RESET_USER_ID" });
       showSnack(data.error || "아이디 찾기 실패", "error");
     }
   };
@@ -43,14 +78,18 @@ export default function FindId() {
       <input
         type="text"
         placeholder="이름을 입력하세요"
-        onChange={(e) => setFindIdName(e.target.value)}
+        onChange={(e) =>
+          dispatch({ type: "SET_NAME", payload: e.target.value })
+        }
         className="bg-gray-400 placeholder-gray-700"
       />
       <span>이메일</span>
       <input
         type="email"
         placeholder="이메일을 입력하세요"
-        onChange={(e) => setFindIdEmail(e.target.value)}
+        onChange={(e) =>
+          dispatch({ type: "SET_EMAIL", payload: e.target.value })
+        }
         className="bg-gray-400 placeholder-gray-700"
       />
       <button
@@ -59,7 +98,7 @@ export default function FindId() {
       >
         아이디 찾기
       </button>
-      {userId && <p>아이디: {userId}</p>}
+      {state.userId && <p>아이디: {state.userId}</p>}
     </div>
   );
 }
