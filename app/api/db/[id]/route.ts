@@ -72,13 +72,18 @@ export async function GET(
 
     // 유저 정보 먼저 조회
     const user = (await User.findById(id)
-      .select("name nickName position eloRating")
+      .select(
+        "name nickName position eloRating mostPlayedChampion totalGames wins losses"
+      )
       .lean()) as {
       name: string;
       nickName: string;
       position: string;
       eloRating: IElo;
       mostPlayedChampion?: string | null;
+      totalGames: number;
+      wins: number;
+      losses: number;
     } | null;
 
     if (!user) {

@@ -128,6 +128,8 @@ export default function PlayerDetail({
     }
   }, [isSuccess, userDetail]);
 
+  console.log("userDetail", userDetail);
+
   const user = userDetail?.user;
   const recentMatches = userDetail?.recentMatches;
   const recentMatchesData = userDetail?.recentMatchesData;
@@ -137,6 +139,10 @@ export default function PlayerDetail({
   const lose = recentMatchesData?.[0]?.totalLosses;
   const winRate = recentMatchesData?.[0]?.winRate;
   const recentPlayedChampions = recentMatchesData?.[0]?.championImages;
+  const totalMatches = user?.totalGames;
+  const totalWins = user?.wins;
+  const totalLosses = user?.losses;
+  const totalWinRate = ((totalWins / totalMatches) * 100).toFixed(0) || 0;
 
   // 표에 나타날 데이터
   const rows = [
@@ -186,9 +192,24 @@ export default function PlayerDetail({
           height={480}
         />
         <div className="py-4 px-10 flex flex-col gap-10">
-          <div className="flex gap-4 items-end text-white">
-            <span className="text-4xl font-bold">{user?.name}</span>
-            <span className="">{user?.nickName}</span>
+          <div className="flex gap-4 items-end justify-between text-white">
+            <div className="flex gap-4 items-end">
+              <span className="text-4xl font-bold">{user?.name}</span>
+              <span className="">{user?.nickName}</span>
+            </div>
+            <div className="flex gap-4 items-center">
+              <div className="flex flex-col items-center">
+                <span>전체 게임 수</span>
+                <div>
+                  <span>{totalMatches}</span>
+                  <span>/</span>
+                  <span>{totalWins}</span>
+                  <span>/</span>
+                  <span>{totalLosses}</span>
+                </div>
+              </div>
+              <span>{totalWinRate}%</span>
+            </div>
           </div>
           <Divider sx={{ borderColor: "#fff" }} />
           <span className="text-4xl text-white font-bold">Elo 점수</span>
