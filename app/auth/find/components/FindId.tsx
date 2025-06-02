@@ -44,6 +44,42 @@ type FindIdResponse =
       error: string;
     };
 
+function NameInput({
+  name,
+  dispatch,
+}: {
+  name: string;
+  dispatch: React.Dispatch<Action>;
+}) {
+  return (
+    <input
+      type="text"
+      placeholder="이름을 입력하세요"
+      value={name}
+      onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
+      className="bg-gray-400 placeholder-gray-700"
+    />
+  );
+}
+
+function EmailInput({
+  email,
+  dispatch,
+}: {
+  email: string;
+  dispatch: React.Dispatch<Action>;
+}) {
+  return (
+    <input
+      type="email"
+      placeholder="이메일을 입력하세요"
+      value={email}
+      onChange={(e) => dispatch({ type: "SET_EMAIL", payload: e.target.value })}
+      className="bg-gray-400 placeholder-gray-700"
+    />
+  );
+}
+
 export default function FindId() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -75,23 +111,9 @@ export default function FindId() {
     <div className="flex flex-col gap-4 items-start">
       <h1 className="text-xl font-bold">아이디 찾기</h1>
       <span>이름</span>
-      <input
-        type="text"
-        placeholder="이름을 입력하세요"
-        onChange={(e) =>
-          dispatch({ type: "SET_NAME", payload: e.target.value })
-        }
-        className="bg-gray-400 placeholder-gray-700"
-      />
+      <NameInput name={state.name} dispatch={dispatch} />
       <span>이메일</span>
-      <input
-        type="email"
-        placeholder="이메일을 입력하세요"
-        onChange={(e) =>
-          dispatch({ type: "SET_EMAIL", payload: e.target.value })
-        }
-        className="bg-gray-400 placeholder-gray-700"
-      />
+      <EmailInput email={state.email} dispatch={dispatch} />
       <button
         onClick={handleFindId}
         className="bg-sky-700 rounded p-2 cursor-pointer"
